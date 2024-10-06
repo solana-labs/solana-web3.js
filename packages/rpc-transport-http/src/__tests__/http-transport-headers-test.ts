@@ -17,7 +17,6 @@ describe('assertIsAllowedHttpRequestHeader', () => {
         'Accept-charset',
         'accept-charset',
         'ACCEPT-CHARSET',
-        'Accept-Encoding',
         'Access-Control-Request-Headers',
         'Access-Control-Request-Method',
         'Connection',
@@ -54,6 +53,17 @@ describe('assertIsAllowedHttpRequestHeader', () => {
             );
         });
     });
+    if (!__NODEJS__) {
+        it('throws when called with the `Accept-Encoding` header', () => {
+            expect(() => {
+                assertIsAllowedHttpRequestHeaders({ 'Accept-Encoding': 'zstd' });
+            }).toThrow(
+                new SolanaError(SOLANA_ERROR__RPC__TRANSPORT_HTTP_HEADER_FORBIDDEN, {
+                    headers: ['Accept-Encoding'],
+                }),
+            );
+        });
+    }
     ['Authorization', 'Content-Language', 'Solana-Client'].forEach(allowedHeader => {
         it('does not throw when called with the header `' + allowedHeader + '`', () => {
             expect(() => {

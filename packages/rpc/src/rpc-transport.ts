@@ -31,6 +31,13 @@ export function createDefaultRpcTransport<TClusterUrl extends ClusterUrl>(
         createHttpTransportForSolanaRpc({
             ...config,
             headers: {
+                ...(__NODEJS__ &&
+                    ({
+                        // Keep these headers lowercase so they will be overriden by any user-supplied headers below.
+                        'accept-encoding':
+                            // Natively supported by Node LTS v20.18.0 and above.
+                            'br,gzip,deflate', // Brotli, gzip, and Deflate, in that order.
+                    } as { [overrideHeader: string]: string })),
                 ...(config.headers ? normalizeHeaders(config.headers) : undefined),
                 ...({
                     // Keep these headers lowercase so they will override any user-supplied headers above.

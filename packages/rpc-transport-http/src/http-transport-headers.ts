@@ -18,7 +18,13 @@ export type AllowedHttpRequestHeaders = Readonly<
 type DisallowedHeaders = 'Accept' | 'Content-Length' | 'Content-Type' | 'Solana-Client';
 type ForbiddenHeaders =
     | 'Accept-Charset'
-    | 'Accept-Encoding'
+    /**
+     * Though technically forbidden in non-Node environments, we don't have a way to target
+     * TypeScript types depending on which platform you are authoring for. `Accept-Encoding` is
+     * therefore omitted from the forbidden headers type, but is still a runtime error in dev mode
+     * when supplied in a non-Node context.
+     */
+    // | 'Accept-Encoding'
     | 'Access-Control-Request-Headers'
     | 'Access-Control-Request-Method'
     | 'Connection'
@@ -47,31 +53,33 @@ const DISALLOWED_HEADERS: Record<string, boolean> = {
     'content-type': true,
 };
 // https://developer.mozilla.org/en-US/docs/Glossary/Forbidden_header_name
-const FORBIDDEN_HEADERS: Record<string, boolean> = {
-    'accept-charset': true,
-    'accept-encoding': true,
-    'access-control-request-headers': true,
-    'access-control-request-method': true,
-    connection: true,
-    'content-length': true,
-    cookie: true,
-    date: true,
-    dnt: true,
-    expect: true,
-    host: true,
-    'keep-alive': true,
-    origin: true,
-    'permissions-policy': true,
-    // Prefix matching is implemented in code, below.
-    // 'proxy-': true,
-    // 'sec-': true,
-    referer: true,
-    te: true,
-    trailer: true,
-    'transfer-encoding': true,
-    upgrade: true,
-    via: true,
-};
+const FORBIDDEN_HEADERS: Record<string, boolean> = /* @__PURE__ */ Object.assign(
+    {
+        'accept-charset': true,
+        'access-control-request-headers': true,
+        'access-control-request-method': true,
+        connection: true,
+        'content-length': true,
+        cookie: true,
+        date: true,
+        dnt: true,
+        expect: true,
+        host: true,
+        'keep-alive': true,
+        origin: true,
+        'permissions-policy': true,
+        // Prefix matching is implemented in code, below.
+        // 'proxy-': true,
+        // 'sec-': true,
+        referer: true,
+        te: true,
+        trailer: true,
+        'transfer-encoding': true,
+        upgrade: true,
+        via: true,
+    },
+    __NODEJS__ ? undefined : { 'accept-encoding': true },
+);
 
 export function assertIsAllowedHttpRequestHeaders(
     headers: Record<string, string>,
