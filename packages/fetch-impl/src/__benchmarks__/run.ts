@@ -1,4 +1,4 @@
-#!/usr/bin/env -S pnpm dlx tsx
+#!/usr/bin/env -S pnpm dlx tsx -r ../build-scripts/register-node-globals.cjs
 
 import { ok } from 'node:assert';
 import process from 'node:process';

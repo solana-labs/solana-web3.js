@@ -1,15 +1,8 @@
-#!/usr/bin/env -S pnpm dlx tsx --
+#!/usr/bin/env -S pnpm dlx tsx -r ../build-scripts/register-node-globals.cjs
 
 import { Bench } from 'tinybench';
 
 import { generateKeyPair, SignatureBytes, signBytes, verifySignature } from '../index';
-
-Object.assign(globalThis, {
-    __BROWSER__: false,
-    __DEV__: false,
-    __NODEJS__: true,
-    __REACTNATIVE____: false,
-});
 
 const bench = new Bench({
     throws: true,

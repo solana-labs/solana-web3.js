@@ -1,4 +1,4 @@
-#!/usr/bin/env -S pnpm dlx tsx --
+#!/usr/bin/env -S pnpm dlx tsx -r ../build-scripts/register-node-globals.cjs
 
 import { ok } from 'node:assert';
 
@@ -14,13 +14,6 @@ ok(
     'You must supply the URL of a rate-limit-free Solana JSON-RPC server as the first argument to this script',
 );
 VALIDATOR_URL ??= 'http://127.0.0.1:8899';
-
-Object.assign(globalThis, {
-    __BROWSER__: false,
-    __DEV__: false,
-    __NODEJS__: true,
-    __REACTNATIVE____: false,
-});
 
 const NUM_CONCURRENT_REQUESTS = 1024;
 
