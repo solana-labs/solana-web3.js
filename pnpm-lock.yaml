@@ -209,7 +209,7 @@ importers:
         version: 4.19.1
       typedoc:
         specifier: ^0.26.5
-        version: 0.26.7(typescript@5.6.2)
+        version: 0.26.8(typescript@5.6.2)
       typescript:
         specifier: ^5.5.4
         version: 5.6.2
@@ -2432,6 +2432,7 @@ packages:
   eslint@8.57.0:
     resolution: {integrity: sha512-dZ6+mexnaTIbSBZWgou51U6OmzIhYM2VcNdtiTtI7qPNZm35Akpr0f6vtw3w1Kmn5PYo+tZVfh13WrhpS6oLqQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
 
   esm@3.2.25:
@@ -4398,8 +4399,8 @@ packages:
     resolution: {integrity: sha512-Z48LU67/qJ+vyA7lh3ozELqpTp3pvQoY5RtLi5wQ/UGSrEidBhlVSqhjr8B3iqbGpjqAoJYrtSYXWMDtidWGkA==}
     engines: {node: '>=6.0.0', npm: '>=3.0.0'}
 
-  typedoc@0.26.7:
-    resolution: {integrity: sha512-gUeI/Wk99vjXXMi8kanwzyhmeFEGv1LTdTQsiyIsmSYsBebvFxhbcyAx7Zjo4cMbpLGxM4Uz3jVIjksu/I2v6Q==}
+  typedoc@0.26.8:
+    resolution: {integrity: sha512-QBF0BMbnNeUc6U7pRHY7Jb8pjhmiNWZNQT8LU6uk9qP9t3goP9bJptdlNqMC0wBB2w9sQrxjZt835bpRSSq1LA==}
     engines: {node: '>= 18'}
     hasBin: true
     peerDependencies:
@@ -9267,7 +9268,7 @@ snapshots:
 
   typed-error@3.2.2: {}
 
-  typedoc@0.26.7(typescript@5.6.2):
+  typedoc@0.26.8(typescript@5.6.2):
     dependencies:
       lunr: 2.3.9
       markdown-it: 14.1.0
