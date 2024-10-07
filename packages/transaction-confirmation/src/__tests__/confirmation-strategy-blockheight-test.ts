@@ -203,7 +203,6 @@ describe('createBlockHeightExceedencePromiseFactory', () => {
     it('throws errors thrown from the epoch info fetcher', async () => {
         expect.assertions(1);
         const abortController = new AbortController();
-        abortController.abort();
         getEpochInfoRequestSender.mockRejectedValue(new Error('o no'));
         await expect(
             getBlockHeightExceedencePromise({
@@ -215,7 +214,6 @@ describe('createBlockHeightExceedencePromiseFactory', () => {
     it('throws errors thrown from the slot subscription', async () => {
         expect.assertions(1);
         const abortController = new AbortController();
-        abortController.abort();
         createSubscriptionIterable.mockRejectedValue(new Error('o no'));
         await expect(
             getBlockHeightExceedencePromise({
