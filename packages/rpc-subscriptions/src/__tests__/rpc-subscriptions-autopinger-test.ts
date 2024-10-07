@@ -1,3 +1,4 @@
+import { SOLANA_ERROR__RPC_SUBSCRIPTIONS__CHANNEL_CONNECTION_CLOSED, SolanaError } from '@solana/errors';
 import { RpcSubscriptionsChannel } from '@solana/rpc-subscriptions-spec';
 
 import { getRpcSubscriptionsChannelWithAutoping } from '../rpc-subscriptions-autopinger';
@@ -68,6 +69,29 @@ describe('getRpcSubscriptionsChannelWithAutoping', () => {
             }),
         );
     });
+    it('continues to ping even though send fataled with a non-connection-closed exception', async () => {
+        expect.assertions(1);
+        mockSend.mockRejectedValue(
+            // Anything other than `SOLANA_ERROR__RPC_SUBSCRIPTIONS__CHANNEL_CONNECTION_CLOSED`.
+            'o no',
+        );
+        getRpcSubscriptionsChannelWithAutoping({
+            abortSignal: new AbortController().signal,
+            channel: mockChannel,
+            intervalMs: MOCK_INTERVAL_MS,
+        });
+        // First ping.
+        await jest.advanceTimersByTimeAsync(MOCK_INTERVAL_MS);
+        // Second ping.
+        mockSend.mockClear();
+        await jest.advanceTimersByTimeAsync(MOCK_INTERVAL_MS);
+        expect(mockSend).toHaveBeenCalledWith(
+            expect.objectContaining({
+                jsonrpc: '2.0',
+                method: 'ping',
+            }),
+        );
+    });
     it('does not send a ping until interval milliseconds after the last sent message', async () => {
         expect.assertions(3);
         const autopingChannel = getRpcSubscriptionsChannelWithAutoping({
@@ -127,6 +151,21 @@ describe('getRpcSubscriptionsChannelWithAutoping', () => {
             }),
         );
         receiveError('o no');
+        // No more pings.
+        mockSend.mockClear();
+        await jest.advanceTimersByTimeAsync(MOCK_INTERVAL_MS);
+        expect(mockSend).not.toHaveBeenCalled();
+    });
+    it('does not send a ping after send fatals with a connection closed error', async () => {
+        expect.assertions(1);
+        mockSend.mockRejectedValue(new SolanaError(SOLANA_ERROR__RPC_SUBSCRIPTIONS__CHANNEL_CONNECTION_CLOSED));
+        getRpcSubscriptionsChannelWithAutoping({
+            abortSignal: new AbortController().signal,
+            channel: mockChannel,
+            intervalMs: MOCK_INTERVAL_MS,
+        });
+        // First ping.
+        await jest.advanceTimersByTimeAsync(MOCK_INTERVAL_MS);
         // No more pings.
         mockSend.mockClear();
         await jest.advanceTimersByTimeAsync(MOCK_INTERVAL_MS);

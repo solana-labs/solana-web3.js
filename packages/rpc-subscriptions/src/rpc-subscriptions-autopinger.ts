@@ -1,3 +1,4 @@
+import { isSolanaError, SOLANA_ERROR__RPC_SUBSCRIPTIONS__CHANNEL_CONNECTION_CLOSED } from '@solana/errors';
 import type { RpcSubscriptionsChannel } from '@solana/rpc-subscriptions-spec';
 
 type Config<TChannel extends RpcSubscriptionsChannel<unknown, unknown>> = Readonly<{
@@ -18,7 +19,11 @@ export function getRpcSubscriptionsChannelWithAutoping<TChannel extends RpcSubsc
 }: Config<TChannel>): TChannel {
     let intervalId: ReturnType<typeof setInterval> | undefined;
     function sendPing() {
-        channel.send(PING_PAYLOAD);
+        channel.send(PING_PAYLOAD).catch((e: unknown) => {
+            if (isSolanaError(e, SOLANA_ERROR__RPC_SUBSCRIPTIONS__CHANNEL_CONNECTION_CLOSED)) {
+                pingerAbortController.abort();
+            }
+        });
     }
     function restartPingTimer() {
         clearInterval(intervalId);
