@@ -17,22 +17,23 @@ describe('getRpcSubscriptionsChannelWithAutoping', () => {
     beforeEach(() => {
         jest.useFakeTimers();
         mockOn = jest.fn().mockReturnValue(() => {});
-        mockSend = jest.fn();
+        mockSend = jest.fn().mockResolvedValue(void 0);
         mockChannel = {
             on: mockOn,
             send: mockSend,
         };
     });
-    it('sends a ping message to the channel at the specified interval', () => {
+    it('sends a ping message to the channel at the specified interval', async () => {
+        expect.assertions(4);
         getRpcSubscriptionsChannelWithAutoping({
             abortSignal: new AbortController().signal,
             channel: mockChannel,
             intervalMs: MOCK_INTERVAL_MS,
         });
         // First ping.
-        jest.advanceTimersByTime(MOCK_INTERVAL_MS - 1);
+        await jest.advanceTimersByTimeAsync(MOCK_INTERVAL_MS - 1);
         expect(mockSend).not.toHaveBeenCalled();
-        jest.advanceTimersByTime(1);
+        await jest.advanceTimersByTimeAsync(1);
         expect(mockSend).toHaveBeenCalledWith(
             expect.objectContaining({
                 jsonrpc: '2.0',
@@ -41,9 +42,9 @@ describe('getRpcSubscriptionsChannelWithAutoping', () => {
         );
         // Second ping.
         mockSend.mockClear();
-        jest.advanceTimersByTime(MOCK_INTERVAL_MS - 1);
+        await jest.advanceTimersByTimeAsync(MOCK_INTERVAL_MS - 1);
         expect(mockSend).not.toHaveBeenCalled();
-        jest.advanceTimersByTime(1);
+        await jest.advanceTimersByTimeAsync(1);
         expect(mockSend).toHaveBeenCalledWith(
             expect.objectContaining({
                 jsonrpc: '2.0',
@@ -51,21 +52,22 @@ describe('getRpcSubscriptionsChannelWithAutoping', () => {
             }),
         );
     });
-    it('does not send a ping until interval milliseconds after the last sent message', () => {
+    it('does not send a ping until interval milliseconds after the last sent message', async () => {
+        expect.assertions(3);
         const autopingChannel = getRpcSubscriptionsChannelWithAutoping({
             abortSignal: new AbortController().signal,
             channel: mockChannel,
             intervalMs: MOCK_INTERVAL_MS,
         });
         autopingChannel.send('hi');
-        mockSend.mockReset();
-        jest.advanceTimersByTime(500);
+        mockSend.mockClear();
+        await jest.advanceTimersByTimeAsync(500);
         expect(mockSend).not.toHaveBeenCalled();
         autopingChannel.send('hi');
         mockSend.mockClear();
-        jest.advanceTimersByTime(MOCK_INTERVAL_MS - 1);
+        await jest.advanceTimersByTimeAsync(MOCK_INTERVAL_MS - 1);
         expect(mockSend).not.toHaveBeenCalled();
-        jest.advanceTimersByTime(1);
+        await jest.advanceTimersByTimeAsync(1);
         expect(mockSend).toHaveBeenCalledWith(
             expect.objectContaining({
                 jsonrpc: '2.0',
@@ -73,18 +75,19 @@ describe('getRpcSubscriptionsChannelWithAutoping', () => {
             }),
         );
     });
-    it('does not send a ping until interval milliseconds after the last received message', () => {
+    it('does not send a ping until interval milliseconds after the last received message', async () => {
+        expect.assertions(3);
         getRpcSubscriptionsChannelWithAutoping({
             abortSignal: new AbortController().signal,
             channel: mockChannel,
             intervalMs: MOCK_INTERVAL_MS,
         });
-        jest.advanceTimersByTime(500);
+        await jest.advanceTimersByTimeAsync(500);
         expect(mockSend).not.toHaveBeenCalled();
         receiveMessage('hi');
-        jest.advanceTimersByTime(MOCK_INTERVAL_MS - 1);
+        await jest.advanceTimersByTimeAsync(MOCK_INTERVAL_MS - 1);
         expect(mockSend).not.toHaveBeenCalled();
-        jest.advanceTimersByTime(1);
+        await jest.advanceTimersByTimeAsync(1);
         expect(mockSend).toHaveBeenCalledWith(
             expect.objectContaining({
                 jsonrpc: '2.0',
@@ -92,14 +95,15 @@ describe('getRpcSubscriptionsChannelWithAutoping', () => {
             }),
         );
     });
-    it('does not send a ping after a channel error', () => {
+    it('does not send a ping after a channel error', async () => {
+        expect.assertions(2);
         getRpcSubscriptionsChannelWithAutoping({
             abortSignal: new AbortController().signal,
             channel: mockChannel,
             intervalMs: MOCK_INTERVAL_MS,
         });
         // First ping.
-        jest.advanceTimersByTime(MOCK_INTERVAL_MS);
+        await jest.advanceTimersByTimeAsync(MOCK_INTERVAL_MS);
         expect(mockSend).toHaveBeenCalledWith(
             expect.objectContaining({
                 jsonrpc: '2.0',
@@ -109,10 +113,11 @@ describe('getRpcSubscriptionsChannelWithAutoping', () => {
         receiveError('o no');
         // No more pings.
         mockSend.mockClear();
-        jest.advanceTimersByTime(MOCK_INTERVAL_MS);
+        await jest.advanceTimersByTimeAsync(MOCK_INTERVAL_MS);
         expect(mockSend).not.toHaveBeenCalled();
     });
-    it('does not send a ping after the abort signal fires', () => {
+    it('does not send a ping after the abort signal fires', async () => {
+        expect.assertions(2);
         const abortController = new AbortController();
         getRpcSubscriptionsChannelWithAutoping({
             abortSignal: abortController.signal,
@@ -120,7 +125,7 @@ describe('getRpcSubscriptionsChannelWithAutoping', () => {
             intervalMs: MOCK_INTERVAL_MS,
         });
         // First ping.
-        jest.advanceTimersByTime(MOCK_INTERVAL_MS);
+        await jest.advanceTimersByTimeAsync(MOCK_INTERVAL_MS);
         expect(mockSend).toHaveBeenCalledWith(
             expect.objectContaining({
                 jsonrpc: '2.0',
@@ -130,18 +135,19 @@ describe('getRpcSubscriptionsChannelWithAutoping', () => {
         abortController.abort();
         // No more pings.
         mockSend.mockClear();
-        jest.advanceTimersByTime(MOCK_INTERVAL_MS);
+        await jest.advanceTimersByTimeAsync(MOCK_INTERVAL_MS);
         expect(mockSend).not.toHaveBeenCalled();
     });
     if (__BROWSER__) {
-        it('stops pinging the connection when it goes offline', () => {
+        it('stops pinging the connection when it goes offline', async () => {
+            expect.assertions(1);
             getRpcSubscriptionsChannelWithAutoping({
                 abortSignal: new AbortController().signal,
                 channel: mockChannel,
                 intervalMs: MOCK_INTERVAL_MS,
             });
             globalThis.window.dispatchEvent(new Event('offline'));
-            jest.advanceTimersByTime(MOCK_INTERVAL_MS);
+            await jest.advanceTimersByTimeAsync(MOCK_INTERVAL_MS);
             expect(mockSend).not.toHaveBeenCalled();
         });
         describe('when the network connection is offline to start', () => {
@@ -152,22 +158,24 @@ describe('getRpcSubscriptionsChannelWithAutoping', () => {
                     onLine: false,
                 }));
             });
-            it('does not ping the connection', () => {
+            it('does not ping the connection', async () => {
+                expect.assertions(1);
                 getRpcSubscriptionsChannelWithAutoping({
                     abortSignal: new AbortController().signal,
                     channel: mockChannel,
                     intervalMs: MOCK_INTERVAL_MS,
                 });
-                jest.advanceTimersByTime(MOCK_INTERVAL_MS);
+                await jest.advanceTimersByTimeAsync(MOCK_INTERVAL_MS);
                 expect(mockSend).not.toHaveBeenCalled();
             });
-            it('pings the connection immediately when the connection comes back online', () => {
+            it('pings the connection immediately when the connection comes back online', async () => {
+                expect.assertions(1);
                 getRpcSubscriptionsChannelWithAutoping({
                     abortSignal: new AbortController().signal,
                     channel: mockChannel,
                     intervalMs: MOCK_INTERVAL_MS,
                 });
-                jest.advanceTimersByTime(500);
+                await jest.advanceTimersByTimeAsync(500);
                 globalThis.window.dispatchEvent(new Event('online'));
                 expect(mockSend).toHaveBeenCalledWith(
                     expect.objectContaining({
@@ -176,19 +184,20 @@ describe('getRpcSubscriptionsChannelWithAutoping', () => {
                     }),
                 );
             });
-            it('pings the connection interval milliseconds after the connection comes back online', () => {
+            it('pings the connection interval milliseconds after the connection comes back online', async () => {
+                expect.assertions(3);
                 getRpcSubscriptionsChannelWithAutoping({
                     abortSignal: new AbortController().signal,
                     channel: mockChannel,
                     intervalMs: MOCK_INTERVAL_MS,
                 });
-                jest.advanceTimersByTime(500);
+                await jest.advanceTimersByTimeAsync(500);
                 globalThis.window.dispatchEvent(new Event('online'));
                 mockSend.mockClear();
                 expect(mockSend).not.toHaveBeenCalled();
-                jest.advanceTimersByTime(MOCK_INTERVAL_MS - 1);
+                await jest.advanceTimersByTimeAsync(MOCK_INTERVAL_MS - 1);
                 expect(mockSend).not.toHaveBeenCalled();
-                jest.advanceTimersByTime(1);
+                await jest.advanceTimersByTimeAsync(1);
                 expect(mockSend).toHaveBeenCalledWith(
                     expect.objectContaining({
                         jsonrpc: '2.0',
