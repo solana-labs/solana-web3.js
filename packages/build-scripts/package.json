@@ -3,6 +3,7 @@
     "version": "0.0.0",
     "private": true,
     "files": [
+        "register-node-globals.mjs",
         "tsup.config.library.ts",
         "tsup.config.package.ts"
     ],
