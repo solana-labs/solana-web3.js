@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
+
 import type { Address } from '@solana/addresses';
 import type { Rpc } from '@solana/rpc-spec';
 

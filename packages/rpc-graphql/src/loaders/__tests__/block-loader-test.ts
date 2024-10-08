@@ -47,7 +47,7 @@ describe('account loader', () => {
                     }
                 }
             `;
-            rpcGraphQL.query(source, { slot });
+            rpcGraphQL.query(source, { slot }).catch(() => {});
             await jest.runAllTimersAsync();
             expect(rpc.getBlock).toHaveBeenCalledTimes(1);
         });
@@ -62,8 +62,8 @@ describe('account loader', () => {
                 }
             `;
             // Call the query twice
-            rpcGraphQL.query(source, { slot });
-            rpcGraphQL.query(source, { slot });
+            rpcGraphQL.query(source, { slot }).catch(() => {});
+            rpcGraphQL.query(source, { slot }).catch(() => {});
             await jest.runAllTimersAsync();
             expect(rpc.getBlock).toHaveBeenCalledTimes(2);
         });
@@ -85,7 +85,7 @@ describe('account loader', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source, { slot });
+                rpcGraphQL.query(source, { slot }).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(1);
                 expect(rpc.getBlock).toHaveBeenLastCalledWith(slot, {
@@ -106,7 +106,7 @@ describe('account loader', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source, { slot });
+                rpcGraphQL.query(source, { slot }).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(1);
                 expect(rpc.getBlock).toHaveBeenLastCalledWith(slot, {
@@ -130,7 +130,7 @@ describe('account loader', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source, { slot });
+                rpcGraphQL.query(source, { slot }).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(2);
                 expect(rpc.getBlock).toHaveBeenCalledWith(slot, {
@@ -155,7 +155,7 @@ describe('account loader', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source, { slot });
+                rpcGraphQL.query(source, { slot }).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(1);
                 expect(rpc.getBlock).toHaveBeenLastCalledWith(slot, {
@@ -175,7 +175,7 @@ describe('account loader', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source, { slot });
+                rpcGraphQL.query(source, { slot }).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(1);
                 expect(rpc.getBlock).toHaveBeenLastCalledWith(slot, {
@@ -196,7 +196,7 @@ describe('account loader', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source, { slot });
+                rpcGraphQL.query(source, { slot }).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(1);
                 expect(rpc.getBlock).toHaveBeenLastCalledWith(slot, {
@@ -219,7 +219,7 @@ describe('account loader', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source, { slot });
+                rpcGraphQL.query(source, { slot }).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(1);
                 expect(rpc.getBlock).toHaveBeenLastCalledWith(slot, {
@@ -241,7 +241,7 @@ describe('account loader', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source, { slot });
+                rpcGraphQL.query(source, { slot }).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(1);
                 expect(rpc.getBlock).toHaveBeenLastCalledWith(slot, {
@@ -263,7 +263,7 @@ describe('account loader', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source, { slot });
+                rpcGraphQL.query(source, { slot }).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(1);
                 expect(rpc.getBlock).toHaveBeenLastCalledWith(slot, {
@@ -291,7 +291,7 @@ describe('account loader', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source, { slot });
+                rpcGraphQL.query(source, { slot }).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(1);
                 expect(rpc.getBlock).toHaveBeenLastCalledWith(slot, {
@@ -325,7 +325,7 @@ describe('account loader', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source, { slot });
+                rpcGraphQL.query(source, { slot }).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(1);
                 expect(rpc.getBlock).toHaveBeenLastCalledWith(slot, {
@@ -360,7 +360,7 @@ describe('account loader', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source, { slot });
+                rpcGraphQL.query(source, { slot }).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(2);
                 expect(rpc.getBlock).toHaveBeenCalledWith(slot, {
@@ -388,7 +388,7 @@ describe('account loader', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source, { slot });
+                rpcGraphQL.query(source, { slot }).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(2);
                 expect(rpc.getBlock).toHaveBeenCalledWith(slot, {
@@ -415,7 +415,7 @@ describe('account loader', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source, { slot });
+                rpcGraphQL.query(source, { slot }).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(1);
                 expect(rpc.getBlock).toHaveBeenLastCalledWith(slot, {
@@ -435,7 +435,7 @@ describe('account loader', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source, { slot });
+                rpcGraphQL.query(source, { slot }).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(1);
                 expect(rpc.getBlock).toHaveBeenLastCalledWith(slot, {
@@ -459,7 +459,7 @@ describe('account loader', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source, { slot });
+                rpcGraphQL.query(source, { slot }).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(3);
                 expect(rpc.getBlock).toHaveBeenCalledWith(slot, {

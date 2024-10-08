@@ -99,11 +99,11 @@ describe('getRpcSubscriptionsChannelWithAutoping', () => {
             channel: mockChannel,
             intervalMs: MOCK_INTERVAL_MS,
         });
-        autopingChannel.send('hi');
+        autopingChannel.send('hi').catch(() => {});
         mockSend.mockClear();
         await jest.advanceTimersByTimeAsync(500);
         expect(mockSend).not.toHaveBeenCalled();
-        autopingChannel.send('hi');
+        autopingChannel.send('hi').catch(() => {});
         mockSend.mockClear();
         await jest.advanceTimersByTimeAsync(MOCK_INTERVAL_MS - 1);
         expect(mockSend).not.toHaveBeenCalled();

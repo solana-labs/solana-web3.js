@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import type { MaybeAccount, MaybeEncodedAccount } from '@solana/accounts';
 import type { Address } from '@solana/addresses';
 import type { JsonParsedSysvarAccount } from '@solana/rpc-parsed-types';

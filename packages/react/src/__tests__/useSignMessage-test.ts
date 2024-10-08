@@ -83,9 +83,9 @@ describe('useSignMessage', () => {
                 throw result.current;
             } else {
                 const signMessage = result.current;
-                signMessage({ message: new Uint8Array([1, 2, 3]) });
+                signMessage({ message: new Uint8Array([1, 2, 3]) }).catch(() => {});
                 await jest.runAllTimersAsync();
-                signMessage({ message: new Uint8Array([1, 2, 3]) });
+                signMessage({ message: new Uint8Array([1, 2, 3]) }).catch(() => {});
                 // eslint-disable-next-line jest/no-conditional-expect
                 expect(mockSignMessage).toHaveBeenCalledTimes(2);
                 // eslint-disable-next-line jest/no-conditional-expect

@@ -17,15 +17,15 @@ describe('RPC request coalescer', () => {
             hashFn.mockReturnValue('samehash');
         });
         it('multiple requests in the same tick produce a single transport request', () => {
-            coalescedTransport({ payload: null });
-            coalescedTransport({ payload: null });
+            coalescedTransport({ payload: null }).catch(() => {});
+            coalescedTransport({ payload: null }).catch(() => {});
             expect(mockTransport).toHaveBeenCalledTimes(1);
         });
         it('multiple requests in different ticks each produce their own transport request', async () => {
             expect.assertions(1);
-            coalescedTransport({ payload: null });
+            coalescedTransport({ payload: null }).catch(() => {});
             await jest.runOnlyPendingTimersAsync();
-            coalescedTransport({ payload: null });
+            coalescedTransport({ payload: null }).catch(() => {});
             expect(mockTransport).toHaveBeenCalledTimes(2);
         });
         it('multiple requests in the same tick receive the same response', async () => {
@@ -89,7 +89,7 @@ describe('RPC request coalescer', () => {
             abortControllerA.abort('o no A');
             abortControllerB.abort('o no B');
             // New request comes in at the last moment before the end of the runloop.
-            coalescedTransport({ payload: null });
+            coalescedTransport({ payload: null }).catch(() => {});
             await jest.runOnlyPendingTimersAsync();
             expect(mockTransport).toHaveBeenCalledTimes(1);
             const transportAbortSignal = mockTransport.mock.lastCall![0].signal!;
@@ -186,8 +186,8 @@ describe('RPC request coalescer', () => {
                 hashFn.mockImplementation(getHashFn());
             });
             it('multiple requests in the same tick produce one transport request each', () => {
-                coalescedTransport({ payload: null });
-                coalescedTransport({ payload: null });
+                coalescedTransport({ payload: null }).catch(() => {});
+                coalescedTransport({ payload: null }).catch(() => {});
                 expect(mockTransport).toHaveBeenCalledTimes(2);
             });
             it('multiple requests in the same tick receive different responses', async () => {

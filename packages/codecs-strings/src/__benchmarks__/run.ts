@@ -55,7 +55,7 @@ bench
         },
     );
 
-(async () => {
+void (async () => {
     await bench.warmup();
     await bench.run();
 

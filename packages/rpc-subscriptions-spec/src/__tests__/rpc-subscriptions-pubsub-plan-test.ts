@@ -59,7 +59,7 @@ describe('executeRpcPubSubSubscriptionPlan', () => {
             subscribeMethodName: 'thingSubscribe',
             subscribeParams: [],
             unsubscribeMethodName: 'thingUnsubscribe',
-        });
+        }).catch(() => {});
         expect(mockChannel.on).toHaveBeenCalledWith('error', expect.any(Function), {
             signal: abortController.signal,
         });
@@ -72,7 +72,7 @@ describe('executeRpcPubSubSubscriptionPlan', () => {
             subscribeMethodName: 'thingSubscribe',
             subscribeParams: expectedParams,
             unsubscribeMethodName: 'thingUnsubscribe',
-        });
+        }).catch(() => {});
         expect(mockSend).toHaveBeenCalledWith(
             expect.objectContaining({
                 id: expect.any(Number),
@@ -288,7 +288,7 @@ describe('executeRpcPubSubSubscriptionPlan', () => {
                     subscribeMethodName: 'thingSubscribe',
                     subscribeParams: [],
                     unsubscribeMethodName: 'thingUnsubscribe',
-                });
+                }).catch(() => {});
                 await jest.runAllTimersAsync();
                 receiveMessage({ id: lastMessageId, jsonrpc: '2.0', result: (expectedSubscriptionId = 123) });
             });

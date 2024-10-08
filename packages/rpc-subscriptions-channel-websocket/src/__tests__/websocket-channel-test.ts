@@ -152,7 +152,7 @@ describe('a websocket channel', () => {
         });
         it('sends a message to the websocket', async () => {
             expect.assertions(1);
-            channel.send('message');
+            channel.send('message').catch(() => {});
             await expect(ws).toReceiveMessage('message');
         });
         it('throws when sending a message to a closing channel', async () => {
@@ -190,9 +190,12 @@ describe('a websocket channel', () => {
             it('queues messages until the buffer falls to the high watermark', async () => {
                 expect.assertions(2);
                 let resolved = false;
-                channel.send('message').then(() => {
-                    resolved = true;
-                });
+                channel
+                    .send('message')
+                    .then(() => {
+                        resolved = true;
+                    })
+                    .catch(() => {});
                 await Promise.resolve(); // Flush Promise queue.
                 expect(resolved).toBe(false);
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -203,7 +206,7 @@ describe('a websocket channel', () => {
                 expect.assertions(1);
                 const message = new Uint8Array(1) satisfies ArrayBufferView;
                 message[0] = 42;
-                channel.send(message);
+                channel.send(message).catch(() => {});
                 message[0] = 255; // Some modification
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 (client as any).bufferedAmount = MOCK_SEND_BUFFER_HIGH_WATERMARK;

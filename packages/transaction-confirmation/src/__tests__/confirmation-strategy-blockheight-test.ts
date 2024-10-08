@@ -156,22 +156,16 @@ describe('createBlockHeightExceedencePromiseFactory', () => {
                 abortSignal: new AbortController().signal,
                 commitment,
                 lastValidBlockHeight: 100n,
-            });
+            }).catch(() => {});
             expect(getEpochInfoMock).toHaveBeenCalledWith({ commitment });
         },
     );
     it('calls the abort signal passed to the epoch info fetcher when aborted', () => {
         const abortController = new AbortController();
-        (async () => {
-            try {
-                await getBlockHeightExceedencePromise({
-                    abortSignal: abortController.signal,
-                    lastValidBlockHeight: 100n,
-                });
-            } catch {
-                /* empty */
-            }
-        })();
+        getBlockHeightExceedencePromise({
+            abortSignal: abortController.signal,
+            lastValidBlockHeight: 100n,
+        }).catch(() => {});
         expect(getEpochInfoRequestSender).toHaveBeenCalledWith({
             abortSignal: expect.objectContaining({ aborted: false }),
         });
@@ -182,16 +176,10 @@ describe('createBlockHeightExceedencePromiseFactory', () => {
     });
     it('calls the abort signal passed to the slot subscription when aborted', () => {
         const abortController = new AbortController();
-        (async () => {
-            try {
-                await getBlockHeightExceedencePromise({
-                    abortSignal: abortController.signal,
-                    lastValidBlockHeight: 100n,
-                });
-            } catch {
-                /* empty */
-            }
-        })();
+        getBlockHeightExceedencePromise({
+            abortSignal: abortController.signal,
+            lastValidBlockHeight: 100n,
+        }).catch(() => {});
         expect(createSubscriptionIterable).toHaveBeenCalledWith({
             abortSignal: expect.objectContaining({ aborted: false }),
         });
