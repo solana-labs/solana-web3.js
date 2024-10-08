@@ -104,8 +104,8 @@ importers:
         specifier: ^30.0.0-alpha.6
         version: 30.0.0-alpha.6(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       jest-runner-eslint:
-        specifier: ^2.2.0
-        version: 2.2.0(eslint@8.57.1)(jest@30.0.0-alpha.6(@types/node@22.7.4)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.7.4)(typescript@5.6.2)))
+        specifier: ^2.2.1
+        version: 2.2.1(eslint@8.57.1)(jest@30.0.0-alpha.6(@types/node@22.7.4)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.7.4)(typescript@5.6.2)))
       jest-runner-prettier:
         specifier: ^1.0.0
         version: 1.0.0(patch_hash=wxyu3ekhzy6qhvwrai2xltdhn4)(bufferutil@4.0.8)(jest@30.0.0-alpha.6(@types/node@22.7.4)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.7.4)(typescript@5.6.2)))(prettier@3.3.3)(utf-8-validate@5.0.10)
@@ -5188,8 +5188,8 @@ packages:
     resolution: {integrity: sha512-0EyeId+RFng52qHvuxOzKjZd2uDF/2Hdzpzt54+biGgY/VVAvf8mYE9UV7g6154Ozpq6KLztSqqMCfPgVs4CbA==}
     engines: {node: ^16.10.0 || ^18.12.0 || >=20.0.0}
 
-  jest-runner-eslint@2.2.0:
-    resolution: {integrity: sha512-uR0kS/PCwCybIFh1yvbJSr3ajmusrueO8vnA4H3ItTpKCoYpQ9k2j2COrR1rdb4MnnbVBczrodCChrcJ/Hq3AQ==}
+  jest-runner-eslint@2.2.1:
+    resolution: {integrity: sha512-BSAB65hGhtr/Kmb7tSkfqFmK9LYwCMK8L1xcp+XaSToPFqr7sY1jleMZUeDhV0ITA33pW+JUCx5a02veVD2Q2w==}
     engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=18.0.0}
     peerDependencies:
       eslint: ^7 || ^8
@@ -11410,7 +11410,7 @@ snapshots:
       resolve.exports: 2.0.2
       slash: 3.0.0
 
-  jest-runner-eslint@2.2.0(eslint@8.57.1)(jest@30.0.0-alpha.6(@types/node@22.7.4)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.7.4)(typescript@5.6.2))):
+  jest-runner-eslint@2.2.1(eslint@8.57.1)(jest@30.0.0-alpha.6(@types/node@22.7.4)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.7.4)(typescript@5.6.2))):
     dependencies:
       chalk: 4.1.2
       cosmiconfig: 7.1.0
