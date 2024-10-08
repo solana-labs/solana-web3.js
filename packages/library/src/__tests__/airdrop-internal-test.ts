@@ -33,7 +33,7 @@ describe('requestAndConfirmAirdrop', () => {
             lamports: lamports(1n),
             recipientAddress: '123' as Address,
             rpc,
-        });
+        }).catch(() => {});
         expect(sendAirdropRequest).toHaveBeenCalledWith({
             abortSignal: expect.objectContaining({ aborted: false }),
         });
@@ -53,7 +53,7 @@ describe('requestAndConfirmAirdrop', () => {
             lamports: lamports(1n),
             recipientAddress: '123' as Address,
             rpc,
-        });
+        }).catch(() => {});
         await jest.runAllTimersAsync();
         expect(confirmSignatureOnlyTransaction).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -76,7 +76,7 @@ describe('requestAndConfirmAirdrop', () => {
             lamports: lamports(1n),
             recipientAddress: '123' as Address,
             rpc,
-        });
+        }).catch(() => {});
         expect(requestAirdrop).toHaveBeenCalledWith('123', 1n, { commitment: 'finalized' });
     });
     it('passes the expected input to the transaction confirmer', async () => {
@@ -89,7 +89,7 @@ describe('requestAndConfirmAirdrop', () => {
             lamports: lamports(1n),
             recipientAddress: '123' as Address,
             rpc,
-        });
+        }).catch(() => {});
         await jest.runAllTimersAsync();
         expect(confirmSignatureOnlyTransaction).toHaveBeenCalledWith({
             abortSignal: expect.any(AbortSignal),

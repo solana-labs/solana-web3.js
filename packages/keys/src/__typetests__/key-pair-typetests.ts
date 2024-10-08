@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import { ReadonlyUint8Array } from '@solana/codecs-core';
 
 import { createKeyPairFromBytes, createKeyPairFromPrivateKeyBytes } from '../key-pair';

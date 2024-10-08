@@ -39,7 +39,7 @@ describe('program accounts resolver', () => {
                     }
                 }
             `;
-            rpcGraphQL.query(source);
+            rpcGraphQL.query(source).catch(() => {});
             await jest.runAllTimersAsync();
             expect(rpc.getProgramAccounts).toHaveBeenCalledTimes(1);
             expect(rpc.getProgramAccounts).toHaveBeenLastCalledWith('AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca', {
@@ -59,7 +59,7 @@ describe('program accounts resolver', () => {
                     }
                 }
             `;
-            rpcGraphQL.query(source);
+            rpcGraphQL.query(source).catch(() => {});
             await jest.runAllTimersAsync();
             expect(rpc.getProgramAccounts).toHaveBeenCalledTimes(2);
             expect(rpc.getProgramAccounts).toHaveBeenCalledWith('AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca', {
@@ -84,7 +84,7 @@ describe('program accounts resolver', () => {
                     }
                 }
             `;
-            rpcGraphQL.query(source);
+            rpcGraphQL.query(source).catch(() => {});
             await jest.runAllTimersAsync();
             expect(rpc.getProgramAccounts).toHaveBeenCalledTimes(1);
             expect(rpc.getProgramAccounts).toHaveBeenCalledWith('AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca', {
@@ -110,7 +110,7 @@ describe('program accounts resolver', () => {
                     lamports
                 }
             `;
-            rpcGraphQL.query(source);
+            rpcGraphQL.query(source).catch(() => {});
             await jest.runAllTimersAsync();
             expect(rpc.getProgramAccounts).toHaveBeenCalledTimes(1);
             expect(rpc.getProgramAccounts).toHaveBeenLastCalledWith('AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca', {
@@ -134,7 +134,7 @@ describe('program accounts resolver', () => {
                     data(encoding: BASE_64_ZSTD)
                 }
             `;
-            rpcGraphQL.query(source);
+            rpcGraphQL.query(source).catch(() => {});
             await jest.runAllTimersAsync();
             expect(rpc.getProgramAccounts).toHaveBeenCalledTimes(1);
             expect(rpc.getProgramAccounts).toHaveBeenLastCalledWith('AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca', {
@@ -157,7 +157,7 @@ describe('program accounts resolver', () => {
                     }
                 }
             `;
-            rpcGraphQL.query(source);
+            rpcGraphQL.query(source).catch(() => {});
             await jest.runAllTimersAsync();
             expect(rpc.getProgramAccounts).toHaveBeenCalledTimes(1);
             expect(rpc.getProgramAccounts).toHaveBeenLastCalledWith('AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca', {
@@ -180,7 +180,7 @@ describe('program accounts resolver', () => {
                     }
                 }
             `;
-            rpcGraphQL.query(source);
+            rpcGraphQL.query(source).catch(() => {});
             await jest.runAllTimersAsync();
             expect(rpc.getProgramAccounts).toHaveBeenCalledTimes(2);
             expect(rpc.getProgramAccounts).toHaveBeenCalledWith('AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca', {
@@ -207,7 +207,7 @@ describe('program accounts resolver', () => {
                     }
                 }
             `;
-            rpcGraphQL.query(source);
+            rpcGraphQL.query(source).catch(() => {});
             await jest.runAllTimersAsync();
             expect(rpc.getProgramAccounts).toHaveBeenCalledTimes(1);
             expect(rpc.getProgramAccounts).toHaveBeenLastCalledWith('AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca', {

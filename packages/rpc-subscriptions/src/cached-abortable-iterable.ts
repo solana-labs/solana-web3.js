@@ -21,7 +21,7 @@ type Config<TInput extends unknown[], TIterable extends AsyncIterable<unknown>> 
 }>;
 
 function registerIterableCleanup(iterable: AsyncIterable<unknown>, cleanupFn: CallableFunction) {
-    (async () => {
+    void (async () => {
         try {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             for await (const _ of iterable);

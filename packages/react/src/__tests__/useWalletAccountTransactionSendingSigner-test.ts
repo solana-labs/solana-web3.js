@@ -115,7 +115,7 @@ describe('useWalletAccountTransactionSendingSigner', () => {
                     '11111111111111111111111111111114': new Uint8Array(64).fill(2) as SignatureBytes,
                 },
             };
-            signAndSendTransactions([inputTransaction]);
+            signAndSendTransactions([inputTransaction]).catch(() => {});
             // eslint-disable-next-line jest/no-conditional-expect
             expect(mockEncodeTransaction).toHaveBeenCalledWith(inputTransaction);
             // eslint-disable-next-line jest/no-conditional-expect
@@ -163,7 +163,7 @@ describe('useWalletAccountTransactionSendingSigner', () => {
             signAndSendTransactions([inputTransaction], {
                 abortSignal: AbortSignal.timeout(1_000_000),
                 ...mockOptions,
-            });
+            }).catch(() => {});
             // eslint-disable-next-line jest/no-conditional-expect
             expect(mockSignAndSendTransaction).toHaveBeenCalledWith(mockOptions);
         }

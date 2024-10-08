@@ -123,9 +123,9 @@ describe('useSignIn', () => {
         describe('the function returned', () => {
             it("calls the wallet's `signIn` implementation", async () => {
                 expect.assertions(2);
-                signIn({ statement: 'You will really like being signed in' });
+                signIn({ statement: 'You will really like being signed in' }).catch(() => {});
                 await jest.runAllTimersAsync();
-                signIn({ statement: 'You will really like being signed in' });
+                signIn({ statement: 'You will really like being signed in' }).catch(() => {});
                 // eslint-disable-next-line jest/no-conditional-expect
                 expect(mockSignIn).toHaveBeenCalledTimes(2);
                 // eslint-disable-next-line jest/no-conditional-expect
@@ -153,9 +153,9 @@ describe('useSignIn', () => {
         describe('the function returned', () => {
             it("calls the wallet's `signIn` implementation", async () => {
                 expect.assertions(2);
-                signIn({ statement: 'You will really like being signed in' });
+                signIn({ statement: 'You will really like being signed in' }).catch(() => {});
                 await jest.runAllTimersAsync();
-                signIn({ statement: 'You will really like being signed in' });
+                signIn({ statement: 'You will really like being signed in' }).catch(() => {});
                 // eslint-disable-next-line jest/no-conditional-expect
                 expect(mockSignIn).toHaveBeenCalledTimes(2);
                 // eslint-disable-next-line jest/no-conditional-expect
@@ -168,7 +168,7 @@ describe('useSignIn', () => {
                 signIn({
                     // @ts-expect-error Not allowed by TypeScript, but what if supplied anyway?
                     address: '123',
-                });
+                }).catch(() => {});
                 // eslint-disable-next-line jest/no-conditional-expect
                 expect(mockSignIn).toHaveBeenCalledWith({ address: 'abc' });
             });

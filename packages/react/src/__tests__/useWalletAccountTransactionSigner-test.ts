@@ -111,7 +111,7 @@ describe('useWalletAccountTransactionSigner', () => {
                     '11111111111111111111111111111114': new Uint8Array(64).fill(2) as SignatureBytes,
                 },
             };
-            modifyAndSignTransactions([inputTransaction]);
+            modifyAndSignTransactions([inputTransaction]).catch(() => {});
             // eslint-disable-next-line jest/no-conditional-expect
             expect(mockEncodeTransaction).toHaveBeenCalledWith(inputTransaction);
             // eslint-disable-next-line jest/no-conditional-expect
@@ -161,7 +161,7 @@ describe('useWalletAccountTransactionSigner', () => {
             modifyAndSignTransactions([inputTransaction], {
                 abortSignal: AbortSignal.timeout(1_000_000),
                 ...mockOptions,
-            });
+            }).catch(() => {});
             // eslint-disable-next-line jest/no-conditional-expect
             expect(mockSignTransaction).toHaveBeenCalledWith(mockOptions);
         }

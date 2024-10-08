@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import { getPublicKeyFromPrivateKey } from '../public-key';
 
 getPublicKeyFromPrivateKey(new CryptoKey()) satisfies Promise<CryptoKey>;

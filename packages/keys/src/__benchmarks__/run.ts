@@ -40,7 +40,7 @@ bench
         },
     });
 
-(async () => {
+void (async () => {
     await bench.run();
     console.table(bench.table());
 })();

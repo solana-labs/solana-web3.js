@@ -54,7 +54,7 @@ describe('waitForDurableNonceTransactionConfirmation', () => {
             getNonceInvalidationPromise,
             getRecentSignatureConfirmationPromise,
             transaction: MOCK_DURABLE_NONCE_TRANSACTION,
-        });
+        }).catch(() => {});
         expect(getNonceInvalidationPromise).toHaveBeenCalledWith({
             abortSignal: expect.any(AbortSignal),
             commitment: 'finalized',
@@ -75,7 +75,7 @@ describe('waitForDurableNonceTransactionConfirmation', () => {
             getNonceInvalidationPromise,
             getRecentSignatureConfirmationPromise,
             transaction: MOCK_DURABLE_NONCE_TRANSACTION,
-        });
+        }).catch(() => {});
         abortController.abort();
         expect(handleAbortOnBlockHeightExceedencePromise).toHaveBeenCalled();
     });
@@ -92,7 +92,7 @@ describe('waitForDurableNonceTransactionConfirmation', () => {
             getNonceInvalidationPromise,
             getRecentSignatureConfirmationPromise,
             transaction: MOCK_DURABLE_NONCE_TRANSACTION,
-        });
+        }).catch(() => {});
         abortController.abort();
         expect(handleAbortOnSignatureConfirmationPromise).toHaveBeenCalled();
     });
@@ -103,7 +103,7 @@ describe('waitForDurableNonceTransactionConfirmation', () => {
             getNonceInvalidationPromise,
             getRecentSignatureConfirmationPromise,
             transaction: MOCK_DURABLE_NONCE_TRANSACTION,
-        });
+        }).catch(() => {});
         expect(getRecentSignatureConfirmationPromise).toHaveBeenCalledWith({
             abortSignal: expect.any(AbortSignal),
             commitment: 'finalized',
@@ -203,7 +203,7 @@ describe('waitForRecentTransactionConfirmation', () => {
             getBlockHeightExceedencePromise,
             getRecentSignatureConfirmationPromise,
             transaction: MOCK_TRANSACTION,
-        });
+        }).catch(() => {});
         expect(getBlockHeightExceedencePromise).toHaveBeenCalledWith({
             abortSignal: expect.any(AbortSignal),
             commitment: 'finalized',
@@ -217,7 +217,7 @@ describe('waitForRecentTransactionConfirmation', () => {
             getBlockHeightExceedencePromise,
             getRecentSignatureConfirmationPromise,
             transaction: MOCK_TRANSACTION,
-        });
+        }).catch(() => {});
         expect(getRecentSignatureConfirmationPromise).toHaveBeenCalledWith({
             abortSignal: expect.any(AbortSignal),
             commitment: 'finalized',
@@ -294,7 +294,7 @@ describe('waitForRecentTransactionConfirmation', () => {
             getBlockHeightExceedencePromise,
             getRecentSignatureConfirmationPromise,
             transaction: MOCK_TRANSACTION,
-        });
+        }).catch(() => {});
         abortController.abort();
         expect(handleAbortOnBlockHeightExceedencePromise).toHaveBeenCalled();
     });
@@ -311,7 +311,7 @@ describe('waitForRecentTransactionConfirmation', () => {
             getBlockHeightExceedencePromise,
             getRecentSignatureConfirmationPromise,
             transaction: MOCK_TRANSACTION,
-        });
+        }).catch(() => {});
         abortController.abort();
         expect(handleAbortOnSignatureConfirmationPromise).toHaveBeenCalled();
     });
@@ -345,7 +345,7 @@ describe('waitForRecentTransactionConfirmationUntilTimeout', () => {
             getRecentSignatureConfirmationPromise,
             getTimeoutPromise,
             signature: MOCK_SIGNATURE,
-        });
+        }).catch(() => {});
         expect(getTimeoutPromise).toHaveBeenCalledWith({
             abortSignal: expect.any(AbortSignal),
             commitment: 'finalized',
@@ -358,7 +358,7 @@ describe('waitForRecentTransactionConfirmationUntilTimeout', () => {
             getRecentSignatureConfirmationPromise,
             getTimeoutPromise,
             signature: MOCK_SIGNATURE,
-        });
+        }).catch(() => {});
         expect(getRecentSignatureConfirmationPromise).toHaveBeenCalledWith({
             abortSignal: expect.any(AbortSignal),
             commitment: 'finalized',
@@ -415,7 +415,7 @@ describe('waitForRecentTransactionConfirmationUntilTimeout', () => {
             getRecentSignatureConfirmationPromise,
             getTimeoutPromise,
             signature: MOCK_SIGNATURE,
-        });
+        }).catch(() => {});
         abortController.abort();
         expect(handleAbortOnTimeoutPromise).toHaveBeenCalled();
     });
@@ -432,7 +432,7 @@ describe('waitForRecentTransactionConfirmationUntilTimeout', () => {
             getRecentSignatureConfirmationPromise,
             getTimeoutPromise,
             signature: MOCK_SIGNATURE,
-        });
+        }).catch(() => {});
         abortController.abort();
         expect(handleAbortOnSignatureConfirmationPromise).toHaveBeenCalled();
     });

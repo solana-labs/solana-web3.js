@@ -196,7 +196,7 @@ describe('getCachedAbortableIterableFactory', () => {
                     resolve = r;
                 }),
         );
-        Promise.all([factory('A'), factory('B')]);
+        Promise.all([factory('A'), factory('B')]).catch(() => {});
         expect(onCacheHit).not.toHaveBeenCalled();
         await jest.runAllTimersAsync();
         const iterable = getAsyncIterable();
@@ -210,7 +210,7 @@ describe('getCachedAbortableIterableFactory', () => {
     it('calls `onCacheHit` in the same runloop when the cached iterable is already resolved', () => {
         const iterable = getAsyncIterable();
         onCreateIterable.mockReturnValue(iterable);
-        Promise.all([factory('A'), factory('B')]);
+        Promise.all([factory('A'), factory('B')]).catch(() => {});
         expect(onCacheHit).toHaveBeenCalledWith(iterable, 'B');
     });
     it('does not call `onCacheHit` in different runloops until the cached iterable is resolved', async () => {
@@ -222,9 +222,9 @@ describe('getCachedAbortableIterableFactory', () => {
                     resolve = r;
                 }),
         );
-        factory('A');
+        factory('A').catch(() => {});
         await jest.runAllTimersAsync();
-        factory('B');
+        factory('B').catch(() => {});
         await jest.runAllTimersAsync();
         expect(onCacheHit).not.toHaveBeenCalled();
         const iterable = getAsyncIterable();

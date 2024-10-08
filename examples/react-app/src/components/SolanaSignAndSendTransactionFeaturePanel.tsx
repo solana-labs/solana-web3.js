@@ -92,8 +92,8 @@ export function SolanaSignAndSendTransactionFeaturePanel({ account }: Props) {
                         );
                         assertIsTransactionMessageWithSingleSendingSigner(message);
                         const signature = await signAndSendTransactionMessageWithSigners(message);
-                        mutate({ address: transactionSendingSigner.address, chain: currentChain });
-                        mutate({ address: recipientAccount.address, chain: currentChain });
+                        void mutate({ address: transactionSendingSigner.address, chain: currentChain });
+                        void mutate({ address: recipientAccount.address, chain: currentChain });
                         setLastSignature(signature);
                         setSolQuantityString('');
                     } catch (e) {

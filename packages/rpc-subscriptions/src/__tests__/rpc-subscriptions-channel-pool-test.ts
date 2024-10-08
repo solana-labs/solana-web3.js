@@ -44,8 +44,8 @@ describe('getChannelPoolingChannelCreator', () => {
             maxSubscriptionsPerChannel: Number.POSITIVE_INFINITY,
             minChannels: 1,
         });
-        poolingChannelCreator({ abortSignal: new AbortController().signal });
-        poolingChannelCreator({ abortSignal: new AbortController().signal });
+        poolingChannelCreator({ abortSignal: new AbortController().signal }).catch(() => {});
+        poolingChannelCreator({ abortSignal: new AbortController().signal }).catch(() => {});
         expect(channelPool).toMatchObject({
             entries: [{ channel: newChannel, subscriptionCount: 2 }],
             freeChannelIndex: 0,
@@ -59,8 +59,8 @@ describe('getChannelPoolingChannelCreator', () => {
             maxSubscriptionsPerChannel: 1,
             minChannels: 1,
         });
-        poolingChannelCreator({ abortSignal: new AbortController().signal });
-        poolingChannelCreator({ abortSignal: new AbortController().signal });
+        poolingChannelCreator({ abortSignal: new AbortController().signal }).catch(() => {});
+        poolingChannelCreator({ abortSignal: new AbortController().signal }).catch(() => {});
         expect(channelPool).toMatchObject({
             entries: [
                 { channel: newChannelA, subscriptionCount: 1 },
@@ -78,7 +78,7 @@ describe('getChannelPoolingChannelCreator', () => {
             minChannels: 1,
         });
         const abortController = new AbortController();
-        poolingChannelCreator({ abortSignal: abortController.signal });
+        poolingChannelCreator({ abortSignal: abortController.signal }).catch(() => {});
         expect(channelPool).toMatchObject({
             entries: [{ channel: newChannelA, subscriptionCount: 1 }],
             freeChannelIndex: 0,
@@ -97,7 +97,7 @@ describe('getChannelPoolingChannelCreator', () => {
             minChannels: 1,
         });
         const abortController = new AbortController();
-        poolingChannelCreator({ abortSignal: abortController.signal });
+        poolingChannelCreator({ abortSignal: abortController.signal }).catch(() => {});
         channelPool.entries = [
             { subscriptionCount: 2 },
             ...channelPool.entries,
@@ -122,8 +122,8 @@ describe('getChannelPoolingChannelCreator', () => {
             minChannels: 1,
         });
         const abortController = new AbortController();
-        poolingChannelCreator({ abortSignal: abortController.signal });
-        poolingChannelCreator({ abortSignal: new AbortController().signal });
+        poolingChannelCreator({ abortSignal: abortController.signal }).catch(() => {});
+        poolingChannelCreator({ abortSignal: new AbortController().signal }).catch(() => {});
         channelPool.entries = [...channelPool.entries, { subscriptionCount: 1 }] as ChannelPoolEntry[];
         channelPool.freeChannelIndex = 1;
         expect(channelPool).toMatchObject({
@@ -144,9 +144,9 @@ describe('getChannelPoolingChannelCreator', () => {
             minChannels: 2,
         });
         const abortController = new AbortController();
-        poolingChannelCreator({ abortSignal: new AbortController().signal });
-        poolingChannelCreator({ abortSignal: abortController.signal });
-        poolingChannelCreator({ abortSignal: new AbortController().signal });
+        poolingChannelCreator({ abortSignal: new AbortController().signal }).catch(() => {});
+        poolingChannelCreator({ abortSignal: abortController.signal }).catch(() => {});
+        poolingChannelCreator({ abortSignal: new AbortController().signal }).catch(() => {});
         expect(channelPool).toMatchObject({
             entries: [{ subscriptionCount: 2 }, { subscriptionCount: 1 }],
             freeChannelIndex: 1,
@@ -196,7 +196,7 @@ describe('getChannelPoolingChannelCreator', () => {
             minChannels: 1,
         });
         const abortController = new AbortController();
-        poolingChannelCreator({ abortSignal: abortController.signal });
+        poolingChannelCreator({ abortSignal: abortController.signal }).catch(() => {});
         abortController.abort();
         expect(createChannel.mock.lastCall?.[0].abortSignal).toHaveProperty('aborted', true);
     });
@@ -206,9 +206,9 @@ describe('getChannelPoolingChannelCreator', () => {
             maxSubscriptionsPerChannel: 2,
             minChannels: 1,
         });
-        poolingChannelCreator({ abortSignal: new AbortController().signal });
-        poolingChannelCreator({ abortSignal: new AbortController().signal });
-        poolingChannelCreator({ abortSignal: new AbortController().signal });
+        poolingChannelCreator({ abortSignal: new AbortController().signal }).catch(() => {});
+        poolingChannelCreator({ abortSignal: new AbortController().signal }).catch(() => {});
+        poolingChannelCreator({ abortSignal: new AbortController().signal }).catch(() => {});
         expect(channelPool).toMatchObject({
             entries: [{ subscriptionCount: 2 }, { subscriptionCount: 1 }],
             freeChannelIndex: 1,
@@ -247,8 +247,8 @@ describe('getChannelPoolingChannelCreator', () => {
             },
             send: jest.fn(),
         });
-        poolingChannelCreator({ abortSignal: new AbortController().signal });
-        poolingChannelCreator({ abortSignal: new AbortController().signal });
+        poolingChannelCreator({ abortSignal: new AbortController().signal }).catch(() => {});
+        poolingChannelCreator({ abortSignal: new AbortController().signal }).catch(() => {});
         expect(channelPool).toMatchObject({
             entries: [{ subscriptionCount: 2 }],
             freeChannelIndex: 0,

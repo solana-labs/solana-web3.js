@@ -93,7 +93,7 @@ bench
         beforeEach: createDispatcher.bind(null, { connections: 64, pipelining: 2 }),
     });
 
-(async () => {
+void (async () => {
     const validatorPromise = $`../../scripts/start-shared-test-validator.sh`;
     await $`wget --output-document=/dev/null --waitretry=1 --tries=100 --retry-connrefused ${VALIDATOR_URL.replace(
         /^(\w+:\/\/[^\\/]+)\/.*$/,
@@ -101,5 +101,5 @@ bench
     )}/health -nv`;
     await bench.run();
     console.table(bench.table());
-    validatorPromise.kill('SIGINT');
+    await validatorPromise.kill('SIGINT');
 })();
