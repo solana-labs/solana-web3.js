@@ -8,20 +8,36 @@ describe('getRpcSubscriptionsChannelWithAutoping', () => {
     let mockChannel: RpcSubscriptionsChannel<unknown, unknown>;
     let mockOn: jest.Mock;
     let mockSend: jest.Mock;
+    let mockWindowAddEventListener: jest.Mock;
+    let originalWindowAddEventListener: typeof globalThis.window.addEventListener;
     function receiveError(error?: unknown) {
         mockOn.mock.calls.filter(([type]) => type === 'error').forEach(([_, listener]) => listener(error));
     }
     function receiveMessage(message: unknown) {
         mockOn.mock.calls.filter(([type]) => type === 'message').forEach(([_, listener]) => listener(message));
     }
+    function dispatchWindowEvent(eventName: 'offline' | 'online') {
+        mockWindowAddEventListener.mock.calls
+            .filter(([type]) => type === eventName)
+            .forEach(([_, listener]) => listener());
+    }
     beforeEach(() => {
         jest.useFakeTimers();
+        if (__BROWSER__) {
+            originalWindowAddEventListener = globalThis.window.addEventListener;
+            globalThis.window.addEventListener = mockWindowAddEventListener = jest.fn();
+        }
         mockOn = jest.fn().mockReturnValue(() => {});
         mockSend = jest.fn().mockResolvedValue(void 0);
         mockChannel = {
             on: mockOn,
             send: mockSend,
         };
+    });
+    afterEach(() => {
+        if (__BROWSER__) {
+            globalThis.window.addEventListener = originalWindowAddEventListener;
+        }
     });
     it('sends a ping message to the channel at the specified interval', async () => {
         expect.assertions(4);
@@ -146,7 +162,7 @@ describe('getRpcSubscriptionsChannelWithAutoping', () => {
                 channel: mockChannel,
                 intervalMs: MOCK_INTERVAL_MS,
             });
-            globalThis.window.dispatchEvent(new Event('offline'));
+            dispatchWindowEvent('offline');
             await jest.advanceTimersByTimeAsync(MOCK_INTERVAL_MS);
             expect(mockSend).not.toHaveBeenCalled();
         });
@@ -176,7 +192,7 @@ describe('getRpcSubscriptionsChannelWithAutoping', () => {
                     intervalMs: MOCK_INTERVAL_MS,
                 });
                 await jest.advanceTimersByTimeAsync(500);
-                globalThis.window.dispatchEvent(new Event('online'));
+                dispatchWindowEvent('online');
                 expect(mockSend).toHaveBeenCalledWith(
                     expect.objectContaining({
                         jsonrpc: '2.0',
@@ -192,7 +208,7 @@ describe('getRpcSubscriptionsChannelWithAutoping', () => {
                     intervalMs: MOCK_INTERVAL_MS,
                 });
                 await jest.advanceTimersByTimeAsync(500);
-                globalThis.window.dispatchEvent(new Event('online'));
+                dispatchWindowEvent('online');
                 mockSend.mockClear();
                 expect(mockSend).not.toHaveBeenCalled();
                 await jest.advanceTimersByTimeAsync(MOCK_INTERVAL_MS - 1);
