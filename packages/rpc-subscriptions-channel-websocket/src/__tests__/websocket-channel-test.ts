@@ -60,11 +60,7 @@ describe('createWebSocketChannel', () => {
             signal: abortController.signal,
             url: 'ws://fake', // Wrong URL!
         });
-        await expect(channelPromise).rejects.toThrow(
-            new SolanaError(SOLANA_ERROR__RPC_SUBSCRIPTIONS__CHANNEL_CONNECTION_CLOSED, {
-                cause: abortController.signal.reason,
-            }),
-        );
+        await expect(channelPromise).rejects.toThrow(/operation was aborted/);
     });
     it('throws when the channel is aborted before a connection is established', async () => {
         expect.assertions(2);
@@ -77,11 +73,7 @@ describe('createWebSocketChannel', () => {
         const client = getLatestClient();
         expect(client).toHaveProperty('readyState', WebSocket.CONNECTING);
         abortController.abort();
-        await expect(channelPromise).rejects.toThrow(
-            new SolanaError(SOLANA_ERROR__RPC_SUBSCRIPTIONS__CHANNEL_FAILED_TO_CONNECT, {
-                errorEvent: {} as Event,
-            }),
-        );
+        await expect(channelPromise).rejects.toThrow(/operation was aborted/);
     });
 });
 
