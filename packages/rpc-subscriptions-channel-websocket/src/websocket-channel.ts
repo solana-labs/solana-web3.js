@@ -22,11 +22,7 @@ export function createWebSocketChannel({
     url,
 }: Config): Promise<RpcSubscriptionsChannel<WebSocketMessage, string>> {
     if (signal.aborted) {
-        return Promise.reject(
-            new SolanaError(SOLANA_ERROR__RPC_SUBSCRIPTIONS__CHANNEL_CONNECTION_CLOSED, {
-                cause: signal.reason,
-            }),
-        );
+        return Promise.reject(signal.reason);
     }
     let bufferDrainWatcher: Readonly<{ onCancel(): void; promise: Promise<void> }> | undefined;
     let hasConnected = false;
@@ -37,14 +33,10 @@ export function createWebSocketChannel({
         });
         listenerRemovers.clear();
     }
-    function handleAbort(ev: Event) {
+    function handleAbort() {
         cleanupListeners();
         if (!hasConnected) {
-            rejectOpen(
-                new SolanaError(SOLANA_ERROR__RPC_SUBSCRIPTIONS__CHANNEL_FAILED_TO_CONNECT, {
-                    errorEvent: ev,
-                }),
-            );
+            rejectOpen(signal.reason);
         }
         if (webSocket.readyState !== WebSocket.CLOSED && webSocket.readyState !== WebSocket.CLOSING) {
             webSocket.close(1000);
