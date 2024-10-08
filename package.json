@@ -37,7 +37,7 @@
         "eslint-plugin-typescript-sort-keys": "^3.2.0",
         "jest": "^30.0.0-alpha.6",
         "jest-environment-jsdom": "^30.0.0-alpha.6",
-        "jest-runner-eslint": "^2.2.0",
+        "jest-runner-eslint": "^2.2.1",
         "jest-runner-prettier": "^1.0.0",
         "jest-watch-master": "^1.0.0",
         "jest-watch-select-projects": "^2.0.0",
