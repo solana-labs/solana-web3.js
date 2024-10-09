@@ -1,5 +1,15 @@
 # @solana/rpc-subscriptions-transport-websocket
 
+## 2.0.0-rc.2
+
+### Patch Changes
+
+-   [#3137](https://github.com/solana-labs/solana-web3.js/pull/3137) [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a) Thanks [@mcintyre94](https://github.com/mcintyre94)! - Add edge-light to package exports
+
+-   Updated dependencies [[`1d87b3c`](https://github.com/solana-labs/solana-web3.js/commit/1d87b3c9fb5637cdceb31c5675e876d8fe088677), [`1c25dd4`](https://github.com/solana-labs/solana-web3.js/commit/1c25dd4069a3a8f5599285c9b0eaeb71a2f897d1), [`38faba0`](https://github.com/solana-labs/solana-web3.js/commit/38faba05fab479ddbd95d0e211744d203f8aa823), [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a)]:
+    -   @solana/rpc-subscriptions-spec@2.0.0-rc.2
+    -   @solana/errors@2.0.0-rc.2
+
 ## 2.0.0-rc.1
 
 ### Patch Changes

@@ -1,5 +1,21 @@
 # @solana/transaction-messages
 
+## 2.0.0-rc.2
+
+### Patch Changes
+
+-   [#3137](https://github.com/solana-labs/solana-web3.js/pull/3137) [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a) Thanks [@mcintyre94](https://github.com/mcintyre94)! - Add edge-light to package exports
+
+-   Updated dependencies [[`38faba0`](https://github.com/solana-labs/solana-web3.js/commit/38faba05fab479ddbd95d0e211744d203f8aa823), [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a)]:
+    -   @solana/rpc-types@2.0.0-rc.2
+    -   @solana/errors@2.0.0-rc.2
+    -   @solana/codecs-data-structures@2.0.0-rc.2
+    -   @solana/codecs-numbers@2.0.0-rc.2
+    -   @solana/instructions@2.0.0-rc.2
+    -   @solana/codecs-core@2.0.0-rc.2
+    -   @solana/functional@2.0.0-rc.2
+    -   @solana/addresses@2.0.0-rc.2
+
 ## 2.0.0-rc.1
 
 ### Patch Changes

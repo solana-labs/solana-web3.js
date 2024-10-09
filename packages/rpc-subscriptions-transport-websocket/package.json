@@ -1,6 +1,6 @@
 {
     "name": "@solana/rpc-subscriptions-transport-websocket",
-    "version": "2.0.0-rc.1",
+    "version": "2.0.0-rc.2",
     "description": "An RPC Subscriptions transport that uses WebSockets",
     "exports": {
         "edge-light": {
