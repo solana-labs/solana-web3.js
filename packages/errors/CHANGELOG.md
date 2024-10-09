@@ -1,5 +1,13 @@
 # @solana/errors
 
+## 2.0.0-rc.2
+
+### Patch Changes
+
+-   [#3134](https://github.com/solana-labs/solana-web3.js/pull/3134) [`38faba0`](https://github.com/solana-labs/solana-web3.js/commit/38faba05fab479ddbd95d0e211744d203f8aa823) Thanks [@buffalojoec](https://github.com/buffalojoec)! - Change unix timestamp type to bigint with an unsafe label
+
+-   [#3137](https://github.com/solana-labs/solana-web3.js/pull/3137) [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a) Thanks [@mcintyre94](https://github.com/mcintyre94)! - Add edge-light to package exports
+
 ## 2.0.0-rc.1
 
 ## 2.0.0-rc.0
