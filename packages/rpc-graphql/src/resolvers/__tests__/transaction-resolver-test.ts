@@ -42,7 +42,7 @@ describe('transaction resolver', () => {
                     blockTime
                 }
             `;
-            rpcGraphQL.query(source, { signature });
+            rpcGraphQL.query(source, { signature }).catch(() => {});
             await jest.runAllTimersAsync();
             expect(rpc.getTransaction).toHaveBeenCalledTimes(1);
             expect(rpc.getTransaction).toHaveBeenLastCalledWith(signature, {
@@ -66,7 +66,7 @@ describe('transaction resolver', () => {
                     data(encoding: BASE_64)
                 }
             `;
-            rpcGraphQL.query(source, { signature });
+            rpcGraphQL.query(source, { signature }).catch(() => {});
             await jest.runAllTimersAsync();
             expect(rpc.getTransaction).toHaveBeenCalledTimes(1);
             expect(rpc.getTransaction).toHaveBeenLastCalledWith(signature, {
@@ -92,7 +92,7 @@ describe('transaction resolver', () => {
                     }
                 }
             `;
-            rpcGraphQL.query(source, { signature });
+            rpcGraphQL.query(source, { signature }).catch(() => {});
             await jest.runAllTimersAsync();
             expect(rpc.getTransaction).toHaveBeenCalledTimes(1);
             expect(rpc.getTransaction).toHaveBeenLastCalledWith(signature, {
@@ -119,7 +119,7 @@ describe('transaction resolver', () => {
                     }
                 }
             `;
-            rpcGraphQL.query(source, { signature });
+            rpcGraphQL.query(source, { signature }).catch(() => {});
             await jest.runAllTimersAsync();
             expect(rpc.getTransaction).toHaveBeenCalledTimes(2);
             expect(rpc.getTransaction).toHaveBeenCalledWith(signature, {
@@ -143,7 +143,7 @@ describe('transaction resolver', () => {
                     transactionData: data(encoding: BASE_58)
                 }
             `;
-            rpcGraphQL.query(source, { signature });
+            rpcGraphQL.query(source, { signature }).catch(() => {});
             await jest.runAllTimersAsync();
             expect(rpc.getTransaction).toHaveBeenCalledTimes(1);
             expect(rpc.getTransaction).toHaveBeenLastCalledWith(signature, {

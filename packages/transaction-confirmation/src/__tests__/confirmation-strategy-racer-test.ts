@@ -22,7 +22,7 @@ describe('raceStrategies', () => {
             function getSpecificStrategiesForRace() {
                 return [];
             },
-        );
+        ).catch(() => {});
         expect(getRecentSignatureConfirmationPromise).toHaveBeenCalledWith(
             expect.objectContaining({ abortSignal: expect.objectContaining({ aborted: false }) }),
         );
@@ -44,7 +44,7 @@ describe('raceStrategies', () => {
             function getSpecificStrategiesForRace() {
                 return [];
             },
-        );
+        ).catch(() => {});
         expect(getRecentSignatureConfirmationPromise).toHaveBeenCalledWith(
             expect.objectContaining({ abortSignal: expect.objectContaining({ aborted: false }) }),
         );
@@ -63,7 +63,7 @@ describe('raceStrategies', () => {
                 getRecentSignatureConfirmationPromise: jest.fn(),
             },
             getSpecificStrategiesForRace,
-        );
+        ).catch(() => {});
         expect(getSpecificStrategiesForRace).toHaveBeenCalledWith(
             expect.objectContaining({ abortSignal: expect.objectContaining({ aborted: false }) }),
         );
@@ -83,7 +83,7 @@ describe('raceStrategies', () => {
                 getRecentSignatureConfirmationPromise: jest.fn().mockReturnValue(FOREVER_PROMISE),
             },
             getSpecificStrategiesForRace,
-        );
+        ).catch(() => {});
         expect(getSpecificStrategiesForRace).toHaveBeenCalledWith(
             expect.objectContaining({ abortSignal: expect.objectContaining({ aborted: false }) }),
         );

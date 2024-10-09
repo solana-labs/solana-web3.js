@@ -58,7 +58,7 @@ describe('createNonceInvalidationPromiseFactory', () => {
             commitment: 'finalized',
             currentNonceValue: '4'.repeat(44) as Nonce,
             nonceAccountAddress: '9'.repeat(44) as Address,
-        });
+        }).catch(() => {});
         await jest.runAllTimersAsync();
         expect(getAccountInfoMock).toHaveBeenCalledWith({
             abortSignal: expect.objectContaining({ aborted: false }),
@@ -75,7 +75,7 @@ describe('createNonceInvalidationPromiseFactory', () => {
             commitment: 'finalized',
             currentNonceValue: '4'.repeat(44) as Nonce,
             nonceAccountAddress: '9'.repeat(44) as Address,
-        });
+        }).catch(() => {});
         expect(createSubscriptionIterable).toHaveBeenCalledWith({
             abortSignal: expect.objectContaining({ aborted: false }),
         });
@@ -91,7 +91,7 @@ describe('createNonceInvalidationPromiseFactory', () => {
             commitment: 'finalized',
             currentNonceValue: '4'.repeat(44) as Nonce,
             nonceAccountAddress: '9'.repeat(44) as Address,
-        });
+        }).catch(() => {});
         await jest.runAllTimersAsync();
         expect(createPendingSubscription).toHaveBeenCalledWith('9'.repeat(44), {
             commitment: 'finalized',
@@ -112,7 +112,7 @@ describe('createNonceInvalidationPromiseFactory', () => {
             commitment: 'finalized',
             currentNonceValue: '4'.repeat(44) as Nonce,
             nonceAccountAddress: '9'.repeat(44) as Address,
-        });
+        }).catch(() => {});
         await jest.runAllTimersAsync();
         expect(getAccountInfoMock).not.toHaveBeenCalled();
         // FIXME: https://github.com/microsoft/TypeScript/issues/11498

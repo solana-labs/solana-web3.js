@@ -47,7 +47,7 @@ describe('getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_DO_NOT_EXPOR
                 ...mockTransactionMessage,
                 lifetimeConstraint: MOCK_BLOCKHASH_LIFETIME_CONSTRAINT,
             },
-        });
+        }).catch(() => {});
         expect(sendSimulateTransactionRequest).toHaveBeenCalledWith({
             abortSignal: expect.objectContaining({ aborted: false }),
         });
@@ -66,7 +66,7 @@ describe('getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_DO_NOT_EXPOR
             minContextSlot: 42n,
             rpc,
             transactionMessage,
-        });
+        }).catch(() => {});
         expect(simulateTransaction).toHaveBeenCalledWith(
             expect.any(String),
             expect.objectContaining({
@@ -99,7 +99,7 @@ describe('getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_DO_NOT_EXPOR
             getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_DO_NOT_EXPORT({
                 rpc,
                 transactionMessage,
-            });
+            }).catch(() => {});
             expect(compileTransaction).toHaveBeenCalledWith({
                 ...transactionMessage,
                 instructions: [
@@ -152,7 +152,7 @@ describe('getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_DO_NOT_EXPOR
             getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_DO_NOT_EXPORT({
                 rpc,
                 transactionMessage,
-            });
+            }).catch(() => {});
             expect(compileTransaction).toHaveBeenCalledWith(
                 expect.objectContaining({
                     instructions: [
@@ -196,7 +196,7 @@ describe('getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_DO_NOT_EXPOR
                     nonce: 'BzAqD6382v5r1pcELoi8HWrBDV4dSL9NGemMn2JYAhxc' as Nonce,
                 },
             },
-        });
+        }).catch(() => {});
         expect(simulateTransaction).toHaveBeenCalledWith(
             expect.anything(),
             expect.objectContaining({ replaceRecentBlockhash: false }),
@@ -209,7 +209,7 @@ describe('getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_DO_NOT_EXPOR
                 ...mockTransactionMessage,
                 lifetimeConstraint: MOCK_BLOCKHASH_LIFETIME_CONSTRAINT,
             },
-        });
+        }).catch(() => {});
         expect(simulateTransaction).toHaveBeenCalledWith(
             expect.anything(),
             expect.objectContaining({ replaceRecentBlockhash: true }),
@@ -219,7 +219,7 @@ describe('getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_DO_NOT_EXPOR
         getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_DO_NOT_EXPORT({
             rpc,
             transactionMessage: mockTransactionMessage,
-        });
+        }).catch(() => {});
         expect(simulateTransaction).toHaveBeenCalledWith(
             expect.anything(),
             expect.objectContaining({ replaceRecentBlockhash: true }),

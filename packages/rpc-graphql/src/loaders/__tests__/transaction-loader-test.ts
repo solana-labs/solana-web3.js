@@ -46,7 +46,7 @@ describe('account loader', () => {
                     }
                 }
             `;
-            rpcGraphQL.query(source, { signature });
+            rpcGraphQL.query(source, { signature }).catch(() => {});
             await jest.runAllTimersAsync();
             expect(rpc.getTransaction).toHaveBeenCalledTimes(1);
         });
@@ -60,8 +60,8 @@ describe('account loader', () => {
                 }
             `;
             // Call the query twice
-            rpcGraphQL.query(source, { signature });
-            rpcGraphQL.query(source, { signature });
+            rpcGraphQL.query(source, { signature }).catch(() => {});
+            rpcGraphQL.query(source, { signature }).catch(() => {});
             await jest.runAllTimersAsync();
             expect(rpc.getTransaction).toHaveBeenCalledTimes(2);
         });
@@ -92,10 +92,12 @@ describe('account loader', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source, {
-                    signature:
-                        '67rSZV97NzE4B4ZeFqULqWZcNEV2KwNfDLMzecJmBheZ4sWhudqGAzypoBCKfeLkKtDQBGnkwgdrrFM8ZMaS3pkk',
-                });
+                rpcGraphQL
+                    .query(source, {
+                        signature:
+                            '67rSZV97NzE4B4ZeFqULqWZcNEV2KwNfDLMzecJmBheZ4sWhudqGAzypoBCKfeLkKtDQBGnkwgdrrFM8ZMaS3pkk',
+                    })
+                    .catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getTransaction).toHaveBeenCalledTimes(1);
                 expect(rpc.getTransaction).toHaveBeenLastCalledWith(
@@ -118,10 +120,12 @@ describe('account loader', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source, {
-                    signature:
-                        '67rSZV97NzE4B4ZeFqULqWZcNEV2KwNfDLMzecJmBheZ4sWhudqGAzypoBCKfeLkKtDQBGnkwgdrrFM8ZMaS3pkk',
-                });
+                rpcGraphQL
+                    .query(source, {
+                        signature:
+                            '67rSZV97NzE4B4ZeFqULqWZcNEV2KwNfDLMzecJmBheZ4sWhudqGAzypoBCKfeLkKtDQBGnkwgdrrFM8ZMaS3pkk',
+                    })
+                    .catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getTransaction).toHaveBeenCalledTimes(1);
                 expect(rpc.getTransaction).toHaveBeenLastCalledWith(
@@ -147,10 +151,12 @@ describe('account loader', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source, {
-                    signature:
-                        '67rSZV97NzE4B4ZeFqULqWZcNEV2KwNfDLMzecJmBheZ4sWhudqGAzypoBCKfeLkKtDQBGnkwgdrrFM8ZMaS3pkk',
-                });
+                rpcGraphQL
+                    .query(source, {
+                        signature:
+                            '67rSZV97NzE4B4ZeFqULqWZcNEV2KwNfDLMzecJmBheZ4sWhudqGAzypoBCKfeLkKtDQBGnkwgdrrFM8ZMaS3pkk',
+                    })
+                    .catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getTransaction).toHaveBeenCalledTimes(2);
                 expect(rpc.getTransaction).toHaveBeenCalledWith(
@@ -181,7 +187,7 @@ describe('account loader', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source);
+                rpcGraphQL.query(source).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getTransaction).toHaveBeenCalledTimes(1);
                 expect(rpc.getTransaction).toHaveBeenLastCalledWith(
@@ -203,7 +209,7 @@ describe('account loader', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source);
+                rpcGraphQL.query(source).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getTransaction).toHaveBeenCalledTimes(1);
                 expect(rpc.getTransaction).toHaveBeenLastCalledWith(
@@ -225,7 +231,7 @@ describe('account loader', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source);
+                rpcGraphQL.query(source).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getTransaction).toHaveBeenCalledTimes(1);
                 expect(rpc.getTransaction).toHaveBeenLastCalledWith(
@@ -256,7 +262,7 @@ describe('account loader', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source);
+                rpcGraphQL.query(source).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getTransaction).toHaveBeenCalledTimes(1);
                 expect(rpc.getTransaction).toHaveBeenLastCalledWith(
@@ -280,7 +286,7 @@ describe('account loader', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source);
+                rpcGraphQL.query(source).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getTransaction).toHaveBeenCalledTimes(1);
                 expect(rpc.getTransaction).toHaveBeenLastCalledWith(
@@ -304,7 +310,7 @@ describe('account loader', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source);
+                rpcGraphQL.query(source).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getTransaction).toHaveBeenCalledTimes(1);
                 expect(rpc.getTransaction).toHaveBeenLastCalledWith(
@@ -335,7 +341,7 @@ describe('account loader', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source);
+                rpcGraphQL.query(source).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getTransaction).toHaveBeenCalledTimes(1);
                 expect(rpc.getTransaction).toHaveBeenLastCalledWith(
@@ -376,7 +382,7 @@ describe('account loader', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source);
+                rpcGraphQL.query(source).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getTransaction).toHaveBeenCalledTimes(1);
                 expect(rpc.getTransaction).toHaveBeenLastCalledWith(
@@ -408,7 +414,7 @@ describe('account loader', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source);
+                rpcGraphQL.query(source).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getTransaction).toHaveBeenCalledTimes(2);
                 expect(rpc.getTransaction).toHaveBeenCalledWith(
@@ -452,7 +458,7 @@ describe('account loader', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source);
+                rpcGraphQL.query(source).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getTransaction).toHaveBeenCalledTimes(3);
                 expect(rpc.getTransaction).toHaveBeenCalledWith(

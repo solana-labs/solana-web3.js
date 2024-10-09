@@ -12,12 +12,12 @@ describe('getRpcSubscriptionsChannelWithJSONSerialization', () => {
         mockOn = jest.fn();
         channel = {
             on: mockOn,
-            send: jest.fn(),
+            send: jest.fn().mockResolvedValue(void 0),
         };
     });
     it('forwards JSON-serialized messages to the underlying channel', () => {
         const channelWithJSONSerialization = getRpcSubscriptionsChannelWithJSONSerialization(channel);
-        channelWithJSONSerialization.send('hello');
+        channelWithJSONSerialization.send('hello').catch(() => {});
         expect(channel.send).toHaveBeenCalledWith(JSON.stringify('hello'));
     });
     it('deserializes messages received from the underlying channel as JSON', () => {

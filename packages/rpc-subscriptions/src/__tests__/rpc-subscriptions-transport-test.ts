@@ -12,7 +12,7 @@ describe('createRpcSubscriptionsTransportFromChannelCreator', () => {
             executeSubscriptionPlan: jest.fn(),
             signal: abortSignal,
             subscriptionConfigurationHash: undefined,
-        });
+        }).catch(() => {});
         expect(mockCreateChannel).toHaveBeenCalledWith({ abortSignal });
     });
     it('creates a function that calls `executeSubscriptionPlan` with the created channel', async () => {
@@ -23,7 +23,7 @@ describe('createRpcSubscriptionsTransportFromChannelCreator', () => {
             executeSubscriptionPlan: mockExecuteSubscriptionPlan,
             signal: new AbortController().signal,
             subscriptionConfigurationHash: undefined,
-        });
+        }).catch(() => {});
         await jest.runAllTimersAsync();
         expect(mockExecuteSubscriptionPlan).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -40,7 +40,7 @@ describe('createRpcSubscriptionsTransportFromChannelCreator', () => {
             executeSubscriptionPlan: mockExecuteSubscriptionPlan,
             signal,
             subscriptionConfigurationHash: undefined,
-        });
+        }).catch(() => {});
         await jest.runAllTimersAsync();
         expect(mockExecuteSubscriptionPlan).toHaveBeenCalledWith(
             expect.objectContaining({

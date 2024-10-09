@@ -39,7 +39,8 @@ export function getRpcTransportWithRequestCoalescing<TTransport extends RpcTrans
             return await transport(request);
         }
         if (!coalescedRequestsByDeduplicationKey) {
-            Promise.resolve().then(() => {
+            // FIXME: Probably replace this with `queueMicrotask()`
+            void Promise.resolve().then(() => {
                 coalescedRequestsByDeduplicationKey = undefined;
             });
             coalescedRequestsByDeduplicationKey = {};
@@ -76,7 +77,8 @@ export function getRpcTransportWithRequestCoalescing<TTransport extends RpcTrans
                 const handleAbort = (e: AbortSignalEventMap['abort']) => {
                     signal.removeEventListener('abort', handleAbort);
                     coalescedRequest.numConsumers -= 1;
-                    Promise.resolve().then(() => {
+                    // FIXME: Probably replace this with `queueMicrotask()`
+                    void Promise.resolve().then(() => {
                         if (coalescedRequest.numConsumers === 0) {
                             const abortController = coalescedRequest.abortController;
                             abortController.abort((EXPLICIT_ABORT_TOKEN ||= createExplicitAbortToken()));

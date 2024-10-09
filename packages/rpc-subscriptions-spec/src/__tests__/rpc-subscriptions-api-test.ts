@@ -1,4 +1,4 @@
-import { createRpcSubscriptionsApi } from '../rpc-subscriptions-api';
+import { createRpcSubscriptionsApi, RpcSubscriptionsPlan } from '../rpc-subscriptions-api';
 import { RpcSubscriptionsChannel } from '../rpc-subscriptions-channel';
 
 describe('createRpcSubscriptionsApi', () => {
@@ -8,14 +8,19 @@ describe('createRpcSubscriptionsApi', () => {
     });
     describe('executeSubscriptionPlan', () => {
         it('calls the plan executor with the expected params', () => {
-            const mockPlanExecutor = jest.fn();
+            const mockPlanExecutor = jest.fn().mockResolvedValue({
+                executeSubscriptionPlan: jest.fn(),
+                subscriptionConfigurationHash: 'MOCK_HASH',
+            } as RpcSubscriptionsPlan<unknown>);
             const api = createRpcSubscriptionsApi({ planExecutor: mockPlanExecutor });
             const expectedParams = [1, 'hi', 3];
             const expectedSignal = new AbortController().signal;
-            api.foo(...expectedParams).executeSubscriptionPlan({
-                channel: mockChannel,
-                signal: expectedSignal,
-            });
+            api.foo(...expectedParams)
+                .executeSubscriptionPlan({
+                    channel: mockChannel,
+                    signal: expectedSignal,
+                })
+                .catch(() => {});
             expect(mockPlanExecutor).toHaveBeenCalledWith({
                 channel: mockChannel,
                 notificationName: 'foo',

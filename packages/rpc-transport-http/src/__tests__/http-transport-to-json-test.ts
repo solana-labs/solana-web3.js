@@ -17,12 +17,12 @@ describe('createHttpTransport and `toJson` function', () => {
         });
     });
     it('uses the `toJson` function to transform the payload to a JSON string', () => {
-        makeHttpRequest({ payload: { foo: 123 } });
+        makeHttpRequest({ payload: { foo: 123 } }).catch(() => {});
         expect(toJson).toHaveBeenCalledWith({ foo: 123 });
     });
     it('uses passes the JSON string to the fetch API', () => {
         toJson.mockReturnValueOnce('{"someAugmented":"jsonString"}');
-        makeHttpRequest({ payload: { foo: 123 } });
+        makeHttpRequest({ payload: { foo: 123 } }).catch(() => {});
         expect(fetchSpy).toHaveBeenCalledWith(
             expect.anything(),
             expect.objectContaining({

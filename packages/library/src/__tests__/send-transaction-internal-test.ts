@@ -45,7 +45,7 @@ describe('sendAndConfirmTransaction', () => {
             confirmRecentTransaction,
             rpc,
             transaction: MOCK_TRANSACTION,
-        });
+        }).catch(() => {});
         expect(getBase64EncodedWireTransaction).toHaveBeenCalledWith(MOCK_TRANSACTION);
         expect(createPendingRequest).toHaveBeenCalledWith('MOCK_WIRE_TRANSACTION', expect.anything());
     });
@@ -63,7 +63,7 @@ describe('sendAndConfirmTransaction', () => {
             confirmRecentTransaction,
             rpc,
             transaction: MOCK_TRANSACTION,
-        });
+        }).catch(() => {});
         expect(getBase64EncodedWireTransaction).toHaveBeenCalledWith(MOCK_TRANSACTION);
         expect(createPendingRequest).toHaveBeenCalledWith('MOCK_WIRE_TRANSACTION', {
             ...sendTransactionConfig,
@@ -87,7 +87,7 @@ describe('sendAndConfirmTransaction', () => {
             confirmRecentTransaction,
             rpc,
             transaction: MOCK_TRANSACTION,
-        });
+        }).catch(() => {});
         await jest.runAllTimersAsync();
         expect(confirmRecentTransaction).toHaveBeenCalledWith({
             abortSignal,
@@ -108,7 +108,7 @@ describe('sendAndConfirmTransaction', () => {
                 confirmRecentTransaction,
                 rpc,
                 transaction: MOCK_TRANSACTION,
-            });
+            }).catch(() => {});
             expect(createPendingRequest).toHaveBeenCalledWith(
                 expect.anything(),
                 expect.objectContaining({
@@ -138,7 +138,7 @@ describe('sendAndConfirmTransaction', () => {
                 preflightCommitment,
                 rpc,
                 transaction: MOCK_TRANSACTION,
-            });
+            }).catch(() => {});
             expect(createPendingRequest).toHaveBeenCalledWith(
                 expect.anything(),
                 expect.objectContaining({
@@ -155,7 +155,7 @@ describe('sendAndConfirmTransaction', () => {
             confirmRecentTransaction,
             rpc,
             transaction: MOCK_TRANSACTION,
-        });
+        }).catch(() => {});
         expect(createPendingRequest.mock.lastCall![1]).not.toHaveProperty('preflightCommitment');
     });
     it('returns the signature of the transaction', async () => {
@@ -200,7 +200,7 @@ describe('sendAndConfirmDurableNonceTransaction', () => {
             confirmDurableNonceTransaction,
             rpc,
             transaction: MOCK_DURABLE_NONCE_TRANSACTION,
-        });
+        }).catch(() => {});
         expect(getBase64EncodedWireTransaction).toHaveBeenCalledWith(MOCK_DURABLE_NONCE_TRANSACTION);
         expect(createPendingRequest).toHaveBeenCalledWith('MOCK_WIRE_TRANSACTION', expect.anything());
     });
@@ -218,7 +218,7 @@ describe('sendAndConfirmDurableNonceTransaction', () => {
             confirmDurableNonceTransaction,
             rpc,
             transaction: MOCK_DURABLE_NONCE_TRANSACTION,
-        });
+        }).catch(() => {});
         expect(getBase64EncodedWireTransaction).toHaveBeenCalledWith(MOCK_DURABLE_NONCE_TRANSACTION);
         expect(createPendingRequest).toHaveBeenCalledWith('MOCK_WIRE_TRANSACTION', {
             ...sendTransactionConfig,
@@ -242,7 +242,7 @@ describe('sendAndConfirmDurableNonceTransaction', () => {
             confirmDurableNonceTransaction,
             rpc,
             transaction: MOCK_DURABLE_NONCE_TRANSACTION,
-        });
+        }).catch(() => {});
         await jest.runAllTimersAsync();
         expect(confirmDurableNonceTransaction).toHaveBeenCalledWith({
             abortSignal,
@@ -263,7 +263,7 @@ describe('sendAndConfirmDurableNonceTransaction', () => {
                 confirmDurableNonceTransaction,
                 rpc,
                 transaction: MOCK_DURABLE_NONCE_TRANSACTION,
-            });
+            }).catch(() => {});
             expect(createPendingRequest).toHaveBeenCalledWith(
                 expect.anything(),
                 expect.objectContaining({
@@ -293,7 +293,7 @@ describe('sendAndConfirmDurableNonceTransaction', () => {
                 preflightCommitment,
                 rpc,
                 transaction: MOCK_DURABLE_NONCE_TRANSACTION,
-            });
+            }).catch(() => {});
             expect(createPendingRequest).toHaveBeenCalledWith(
                 expect.anything(),
                 expect.objectContaining({
@@ -310,7 +310,7 @@ describe('sendAndConfirmDurableNonceTransaction', () => {
             confirmDurableNonceTransaction,
             rpc,
             transaction: MOCK_DURABLE_NONCE_TRANSACTION,
-        });
+        }).catch(() => {});
         expect(createPendingRequest.mock.lastCall![1]).not.toHaveProperty('preflightCommitment');
     });
     it('returns the signature of the transaction', async () => {
