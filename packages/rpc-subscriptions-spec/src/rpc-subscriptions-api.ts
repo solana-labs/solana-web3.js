@@ -1,12 +1,43 @@
 import { Callable } from '@solana/rpc-spec-types';
+import { DataPublisher } from '@solana/subscribable';
 
-import { RpcSubscriptionsRequest } from './rpc-subscriptions-request';
+import { RpcSubscriptionsChannel } from './rpc-subscriptions-channel';
+import { RpcSubscriptionsTransportDataEvents } from './rpc-subscriptions-transport';
 
-export type RpcSubscriptionsApiConfig = Readonly<{
-    parametersTransformer?: <T extends unknown[]>(params: T, notificationName: string) => unknown[];
-    responseTransformer?: <T>(response: unknown, notificationName: string) => T;
-    subscribeNotificationNameTransformer?: (notificationName: string) => string;
-    unsubscribeNotificationNameTransformer?: (notificationName: string) => string;
+export type RpcSubscriptionsApiConfig<TApiMethods extends RpcSubscriptionsApiMethods> = Readonly<{
+    getSubscriptionConfigurationHash?: (
+        details: Readonly<{
+            notificationName: string;
+            params: unknown;
+        }>,
+    ) => string | undefined;
+    planExecutor: RpcSubscriptionsPlanExecutor<ReturnType<TApiMethods[keyof TApiMethods]>>;
+}>;
+
+type RpcSubscriptionsPlanExecutor<TNotification> = (
+    config: Readonly<{
+        channel: RpcSubscriptionsChannel<unknown, unknown>;
+        notificationName: string;
+        params?: unknown[];
+        signal: AbortSignal;
+    }>,
+) => Promise<DataPublisher<RpcSubscriptionsTransportDataEvents<TNotification>>>;
+
+export type RpcSubscriptionsPlan<TNotification> = Readonly<{
+    /**
+     * This method may be called with a newly-opened channel or a pre-established channel.
+     */
+    executeSubscriptionPlan: (
+        config: Readonly<{
+            channel: RpcSubscriptionsChannel<unknown, unknown>;
+            signal: AbortSignal;
+        }>,
+    ) => Promise<DataPublisher<RpcSubscriptionsTransportDataEvents<TNotification>>>;
+    /**
+     * This hash uniquely identifies the configuration of a subscription. It is typically used by
+     * consumers of this API to deduplicate multiple subscriptions for the same notification.
+     */
+    subscriptionConfigurationHash: string | undefined;
 }>;
 
 export type RpcSubscriptionsApi<TRpcSubscriptionMethods> = {
@@ -16,7 +47,7 @@ export type RpcSubscriptionsApi<TRpcSubscriptionMethods> = {
 };
 
 type RpcSubscriptionsReturnTypeMapper<TRpcMethod> = TRpcMethod extends Callable
-    ? (...rawParams: unknown[]) => RpcSubscriptionsRequest<ReturnType<TRpcMethod>>
+    ? (...rawParams: unknown[]) => RpcSubscriptionsPlan<ReturnType<TRpcMethod>>
     : never;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -25,8 +56,10 @@ export interface RpcSubscriptionsApiMethods {
     [methodName: string]: RpcSubscriptionsApiMethod;
 }
 
+const UNINITIALIZED = Symbol();
+
 export function createRpcSubscriptionsApi<TRpcSubscriptionsApiMethods extends RpcSubscriptionsApiMethods>(
-    config?: RpcSubscriptionsApiConfig,
+    config: RpcSubscriptionsApiConfig<TRpcSubscriptionsApiMethods>,
 ): RpcSubscriptionsApi<TRpcSubscriptionsApiMethods> {
     return new Proxy({} as RpcSubscriptionsApi<TRpcSubscriptionsApiMethods>, {
         defineProperty() {
@@ -41,30 +74,30 @@ export function createRpcSubscriptionsApi<TRpcSubscriptionsApiMethods extends Rp
             const [_, p] = args;
             const notificationName = p.toString() as keyof TRpcSubscriptionsApiMethods as string;
             return function (
-                ...rawParams: Parameters<
+                ...params: Parameters<
                     TRpcSubscriptionsApiMethods[TNotificationName] extends CallableFunction
                         ? TRpcSubscriptionsApiMethods[TNotificationName]
                         : never
                 >
-            ): RpcSubscriptionsRequest<ReturnType<TRpcSubscriptionsApiMethods[TNotificationName]>> {
-                const params = config?.parametersTransformer
-                    ? config?.parametersTransformer(rawParams, notificationName)
-                    : rawParams;
-                const responseTransformer = config?.responseTransformer
-                    ? config?.responseTransformer<ReturnType<TRpcSubscriptionsApiMethods[TNotificationName]>>
-                    : (rawResponse: unknown) =>
-                          rawResponse as ReturnType<TRpcSubscriptionsApiMethods[TNotificationName]>;
-                const subscribeMethodName = config?.subscribeNotificationNameTransformer
-                    ? config?.subscribeNotificationNameTransformer(notificationName)
-                    : notificationName;
-                const unsubscribeMethodName = config?.unsubscribeNotificationNameTransformer
-                    ? config?.unsubscribeNotificationNameTransformer(notificationName)
-                    : notificationName;
+            ): RpcSubscriptionsPlan<ReturnType<TRpcSubscriptionsApiMethods[TNotificationName]>> {
+                let _cachedSubscriptionHash: string | typeof UNINITIALIZED | undefined = UNINITIALIZED;
                 return {
-                    params,
-                    responseTransformer,
-                    subscribeMethodName,
-                    unsubscribeMethodName,
+                    executeSubscriptionPlan(planConfig) {
+                        return config.planExecutor({
+                            ...planConfig,
+                            notificationName,
+                            params,
+                        });
+                    },
+                    get subscriptionConfigurationHash() {
+                        if (_cachedSubscriptionHash === UNINITIALIZED) {
+                            _cachedSubscriptionHash = config?.getSubscriptionConfigurationHash?.({
+                                notificationName,
+                                params,
+                            });
+                        }
+                        return _cachedSubscriptionHash;
+                    },
                 };
             };
         },

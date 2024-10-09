@@ -72,6 +72,7 @@
     ],
     "dependencies": {
         "@solana/addresses": "workspace:*",
+        "@solana/fast-stable-stringify": "workspace:*",
         "@solana/keys": "workspace:*",
         "@solana/rpc-types": "workspace:*",
         "@solana/rpc-subscriptions-spec": "workspace:*",
@@ -80,7 +81,7 @@
         "@solana/transactions": "workspace:*"
     },
     "devDependencies": {
-        "@solana/rpc-subscriptions-transport-websocket": "workspace:*"
+        "@solana/rpc-subscriptions-channel-websocket": "workspace:*"
     },
     "peerDependencies": {
         "typescript": ">=5"

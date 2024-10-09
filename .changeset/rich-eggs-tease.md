@@ -2,7 +2,7 @@
 '@solana/errors': patch
 '@solana/rpc': patch
 '@solana/rpc-subscriptions': patch
-'@solana/rpc-subscriptions-transport-websocket': patch
+'@solana/rpc-subscriptions-channel-websocket': patch
 '@solana/rpc-transport-http': patch
 '@solana/webcrypto-ed25519-polyfill': patch
 ---

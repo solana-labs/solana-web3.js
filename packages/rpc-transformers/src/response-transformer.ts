@@ -1,4 +1,3 @@
-import { getSolanaErrorFromJsonRpcError } from '@solana/errors';
 import { pipe } from '@solana/functional';
 import { RpcRequest, RpcResponse, RpcResponseTransformer } from '@solana/rpc-spec';
 
@@ -28,16 +27,10 @@ export function getDefaultResponseTransformerForSolanaRpc<TApi>(
     };
 }
 
-type JsonRpcResponse = { error: Parameters<typeof getSolanaErrorFromJsonRpcError>[0] } | { result: unknown };
-
 export function getDefaultResponseTransformerForSolanaRpcSubscriptions<TApi>(
     config?: ResponseTransformerConfig<TApi>,
-): <T>(response: unknown, notificationName: string) => T {
-    return <T>(rawResponse: unknown, notificationName: string): T => {
-        const rawData = rawResponse as JsonRpcResponse;
-        if ('error' in rawData) {
-            throw getSolanaErrorFromJsonRpcError(rawData.error);
-        }
+): <T>(notification: unknown, notificationName: string) => T {
+    return <T>(notification: unknown, notificationName: string): T => {
         const keyPaths =
             config?.allowedNumericKeyPaths && notificationName
                 ? config.allowedNumericKeyPaths[notificationName as keyof TApi]
@@ -46,6 +39,6 @@ export function getDefaultResponseTransformerForSolanaRpcSubscriptions<TApi>(
         const initialState = {
             keyPath: [],
         };
-        return traverse(rawData.result, initialState) as T;
+        return traverse(notification, initialState) as T;
     };
 }

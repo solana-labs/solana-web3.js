@@ -7,7 +7,9 @@ type MySubscriptionApiMethods = {
     foo(): number;
 };
 
-const api = createRpcSubscriptionsApi<MySubscriptionApiMethods>();
+const api = createRpcSubscriptionsApi<MySubscriptionApiMethods>(
+    ...(null as unknown as Parameters<typeof createRpcSubscriptionsApi>),
+);
 const transport = null as unknown as RpcSubscriptionsTransport;
 
 createSubscriptionRpc({ api, transport }) satisfies RpcSubscriptions<MySubscriptionApiMethods>;

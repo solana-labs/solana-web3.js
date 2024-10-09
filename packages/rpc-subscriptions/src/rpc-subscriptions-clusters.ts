@@ -1,5 +1,72 @@
-import type { RpcSubscriptions, RpcSubscriptionsTransport } from '@solana/rpc-subscriptions-spec';
+import type {
+    RpcSubscriptions,
+    RpcSubscriptionsChannel,
+    RpcSubscriptionsChannelCreator,
+    RpcSubscriptionsTransport,
+} from '@solana/rpc-subscriptions-spec';
 import type { ClusterUrl, DevnetUrl, MainnetUrl, TestnetUrl } from '@solana/rpc-types';
+
+export type RpcSubscriptionsChannelCreatorDevnet<TOutboundMessage, TInboundMessage> = RpcSubscriptionsChannelCreator<
+    TOutboundMessage,
+    TInboundMessage
+> & {
+    '~cluster': 'devnet';
+};
+export type RpcSubscriptionsChannelCreatorTestnet<TOutboundMessage, TInboundMessage> = RpcSubscriptionsChannelCreator<
+    TOutboundMessage,
+    TInboundMessage
+> & {
+    '~cluster': 'testnet';
+};
+export type RpcSubscriptionsChannelCreatorMainnet<TOutboundMessage, TInboundMessage> = RpcSubscriptionsChannelCreator<
+    TOutboundMessage,
+    TInboundMessage
+> & {
+    '~cluster': 'mainnet';
+};
+export type RpcSubscriptionsChannelCreatorWithCluster<TOutboundMessage, TInboundMessage> =
+    | RpcSubscriptionsChannelCreatorDevnet<TOutboundMessage, TInboundMessage>
+    | RpcSubscriptionsChannelCreatorMainnet<TOutboundMessage, TInboundMessage>
+    | RpcSubscriptionsChannelCreatorTestnet<TOutboundMessage, TInboundMessage>;
+export type RpcSubscriptionsChannelCreatorFromClusterUrl<
+    TClusterUrl extends ClusterUrl,
+    TOutboundMessage,
+    TInboundMessage,
+> = TClusterUrl extends DevnetUrl
+    ? RpcSubscriptionsChannelCreatorDevnet<TOutboundMessage, TInboundMessage>
+    : TClusterUrl extends TestnetUrl
+      ? RpcSubscriptionsChannelCreatorTestnet<TOutboundMessage, TInboundMessage>
+      : TClusterUrl extends MainnetUrl
+        ? RpcSubscriptionsChannelCreatorMainnet<TOutboundMessage, TInboundMessage>
+        : RpcSubscriptionsChannelCreator<TOutboundMessage, TInboundMessage>;
+
+export type RpcSubscriptionsChannelDevnet<TOutboundMessage, TInboundMessage> = RpcSubscriptionsChannel<
+    TOutboundMessage,
+    TInboundMessage
+> & { '~cluster': 'devnet' };
+export type RpcSubscriptionsChannelTestnet<TOutboundMessage, TInboundMessage> = RpcSubscriptionsChannel<
+    TOutboundMessage,
+    TInboundMessage
+> & { '~cluster': 'testnet' };
+export type RpcSubscriptionsChannelMainnet<TOutboundMessage, TInboundMessage> = RpcSubscriptionsChannel<
+    TOutboundMessage,
+    TInboundMessage
+> & { '~cluster': 'mainnet' };
+export type RpcSubscriptionsChannelWithCluster<TOutboundMessage, TInboundMessage> =
+    | RpcSubscriptionsChannelDevnet<TOutboundMessage, TInboundMessage>
+    | RpcSubscriptionsChannelMainnet<TOutboundMessage, TInboundMessage>
+    | RpcSubscriptionsChannelTestnet<TOutboundMessage, TInboundMessage>;
+export type RpcSubscriptionsChannelFromClusterUrl<
+    TClusterUrl extends ClusterUrl,
+    TOutboundMessage,
+    TInboundMessage,
+> = TClusterUrl extends DevnetUrl
+    ? RpcSubscriptionsChannelDevnet<TOutboundMessage, TInboundMessage>
+    : TClusterUrl extends TestnetUrl
+      ? RpcSubscriptionsChannelTestnet<TOutboundMessage, TInboundMessage>
+      : TClusterUrl extends MainnetUrl
+        ? RpcSubscriptionsChannelMainnet<TOutboundMessage, TInboundMessage>
+        : RpcSubscriptionsChannel<TOutboundMessage, TInboundMessage>;
 
 export type RpcSubscriptionsTransportDevnet = RpcSubscriptionsTransport & { '~cluster': 'devnet' };
 export type RpcSubscriptionsTransportTestnet = RpcSubscriptionsTransport & { '~cluster': 'testnet' };

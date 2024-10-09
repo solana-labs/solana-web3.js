@@ -18,4 +18,6 @@ type NftCollectionDetailsApi = {
 
 type QuickNodeRpcMethods = NftCollectionDetailsApi;
 
-createRpcSubscriptionsApi<QuickNodeRpcMethods>() satisfies RpcSubscriptionsApi<QuickNodeRpcMethods>;
+createRpcSubscriptionsApi<QuickNodeRpcMethods>(
+    ...(null as unknown as Parameters<typeof createRpcSubscriptionsApi>),
+) satisfies RpcSubscriptionsApi<QuickNodeRpcMethods>;

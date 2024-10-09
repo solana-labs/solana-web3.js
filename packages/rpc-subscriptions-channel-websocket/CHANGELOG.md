@@ -1,4 +1,4 @@
-# @solana/rpc-subscriptions-transport-websocket
+# @solana/rpc-subscriptions-channel-websocket
 
 ## 2.0.0-rc.1
 

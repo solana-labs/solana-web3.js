@@ -13,7 +13,7 @@
     -   @solana/fast-stable-stringify@2.0.0-rc.1
     -   @solana/functional@2.0.0-rc.1
     -   @solana/rpc-subscriptions-spec@2.0.0-rc.1
-    -   @solana/rpc-subscriptions-transport-websocket@2.0.0-rc.1
+    -   @solana/rpc-subscriptions-channel-websocket@2.0.0-rc.1
     -   @solana/rpc-transformers@2.0.0-rc.1
     -   @solana/rpc-types@2.0.0-rc.1
 
@@ -26,7 +26,7 @@
 -   Updated dependencies [[`29821df`](https://github.com/solana-labs/solana-web3.js/commit/29821df246b14eb41dd4606913f44fac40183957), [`677a9c4`](https://github.com/solana-labs/solana-web3.js/commit/677a9c4eb88a8ac6a9ede8d82f367c5ac8d69ff4)]:
     -   @solana/rpc-transformers@2.0.0-rc.0
     -   @solana/errors@2.0.0-rc.0
-    -   @solana/rpc-subscriptions-transport-websocket@2.0.0-rc.0
+    -   @solana/rpc-subscriptions-channel-websocket@2.0.0-rc.0
     -   @solana/rpc-subscriptions-api@2.0.0-rc.0
     -   @solana/rpc-subscriptions-spec@2.0.0-rc.0
     -   @solana/rpc-types@2.0.0-rc.0
@@ -42,7 +42,7 @@
 -   Updated dependencies [[`4f19842`](https://github.com/solana-labs/solana-web3.js/commit/4f198423997d28d927f982333d268e19940656df), [`73bd5a9`](https://github.com/solana-labs/solana-web3.js/commit/73bd5a9e0b32846cd5d76f2d2d1b21661eab0677), [`be36bab`](https://github.com/solana-labs/solana-web3.js/commit/be36babd752b1c987a2f53b4ff83ac8c045a3418), [`367b8ad`](https://github.com/solana-labs/solana-web3.js/commit/367b8ad0cce55a916abfb0125f36b6e844333b2b)]:
     -   @solana/errors@2.0.0-preview.4
     -   @solana/rpc-types@2.0.0-preview.4
-    -   @solana/rpc-subscriptions-transport-websocket@2.0.0-preview.4
+    -   @solana/rpc-subscriptions-channel-websocket@2.0.0-preview.4
     -   @solana/rpc-subscriptions-spec@2.0.0-preview.4
     -   @solana/fast-stable-stringify@2.0.0-preview.4
     -   @solana/rpc-subscriptions-api@2.0.0-preview.4
@@ -61,7 +61,7 @@
     -   @solana/rpc-types@2.0.0-preview.3
     -   @solana/rpc-transformers@2.0.0-preview.3
     -   @solana/rpc-subscriptions-spec@2.0.0-preview.3
-    -   @solana/rpc-subscriptions-transport-websocket@2.0.0-preview.3
+    -   @solana/rpc-subscriptions-channel-websocket@2.0.0-preview.3
     -   @solana/rpc-subscriptions-api@2.0.0-preview.3
     -   @solana/functional@2.0.0-preview.3
 
@@ -118,6 +118,6 @@
     -   @solana/functional@2.0.0-preview.2
     -   @solana/rpc-subscriptions-api@2.0.0-preview.2
     -   @solana/rpc-subscriptions-spec@2.0.0-preview.2
-    -   @solana/rpc-subscriptions-transport-websocket@2.0.0-preview.2
+    -   @solana/rpc-subscriptions-channel-websocket@2.0.0-preview.2
     -   @solana/rpc-transformers@2.0.0-preview.2
     -   @solana/rpc-types@2.0.0-preview.2
