@@ -48,3 +48,7 @@ Given an `RpcSubscriptionsChannel`, will return a new channel that parses data p
 ### `getRpcSubscriptionsChannelWithAutoping(channel)`
 
 Given an `RpcSubscriptionsChannel`, will return a new channel that sends a ping message to the inner channel if a message has not been sent or received in the last `intervalMs`. In web browsers, this implementation sends no ping when the network is down, and sends a ping immediately upon the network coming back up.
+
+### `getRpcSubscriptionsTransportWithSubscriptionCoalescing(transport)`
+
+Given an `RpcSubscriptionsTransport`, will return a new transport that coalesces identical subscriptions into a single subscription request to the server. The determination of whether a subscription is the same as another is based on the `subscriptionConfigurationHash` returned by its `RpcSubscriptionsPlan`. The subscription will only be aborted once all subscribers abort, or there is an error.
