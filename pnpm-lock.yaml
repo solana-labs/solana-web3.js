@@ -985,8 +985,8 @@ importers:
         specifier: '>=5'
         version: 5.5.2
       undici-types:
-        specifier: ^6.19.8
-        version: 6.19.8
+        specifier: ^6.20.0
+        version: 6.20.0
     devDependencies:
       tinybench:
         specifier: ^2.9.0
@@ -6467,6 +6467,9 @@ packages:
 
   undici-types@6.19.8:
     resolution: {integrity: sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==}
+
+  undici-types@6.20.0:
+    resolution: {integrity: sha512-Ny6QZ2Nju20vw1SRHe3d9jVu6gJ+4e3+MMpqu7pqE5HT6WsTSlce++GQmK5UXS8mzV8DSYHrQH+Xrf2jVcuKNg==}
 
   undici@6.20.0:
     resolution: {integrity: sha512-AITZfPuxubm31Sx0vr8bteSalEbs9wQb/BOBi9FPlD9Qpd6HxZ4Q0+hI742jBhkPb4RT2v5MQzaW5VhRVyj+9A==}
@@ -12875,6 +12878,8 @@ snapshots:
   typescript@5.6.3: {}
 
   undici-types@6.19.8: {}
+
+  undici-types@6.20.0: {}
 
   undici@6.20.0: {}
 
