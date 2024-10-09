@@ -222,4 +222,55 @@ describe('createBlockHeightExceedencePromiseFactory', () => {
             }),
         ).rejects.toThrow('o no');
     });
+    it('throws if started aborted', async () => {
+        expect.assertions(1);
+        const abortController = new AbortController();
+        abortController.abort();
+        await expect(
+            getBlockHeightExceedencePromise({
+                abortSignal: abortController.signal,
+                lastValidBlockHeight: 100n,
+            }),
+        ).rejects.toThrow(/operation was aborted/);
+    });
+    it('throws if aborted while waiting for the epoch info', async () => {
+        expect.assertions(1);
+        const abortController = new AbortController();
+        let resolveEpochInfo!: (value: { absoluteSlot: bigint; blockHeight: bigint }) => void;
+        const epochInfoPromise = new Promise(r => {
+            resolveEpochInfo = r;
+        });
+        getEpochInfoRequestSender.mockReturnValue(epochInfoPromise);
+        const blockHeightExceedencePromise = getBlockHeightExceedencePromise({
+            abortSignal: abortController.signal,
+            lastValidBlockHeight: 100n,
+        });
+        await jest.runAllTimersAsync();
+        abortController.abort();
+        resolveEpochInfo({ absoluteSlot: 101n, blockHeight: 101n });
+        await expect(blockHeightExceedencePromise).rejects.toThrow(/operation was aborted/);
+    });
+    it('throws if aborted while the slot subscription is working', async () => {
+        expect.assertions(1);
+        const abortController = new AbortController();
+        let resolveSlotSubscription!: (value: { slot: bigint }) => void;
+        const slotSubscriptionReturnPromise = new Promise(r => {
+            resolveSlotSubscription = r;
+        });
+        getEpochInfoRequestSender.mockResolvedValue({ absoluteSlot: 100n, blockHeight: 100n });
+        slotNotificationsGenerator.mockImplementation(
+            // eslint-disable-next-line require-yield
+            async function* () {
+                await slotSubscriptionReturnPromise;
+            },
+        );
+        const blockHeightExceedencePromise = getBlockHeightExceedencePromise({
+            abortSignal: abortController.signal,
+            lastValidBlockHeight: 100n,
+        });
+        await jest.runAllTimersAsync();
+        abortController.abort();
+        resolveSlotSubscription({ slot: 101n });
+        await expect(blockHeightExceedencePromise).rejects.toThrow(/operation was aborted/);
+    });
 });
