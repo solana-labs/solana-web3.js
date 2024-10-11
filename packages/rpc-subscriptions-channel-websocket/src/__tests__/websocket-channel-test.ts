@@ -122,21 +122,48 @@ describe('a websocket channel', () => {
             ws.send('message');
             expect(messageListener).not.toHaveBeenCalled();
         });
-        it('publishes errors to error listeners when the connection closes', () => {
+        it('publishes errors to error listeners when the connection closes in an unclean manner', () => {
             const errorListener = jest.fn();
             channel.on('error', errorListener);
-            const errorDetails = {
+            const closeOptions = {
                 code: 1006 /* abnormal closure */,
                 reason: 'o no',
                 wasClean: false,
             };
-            ws.error(errorDetails);
+            ws.close(closeOptions);
             expect(errorListener).toHaveBeenCalledWith(
                 new SolanaError(SOLANA_ERROR__RPC_SUBSCRIPTIONS__CHANNEL_CONNECTION_CLOSED, {
-                    cause: expect.objectContaining(errorDetails),
+                    cause: expect.objectContaining(closeOptions),
                 }),
             );
-            expect(errorListener.mock.lastCall[0].cause).toMatchObject(errorDetails);
+            expect(errorListener.mock.lastCall[0].cause).toMatchObject(closeOptions);
+        });
+        it('publishes errors to error listeners when the connection closes cleanly with a non-1000 code', () => {
+            const errorListener = jest.fn();
+            channel.on('error', errorListener);
+            const closeOptions = {
+                code: 1011 /* internal error */,
+                reason: 'o no',
+                wasClean: true,
+            };
+            ws.server.close(closeOptions);
+            expect(errorListener).toHaveBeenCalledWith(
+                new SolanaError(SOLANA_ERROR__RPC_SUBSCRIPTIONS__CHANNEL_CONNECTION_CLOSED, {
+                    cause: expect.objectContaining(closeOptions),
+                }),
+            );
+            expect(errorListener.mock.lastCall[0].cause).toMatchObject(closeOptions);
+        });
+        it('does not publish errors to error listeners when the connection closes cleanly with a 1000 code', () => {
+            const errorListener = jest.fn();
+            channel.on('error', errorListener);
+            const errorDetails = {
+                code: 1000 /* normal closure */,
+                reason: 'I enjoyed our little chat',
+                wasClean: true,
+            };
+            ws.error(errorDetails);
+            expect(errorListener).not.toHaveBeenCalled();
         });
         it('does not publish errors received between the time the channel is aborted and the time it closes', () => {
             const errorListener = jest.fn();

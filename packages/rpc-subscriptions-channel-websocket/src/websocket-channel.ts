@@ -16,6 +16,8 @@ export type Config = Readonly<{
 
 type WebSocketMessage = ArrayBufferLike | ArrayBufferView | Blob | string;
 
+const NORMAL_CLOSURE_CODE = 1000; // https://www.rfc-editor.org/rfc/rfc6455.html#section-7.4.1
+
 export function createWebSocketChannel({
     sendBufferHighWatermark,
     signal,
@@ -39,7 +41,7 @@ export function createWebSocketChannel({
             rejectOpen(signal.reason);
         }
         if (webSocket.readyState !== WebSocket.CLOSED && webSocket.readyState !== WebSocket.CLOSING) {
-            webSocket.close(1000);
+            webSocket.close(NORMAL_CLOSURE_CODE);
         }
     }
     function handleClose(ev: CloseEvent) {
@@ -50,7 +52,7 @@ export function createWebSocketChannel({
         webSocket.removeEventListener('error', handleError);
         webSocket.removeEventListener('message', handleMessage);
         webSocket.removeEventListener('open', handleOpen);
-        if (!signal.aborted && !ev.wasClean) {
+        if (!signal.aborted && !(ev.wasClean && ev.code === NORMAL_CLOSURE_CODE)) {
             eventTarget.dispatchEvent(
                 new CustomEvent('error', {
                     detail: new SolanaError(SOLANA_ERROR__RPC_SUBSCRIPTIONS__CHANNEL_CONNECTION_CLOSED, {
