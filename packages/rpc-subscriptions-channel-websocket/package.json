@@ -74,10 +74,10 @@
         "@solana/errors": "workspace:*",
         "@solana/functional": "workspace:*",
         "@solana/rpc-subscriptions-spec": "workspace:*",
-        "@solana/subscribable": "workspace:*",
-        "@solana/ws-impl": "workspace:*"
+        "@solana/subscribable": "workspace:*"
     },
     "devDependencies": {
+        "@solana/ws-impl": "workspace:*",
         "jest-websocket-mock": "^2.5.0"
     },
     "peerDependencies": {
