@@ -65,7 +65,7 @@ importers:
         version: 7.25.7(@babel/core@7.25.8)
       '@babel/plugin-transform-private-property-in-object':
         specifier: ^7.24.7
-        version: 7.25.7(@babel/core@7.25.8)
+        version: 7.25.8(@babel/core@7.25.8)
       '@babel/plugin-transform-runtime':
         specifier: ^7.24.7
         version: 7.25.7(@babel/core@7.25.8)
@@ -708,8 +708,8 @@ packages:
     peerDependencies:
       '@babel/core': ^7.0.0-0
 
-  '@babel/plugin-transform-private-property-in-object@7.25.7':
-    resolution: {integrity: sha512-LzA5ESzBy7tqj00Yjey9yWfs3FKy4EmJyKOSWld144OxkTji81WWnUT8nkLUn+imN/zHL8ZQlOu/MTUAhHaX3g==}
+  '@babel/plugin-transform-private-property-in-object@7.25.8':
+    resolution: {integrity: sha512-8Uh966svuB4V8RHHg0QJOB32QK287NBksJOByoKmHMp1TAobNniNalIkI2i5IPj5+S9NYCG4VIjbEuiSN8r+ow==}
     engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0-0
@@ -5224,13 +5224,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/plugin-transform-private-property-in-object@7.25.7(@babel/core@7.25.8)':
+  '@babel/plugin-transform-private-property-in-object@7.25.8(@babel/core@7.25.8)':
     dependencies:
       '@babel/core': 7.25.8
       '@babel/helper-annotate-as-pure': 7.25.7
       '@babel/helper-create-class-features-plugin': 7.25.7(@babel/core@7.25.8)
       '@babel/helper-plugin-utils': 7.25.7
-      '@babel/plugin-syntax-private-property-in-object': 7.14.5(@babel/core@7.25.8)
     transitivePeerDependencies:
       - supports-color
 
@@ -5391,7 +5390,7 @@ snapshots:
       '@babel/plugin-transform-optional-chaining': 7.25.7(@babel/core@7.25.8)
       '@babel/plugin-transform-parameters': 7.25.7(@babel/core@7.25.8)
       '@babel/plugin-transform-private-methods': 7.25.7(@babel/core@7.25.8)
-      '@babel/plugin-transform-private-property-in-object': 7.25.7(@babel/core@7.25.8)
+      '@babel/plugin-transform-private-property-in-object': 7.25.8(@babel/core@7.25.8)
       '@babel/plugin-transform-property-literals': 7.25.7(@babel/core@7.25.8)
       '@babel/plugin-transform-regenerator': 7.25.7(@babel/core@7.25.8)
       '@babel/plugin-transform-reserved-words': 7.25.7(@babel/core@7.25.8)
