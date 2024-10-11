@@ -935,9 +935,6 @@ importers:
       '@solana/subscribable':
         specifier: workspace:*
         version: link:../subscribable
-      '@solana/ws-impl':
-        specifier: workspace:*
-        version: link:../ws-impl
       typescript:
         specifier: '>=5'
         version: 5.6.2
@@ -945,6 +942,9 @@ importers:
         specifier: ^8.18.0
         version: 8.18.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
     devDependencies:
+      '@solana/ws-impl':
+        specifier: workspace:*
+        version: link:../ws-impl
       jest-websocket-mock:
         specifier: ^2.5.0
         version: 2.5.0
