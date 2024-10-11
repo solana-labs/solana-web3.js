@@ -36,7 +36,8 @@ export function createBlockHeightExceedencePromiseFactory<
         abortSignal: callerAbortSignal,
         commitment,
         lastValidBlockHeight,
-    }) {
+    }): Promise<never> {
+        callerAbortSignal.throwIfAborted();
         const abortController = new AbortController();
         const handleAbort = () => {
             abortController.abort();
@@ -57,6 +58,7 @@ export function createBlockHeightExceedencePromiseFactory<
                     rpcSubscriptions.slotNotifications().subscribe({ abortSignal: abortController.signal }),
                     getBlockHeightAndDifferenceBetweenSlotHeightAndBlockHeight(),
                 ]);
+            callerAbortSignal.throwIfAborted();
             let currentBlockHeight = initialBlockHeight;
             if (currentBlockHeight <= lastValidBlockHeight) {
                 let lastKnownDifferenceBetweenSlotHeightAndBlockHeight = differenceBetweenSlotHeightAndBlockHeight;
@@ -83,6 +85,7 @@ export function createBlockHeightExceedencePromiseFactory<
                     }
                 }
             }
+            callerAbortSignal.throwIfAborted();
             throw new SolanaError(SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED, {
                 currentBlockHeight,
                 lastValidBlockHeight,
