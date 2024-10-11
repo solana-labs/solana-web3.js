@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
+
 import { RpcSubscriptionsChannel } from '@solana/rpc-subscriptions-spec';
 
 import { createWebSocketChannel } from '../websocket-channel';

@@ -54,11 +54,11 @@ describe('createHttpTransport', () => {
             });
         });
         it('calls fetch with the specified URL', () => {
-            makeHttpRequest({ payload: 123 });
+            makeHttpRequest({ payload: 123 }).catch(() => {});
             expect(fetchSpy).toHaveBeenCalledWith('http://localhost', expect.anything());
         });
         it('sets the `body` to a stringfied version of the payload', () => {
-            makeHttpRequest({ payload: { ok: true } });
+            makeHttpRequest({ payload: { ok: true } }).catch(() => {});
             expect(fetchSpy).toHaveBeenCalledWith(
                 expect.anything(),
                 expect.objectContaining({
@@ -67,7 +67,7 @@ describe('createHttpTransport', () => {
             );
         });
         it('sets the accept header to `application/json`', () => {
-            makeHttpRequest({ payload: 123 });
+            makeHttpRequest({ payload: 123 }).catch(() => {});
             expect(fetchSpy).toHaveBeenCalledWith(
                 expect.anything(),
                 expect.objectContaining({
@@ -78,7 +78,7 @@ describe('createHttpTransport', () => {
             );
         });
         it('sets the content type header to `application/json; charset=utf-8`', () => {
-            makeHttpRequest({ payload: 123 });
+            makeHttpRequest({ payload: 123 }).catch(() => {});
             expect(fetchSpy).toHaveBeenCalledWith(
                 expect.anything(),
                 expect.objectContaining({
@@ -99,7 +99,7 @@ describe('createHttpTransport', () => {
                     ' ' +
                     // https://tinyurl.com/bdemuf3r
                     '\u{1F469}\u{1F3FB}\u200D\u2764\uFE0F\u200D\u{1F469}\u{1F3FF}',
-            });
+            }).catch(() => {});
             expect(fetchSpy).toHaveBeenCalledWith(
                 expect.anything(),
                 expect.objectContaining({
@@ -110,7 +110,7 @@ describe('createHttpTransport', () => {
             );
         });
         it('sets the `method` to `POST`', () => {
-            makeHttpRequest({ payload: 123 });
+            makeHttpRequest({ payload: 123 }).catch(() => {});
             expect(fetchSpy).toHaveBeenCalledWith(
                 expect.anything(),
                 expect.objectContaining({

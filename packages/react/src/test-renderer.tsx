@@ -56,12 +56,12 @@ export function renderHook<THookReturn>(executor: () => THookReturn): {
 } {
     const result = { __type: 'result' } as Result<THookReturn>;
     let testRenderer: ReactTestRenderer;
-    act(() => {
+    void act(() => {
         testRenderer = create(<TestComponent executor={executor} resultRef={result} />);
     });
     return {
         rerenderHook(nextExecutor) {
-            act(() => {
+            void act(() => {
                 testRenderer.update(<TestComponent executor={nextExecutor} resultRef={result} />);
             });
         },

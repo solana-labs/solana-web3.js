@@ -91,7 +91,7 @@ describe('createHttpRequest with custom headers', () => {
             headers: { aCcEpT: 'text/html' },
             url: 'http://localhost',
         });
-        makeHttpRequest({ payload: 123 });
+        makeHttpRequest({ payload: 123 }).catch(() => {});
         expect(fetchSpy).toHaveBeenCalledWith(
             expect.anything(),
             expect.objectContaining({
@@ -106,7 +106,7 @@ describe('createHttpRequest with custom headers', () => {
             headers: { 'cOnTeNt-LeNgTh': '420' },
             url: 'http://localhost',
         });
-        makeHttpRequest({ payload: 123 });
+        makeHttpRequest({ payload: 123 }).catch(() => {});
         expect(fetchSpy).toHaveBeenCalledWith(
             expect.anything(),
             expect.objectContaining({
@@ -121,7 +121,7 @@ describe('createHttpRequest with custom headers', () => {
             headers: { 'cOnTeNt-TyPe': 'text/html' },
             url: 'http://localhost',
         });
-        makeHttpRequest({ payload: 123 });
+        makeHttpRequest({ payload: 123 }).catch(() => {});
         expect(fetchSpy).toHaveBeenCalledWith(
             expect.anything(),
             expect.objectContaining({

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import { SignatureBytes } from '@solana/keys';
 import {
     CompilableTransactionMessage,

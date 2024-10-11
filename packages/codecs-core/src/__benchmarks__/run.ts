@@ -46,7 +46,7 @@ bench
         { beforeEach: randomizeBytes },
     );
 
-(async () => {
+void (async () => {
     await bench.warmup();
     await bench.run();
 

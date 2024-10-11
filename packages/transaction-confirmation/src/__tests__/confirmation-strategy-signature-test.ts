@@ -39,7 +39,7 @@ describe('createSignatureConfirmationPromiseFactory', () => {
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
             signature: 'abc' as Signature,
-        });
+        }).catch(() => {});
         await jest.runAllTimersAsync();
         expect(createPendingSubscription).toHaveBeenCalledWith('abc', {
             commitment: 'finalized',
@@ -58,7 +58,7 @@ describe('createSignatureConfirmationPromiseFactory', () => {
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
             signature: 'abc' as Signature,
-        });
+        }).catch(() => {});
         await jest.runAllTimersAsync();
         expect(getSignatureStatusesMock).not.toHaveBeenCalled();
         // FIXME: https://github.com/microsoft/TypeScript/issues/11498
@@ -148,7 +148,7 @@ describe('createSignatureConfirmationPromiseFactory', () => {
             abortSignal: abortController.signal,
             commitment: 'finalized',
             signature: 'abc' as Signature,
-        });
+        }).catch(() => {});
         await jest.runAllTimersAsync();
         expect(getSignatureStatusesMock).toHaveBeenCalledWith({
             abortSignal: expect.objectContaining({ aborted: false }),
@@ -164,7 +164,7 @@ describe('createSignatureConfirmationPromiseFactory', () => {
             abortSignal: abortController.signal,
             commitment: 'finalized',
             signature: 'abc' as Signature,
-        });
+        }).catch(() => {});
         expect(createSubscriptionIterable).toHaveBeenCalledWith({
             abortSignal: expect.objectContaining({ aborted: false }),
         });

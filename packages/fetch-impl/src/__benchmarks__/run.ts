@@ -90,7 +90,7 @@ bench
         beforeEach: createDispatcher.bind(null, { connections: 64, pipelining: 2 }),
     });
 
-(async () => {
+void (async () => {
     await bench.run();
 
     console.table(bench.table());

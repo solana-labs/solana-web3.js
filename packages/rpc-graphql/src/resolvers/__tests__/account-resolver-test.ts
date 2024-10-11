@@ -56,7 +56,7 @@ describe('account resolver', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source);
+                rpcGraphQL.query(source).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getAccountInfo).not.toHaveBeenCalled();
             });
@@ -71,7 +71,7 @@ describe('account resolver', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source);
+                rpcGraphQL.query(source).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getAccountInfo).not.toHaveBeenCalled();
             });
@@ -87,7 +87,7 @@ describe('account resolver', () => {
                         address
                     }
                 `;
-                rpcGraphQL.query(source);
+                rpcGraphQL.query(source).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getAccountInfo).not.toHaveBeenCalled();
             });
@@ -105,7 +105,7 @@ describe('account resolver', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source);
+                rpcGraphQL.query(source).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
             });
@@ -123,7 +123,7 @@ describe('account resolver', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source);
+                rpcGraphQL.query(source).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
             });
@@ -142,7 +142,7 @@ describe('account resolver', () => {
                         address
                     }
                 `;
-                rpcGraphQL.query(source);
+                rpcGraphQL.query(source).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getAccountInfo).not.toHaveBeenCalled();
             });
@@ -163,7 +163,7 @@ describe('account resolver', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source);
+                rpcGraphQL.query(source).catch(() => {});
                 await jest.advanceTimersToNextTimerAsync(); // Advance past layer 1
                 await jest.advanceTimersToNextTimerAsync(); // Advance past layer 2
                 await jest.runAllTimersAsync();
@@ -186,7 +186,7 @@ describe('account resolver', () => {
                         }
                     }
                 `;
-                rpcGraphQL.query(source);
+                rpcGraphQL.query(source).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
             });
@@ -208,7 +208,7 @@ describe('account resolver', () => {
                         address
                     }
                 `;
-                rpcGraphQL.query(source);
+                rpcGraphQL.query(source).catch(() => {});
                 await jest.runAllTimersAsync();
                 expect(rpc.getAccountInfo).not.toHaveBeenCalled();
             });
@@ -226,7 +226,7 @@ describe('account resolver', () => {
                     }
                 }
             `;
-            rpcGraphQL.query(source);
+            rpcGraphQL.query(source).catch(() => {});
             await jest.runAllTimersAsync();
             expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
             expect(rpc.getAccountInfo).toHaveBeenLastCalledWith('AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca', {
@@ -246,7 +246,7 @@ describe('account resolver', () => {
                     }
                 }
             `;
-            rpcGraphQL.query(source);
+            rpcGraphQL.query(source).catch(() => {});
             await jest.runAllTimersAsync();
             expect(rpc.getAccountInfo).toHaveBeenCalledTimes(2);
             expect(rpc.getAccountInfo).toHaveBeenCalledWith('AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca', {
@@ -271,7 +271,7 @@ describe('account resolver', () => {
                     }
                 }
             `;
-            rpcGraphQL.query(source);
+            rpcGraphQL.query(source).catch(() => {});
             await jest.runAllTimersAsync();
             expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
             expect(rpc.getAccountInfo).toHaveBeenCalledWith('AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca', {
@@ -297,7 +297,7 @@ describe('account resolver', () => {
                     lamports
                 }
             `;
-            rpcGraphQL.query(source);
+            rpcGraphQL.query(source).catch(() => {});
             await jest.runAllTimersAsync();
             expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
             expect(rpc.getAccountInfo).toHaveBeenLastCalledWith('AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca', {
@@ -321,7 +321,7 @@ describe('account resolver', () => {
                     data(encoding: BASE_64_ZSTD)
                 }
             `;
-            rpcGraphQL.query(source);
+            rpcGraphQL.query(source).catch(() => {});
             await jest.runAllTimersAsync();
             expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
             expect(rpc.getAccountInfo).toHaveBeenLastCalledWith('AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca', {
@@ -344,7 +344,7 @@ describe('account resolver', () => {
                     }
                 }
             `;
-            rpcGraphQL.query(source);
+            rpcGraphQL.query(source).catch(() => {});
             await jest.runAllTimersAsync();
             expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
             expect(rpc.getAccountInfo).toHaveBeenLastCalledWith('AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca', {
@@ -367,7 +367,7 @@ describe('account resolver', () => {
                     }
                 }
             `;
-            rpcGraphQL.query(source);
+            rpcGraphQL.query(source).catch(() => {});
             await jest.runAllTimersAsync();
             expect(rpc.getAccountInfo).toHaveBeenCalledTimes(2);
             expect(rpc.getAccountInfo).toHaveBeenCalledWith('AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca', {
@@ -394,7 +394,7 @@ describe('account resolver', () => {
                     }
                 }
             `;
-            rpcGraphQL.query(source);
+            rpcGraphQL.query(source).catch(() => {});
             await jest.runAllTimersAsync();
             expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
             expect(rpc.getAccountInfo).toHaveBeenLastCalledWith('AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca', {

@@ -21,11 +21,11 @@ async function isEd25519CurveSupported(subtle: SubtleCrypto): Promise<boolean> {
         cachedEd25519Decision = new Promise(resolve => {
             subtle
                 .generateKey('Ed25519', /* extractable */ false, ['sign', 'verify'])
-                .catch(() => {
-                    resolve((cachedEd25519Decision = false));
-                })
                 .then(() => {
                     resolve((cachedEd25519Decision = true));
+                })
+                .catch(() => {
+                    resolve((cachedEd25519Decision = false));
                 });
         });
     }

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import type { PendingRpcSubscriptionsRequest, RpcSubscriptions } from '@solana/rpc-subscriptions-spec';
 import type { Slot, U64UnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 

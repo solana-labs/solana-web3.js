@@ -32,7 +32,7 @@ describe('getRpcSubscriptionsTransportWithSubscriptionCoalescing', () => {
             signal: new AbortController().signal,
             subscriptionConfigurationHash: 'MOCK_HASH',
         };
-        coalescedTransport(config);
+        coalescedTransport(config).catch(() => {});
         expect(mockInnerTransport).toHaveBeenCalledWith(
             expect.objectContaining({
                 executeSubscriptionPlan: config.executeSubscriptionPlan,
@@ -45,7 +45,7 @@ describe('getRpcSubscriptionsTransportWithSubscriptionCoalescing', () => {
             signal: new AbortController().signal,
             subscriptionConfigurationHash: 'MOCK_HASH',
         };
-        coalescedTransport(config);
+        coalescedTransport(config).catch(() => {});
         expect(mockInnerTransport).toHaveBeenCalledWith(
             expect.objectContaining({
                 subscriptionConfigurationHash: 'MOCK_HASH',
@@ -57,8 +57,14 @@ describe('getRpcSubscriptionsTransportWithSubscriptionCoalescing', () => {
             executeSubscriptionPlan: jest.fn(),
             signal: new AbortController().signal,
         };
-        coalescedTransport({ ...config, subscriptionConfigurationHash: 'MOCK_HASH_A' });
-        coalescedTransport({ ...config, subscriptionConfigurationHash: 'MOCK_HASH_B' });
+        coalescedTransport({
+            subscriptionConfigurationHash: 'MOCK_HASH_A',
+            ...config,
+        }).catch(() => {});
+        coalescedTransport({
+            subscriptionConfigurationHash: 'MOCK_HASH_B',
+            ...config,
+        }).catch(() => {});
         expect(mockInnerTransport).toHaveBeenCalledTimes(2);
     });
     it('calls the inner transport once per subscriber whose hashes do not match, in different runloops', async () => {
@@ -76,8 +82,14 @@ describe('getRpcSubscriptionsTransportWithSubscriptionCoalescing', () => {
             executeSubscriptionPlan: jest.fn(),
             signal: new AbortController().signal,
         };
-        coalescedTransport({ ...config, subscriptionConfigurationHash: undefined });
-        coalescedTransport({ ...config, subscriptionConfigurationHash: undefined });
+        coalescedTransport({
+            subscriptionConfigurationHash: undefined,
+            ...config,
+        }).catch(() => {});
+        coalescedTransport({
+            subscriptionConfigurationHash: undefined,
+            ...config,
+        }).catch(() => {});
         expect(mockInnerTransport).toHaveBeenCalledTimes(2);
     });
     it("calls the inner transport once per subscriber when both subscribers' hashes are `undefined`, in different runloops", async () => {
@@ -86,8 +98,14 @@ describe('getRpcSubscriptionsTransportWithSubscriptionCoalescing', () => {
             executeSubscriptionPlan: jest.fn(),
             signal: new AbortController().signal,
         };
-        await coalescedTransport({ ...config, subscriptionConfigurationHash: undefined });
-        await coalescedTransport({ ...config, subscriptionConfigurationHash: undefined });
+        await coalescedTransport({
+            subscriptionConfigurationHash: undefined,
+            ...config,
+        });
+        await coalescedTransport({
+            subscriptionConfigurationHash: undefined,
+            ...config,
+        });
         expect(mockInnerTransport).toHaveBeenCalledTimes(2);
     });
     it('only calls the inner transport once, in the same runloop', () => {
@@ -96,8 +114,8 @@ describe('getRpcSubscriptionsTransportWithSubscriptionCoalescing', () => {
             signal: new AbortController().signal,
             subscriptionConfigurationHash: 'MOCK_HASH',
         };
-        coalescedTransport(config);
-        coalescedTransport(config);
+        coalescedTransport(config).catch(() => {});
+        coalescedTransport(config).catch(() => {});
         expect(mockInnerTransport).toHaveBeenCalledTimes(1);
     });
     it('only calls the inner transport once, in different runloops', async () => {
@@ -139,8 +157,8 @@ describe('getRpcSubscriptionsTransportWithSubscriptionCoalescing', () => {
             subscriptionConfigurationHash: 'MOCK_HASH',
         };
         const abortControllerB = new AbortController();
-        coalescedTransport({ ...config, signal: new AbortController().signal });
-        coalescedTransport({ ...config, signal: abortControllerB.signal });
+        coalescedTransport({ ...config, signal: new AbortController().signal }).catch(() => {});
+        coalescedTransport({ ...config, signal: abortControllerB.signal }).catch(() => {});
         abortControllerB.abort();
         jest.runAllTicks();
         expect(mockInnerTransport.mock.lastCall?.[0].signal).toHaveProperty('aborted', false);
@@ -153,8 +171,8 @@ describe('getRpcSubscriptionsTransportWithSubscriptionCoalescing', () => {
         };
         const abortControllerA = new AbortController();
         const abortControllerB = new AbortController();
-        coalescedTransport({ ...config, signal: abortControllerA.signal });
-        coalescedTransport({ ...config, signal: abortControllerB.signal });
+        coalescedTransport({ ...config, signal: abortControllerA.signal }).catch(() => {});
+        coalescedTransport({ ...config, signal: abortControllerB.signal }).catch(() => {});
         abortControllerA.abort();
         abortControllerB.abort();
         jest.runAllTicks();
@@ -168,9 +186,9 @@ describe('getRpcSubscriptionsTransportWithSubscriptionCoalescing', () => {
         };
         const abortControllerA = new AbortController();
         const abortControllerB = new AbortController();
-        coalescedTransport({ ...config, signal: abortControllerA.signal });
+        coalescedTransport({ ...config, signal: abortControllerA.signal }).catch(() => {});
         await jest.runAllTimersAsync();
-        coalescedTransport({ ...config, signal: abortControllerB.signal });
+        coalescedTransport({ ...config, signal: abortControllerB.signal }).catch(() => {});
         await jest.runAllTimersAsync();
         abortControllerA.abort();
         abortControllerB.abort();
@@ -183,9 +201,9 @@ describe('getRpcSubscriptionsTransportWithSubscriptionCoalescing', () => {
             subscriptionConfigurationHash: 'MOCK_HASH',
         };
         const abortControllerA = new AbortController();
-        coalescedTransport({ ...config, signal: abortControllerA.signal });
+        coalescedTransport({ ...config, signal: abortControllerA.signal }).catch(() => {});
         abortControllerA.abort();
-        coalescedTransport({ ...config, signal: new AbortController().signal });
+        coalescedTransport({ ...config, signal: new AbortController().signal }).catch(() => {});
         jest.runAllTicks();
         expect(mockInnerTransport.mock.lastCall?.[0].signal).toHaveProperty('aborted', false);
     });
@@ -196,10 +214,10 @@ describe('getRpcSubscriptionsTransportWithSubscriptionCoalescing', () => {
             executeSubscriptionPlan: jest.fn(),
             subscriptionConfigurationHash: 'MOCK_HASH',
         };
-        coalescedTransport({ ...config, signal: new AbortController().signal });
+        coalescedTransport({ ...config, signal: new AbortController().signal }).catch(() => {});
         await jest.runAllTimersAsync();
         receiveError('o no');
-        coalescedTransport({ ...config, signal: new AbortController().signal });
+        coalescedTransport({ ...config, signal: new AbortController().signal }).catch(() => {});
         expect(mockInnerTransport).toHaveBeenCalledTimes(2);
     });
     it('does not cancel a newly-coalesced transport when an old errored one is aborted', async () => {

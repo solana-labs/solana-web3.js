@@ -110,12 +110,12 @@ describe('useSignTransaction', () => {
                 signTransaction({
                     options: { minContextSlot: 123n },
                     transaction: new Uint8Array([1, 2, 3]),
-                });
+                }).catch(() => {});
                 await jest.runAllTimersAsync();
                 signTransaction({
                     options: { minContextSlot: 123n },
                     transaction: new Uint8Array([1, 2, 3]),
-                });
+                }).catch(() => {});
                 // eslint-disable-next-line jest/no-conditional-expect
                 expect(mockSignTransaction).toHaveBeenCalledTimes(2);
                 // eslint-disable-next-line jest/no-conditional-expect
