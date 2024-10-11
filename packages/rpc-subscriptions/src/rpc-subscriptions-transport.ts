@@ -1,23 +1,45 @@
-import { createWebSocketTransport } from '@solana/rpc-subscriptions-transport-websocket';
-import type { ClusterUrl } from '@solana/rpc-types';
+import { pipe } from '@solana/functional';
+import { RpcSubscriptionsChannelCreator, RpcSubscriptionsTransport } from '@solana/rpc-subscriptions-spec';
+import { ClusterUrl } from '@solana/rpc-types';
 
-import { RpcSubscriptionsTransportFromClusterUrl } from './rpc-subscriptions-clusters';
+import {
+    RpcSubscriptionsChannelCreatorDevnet,
+    RpcSubscriptionsChannelCreatorFromClusterUrl,
+    RpcSubscriptionsChannelCreatorMainnet,
+    RpcSubscriptionsChannelCreatorTestnet,
+    RpcSubscriptionsTransportDevnet,
+    RpcSubscriptionsTransportFromClusterUrl,
+    RpcSubscriptionsTransportMainnet,
+    RpcSubscriptionsTransportTestnet,
+} from './rpc-subscriptions-clusters';
 
 export type DefaultRpcSubscriptionsTransportConfig<TClusterUrl extends ClusterUrl> = Readonly<{
-    intervalMs?: number;
-    sendBufferHighWatermark?: number;
-    url: TClusterUrl;
+    createChannel: RpcSubscriptionsChannelCreatorFromClusterUrl<TClusterUrl, unknown, unknown>;
 }>;
 
-export function createDefaultRpcSubscriptionsTransport<TClusterUrl extends ClusterUrl>(
-    config: DefaultRpcSubscriptionsTransportConfig<TClusterUrl>,
-): RpcSubscriptionsTransportFromClusterUrl<TClusterUrl> {
-    const { /* `intervalMs` will make a comeback; stay tuned */ ...rest } = config;
-    return createWebSocketTransport({
-        ...rest,
-        sendBufferHighWatermark:
-            config.sendBufferHighWatermark ??
-            // Let 128KB of data into the WebSocket buffer before buffering it in the app.
-            131_072,
-    }) as RpcSubscriptionsTransportFromClusterUrl<TClusterUrl>;
+export function createDefaultRpcSubscriptionsTransport<TClusterUrl extends ClusterUrl>({
+    createChannel,
+}: DefaultRpcSubscriptionsTransportConfig<TClusterUrl>) {
+    return pipe(
+        createRpcSubscriptionsTransportFromChannelCreator(
+            createChannel,
+        ) as RpcSubscriptionsTransport as RpcSubscriptionsTransportFromClusterUrl<TClusterUrl>,
+    );
+}
+
+export function createRpcSubscriptionsTransportFromChannelCreator<
+    TChannelCreator extends RpcSubscriptionsChannelCreator<TOutboundMessage, TInboundMessage>,
+    TInboundMessage,
+    TOutboundMessage,
+>(createChannel: TChannelCreator) {
+    return (async ({ executeSubscriptionPlan, signal }) => {
+        const channel = await createChannel({ abortSignal: signal });
+        return await executeSubscriptionPlan({ channel, signal });
+    }) as TChannelCreator extends RpcSubscriptionsChannelCreatorDevnet<TOutboundMessage, TInboundMessage>
+        ? RpcSubscriptionsTransportDevnet
+        : TChannelCreator extends RpcSubscriptionsChannelCreatorTestnet<TOutboundMessage, TInboundMessage>
+          ? RpcSubscriptionsTransportTestnet
+          : TChannelCreator extends RpcSubscriptionsChannelCreatorMainnet<TOutboundMessage, TInboundMessage>
+            ? RpcSubscriptionsTransportMainnet
+            : RpcSubscriptionsTransport;
 }

@@ -1,14 +1,19 @@
-type RpcSubscriptionsTransportConfig = Readonly<{
-    payload: unknown;
+import { SolanaError } from '@solana/errors';
+import { DataPublisher } from '@solana/subscribable';
+
+import { RpcSubscriptionsPlan } from './rpc-subscriptions-api';
+
+export type RpcSubscriptionsTransportDataEvents<TNotification> = {
+    error: SolanaError;
+    notification: TNotification;
+};
+
+interface RpcSubscriptionsTransportConfig<TNotification> extends RpcSubscriptionsPlan<TNotification> {
     signal: AbortSignal;
-}>;
+}
 
 export interface RpcSubscriptionsTransport {
-    (config: RpcSubscriptionsTransportConfig): Promise<
-        Readonly<
-            AsyncIterable<unknown> & {
-                send_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: (payload: unknown) => Promise<void>;
-            }
-        >
-    >;
+    <TNotification>(
+        config: RpcSubscriptionsTransportConfig<TNotification>,
+    ): Promise<DataPublisher<RpcSubscriptionsTransportDataEvents<TNotification>>>;
 }

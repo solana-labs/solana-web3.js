@@ -1,5 +1,7 @@
+import fastStableStringify from '@solana/fast-stable-stringify';
 import {
     createRpcSubscriptionsApi,
+    executeRpcPubSubSubscriptionPlan,
     RpcSubscriptionsApi,
     RpcSubscriptionsApiMethods,
 } from '@solana/rpc-subscriptions-spec';
@@ -49,19 +51,27 @@ type Config = RequestTransformerConfig;
 function createSolanaRpcSubscriptionsApi_INTERNAL<TApi extends RpcSubscriptionsApiMethods>(
     config?: Config,
 ): RpcSubscriptionsApi<TApi> {
+    const responseTransformer = getDefaultResponseTransformerForSolanaRpcSubscriptions({
+        allowedNumericKeyPaths: getAllowedNumericKeypaths(),
+    });
+    // TODO(loris): Replace with request transformer.
+    const parametersTransformer = <T extends unknown[]>(notificationName: string, params?: T) => {
+        return getDefaultRequestTransformerForSolanaRpc(config)({ methodName: notificationName, params })
+            .params as unknown[];
+    };
     return createRpcSubscriptionsApi<TApi>({
-        // TODO(loris): Replace with request transformer.
-        parametersTransformer: <T extends unknown[]>(params: T, notificationName: string) => {
-            return getDefaultRequestTransformerForSolanaRpc(config)({ methodName: notificationName, params })
-                .params as unknown[];
+        getSubscriptionConfigurationHash({ notificationName, params }) {
+            return fastStableStringify([notificationName, params]);
         },
-        responseTransformer: getDefaultResponseTransformerForSolanaRpcSubscriptions({
-            allowedNumericKeyPaths: getAllowedNumericKeypaths(),
-        }),
-        subscribeNotificationNameTransformer: (notificationName: string) =>
-            notificationName.replace(/Notifications$/, 'Subscribe'),
-        unsubscribeNotificationNameTransformer: (notificationName: string) =>
-            notificationName.replace(/Notifications$/, 'Unsubscribe'),
+        planExecutor({ notificationName, params, ...rest }) {
+            return executeRpcPubSubSubscriptionPlan({
+                ...rest,
+                responseTransformer,
+                subscribeMethodName: notificationName.replace(/Notifications$/, 'Subscribe'),
+                subscribeParams: parametersTransformer(notificationName, params),
+                unsubscribeMethodName: notificationName.replace(/Notifications$/, 'Unsubscribe'),
+            });
+        },
     });
 }
 
