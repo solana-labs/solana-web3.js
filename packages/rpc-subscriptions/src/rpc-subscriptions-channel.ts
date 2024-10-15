@@ -48,8 +48,15 @@ export function createDefaultRpcSubscriptionsChannelCreator<TClusterUrl extends 
     return getChannelPoolingChannelCreator(createDefaultRpcSubscriptionsChannel, {
         maxSubscriptionsPerChannel:
             config.maxSubscriptionsPerChannel ??
-            // TODO: Determine this experimentally
-            1_000,
+            /**
+             * A note about this default. The idea here is that, because some RPC providers impose
+             * an upper limit on the number of subscriptions you can make per channel, we must
+             * choose a number low enough to avoid hitting that limit. Without knowing what provider
+             * a given person is using, or what their limit is, we have to choose the lowest of all
+             * known limits. As of this writing (October 2024) that is the public mainnet RPC node
+             * (api.mainnet-beta.solana.com) at 100 subscriptions.
+             */
+            100,
         minChannels: config.minChannels ?? 1,
     });
 }
