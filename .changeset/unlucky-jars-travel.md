@@ -39,4 +39,4 @@
 '@solana/rpc': patch
 ---
 
-Add edge-light to package exports
+The build is now compatible with the Vercel Edge runtime and Cloudflare Workers through the addition of `edge-light` and `workerd` to the package exports.
