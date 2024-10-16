@@ -189,8 +189,8 @@ importers:
         specifier: ^18.3.0
         version: 18.3.1(react@18.3.1)
       react-error-boundary:
-        specifier: ^4.0.13
-        version: 4.0.13(react@18.3.1)
+        specifier: ^4.1.0
+        version: 4.1.0(react@18.3.1)
       swr:
         specifier: ^2.2.5
         version: 2.2.5(react@18.3.1)
@@ -704,8 +704,8 @@ importers:
         specifier: ^18
         version: 18.3.1
       react-error-boundary:
-        specifier: ^4.0.13
-        version: 4.0.13(react@18.3.1)
+        specifier: ^4.1.0
+        version: 4.1.0(react@18.3.1)
       react-test-renderer:
         specifier: ^18
         version: 18.3.1(react@18.3.1)
@@ -1910,10 +1910,6 @@ packages:
 
   '@babel/regjsgen@0.8.0':
     resolution: {integrity: sha512-x/rqGMdzj+fWZvCOYForTghzbtqPDZ5gPwaoNGHdgDfF2QA/XZbCBp4Moo5scrkAMPhB7z26XM/AaHuIJdgauA==}
-
-  '@babel/runtime@7.24.8':
-    resolution: {integrity: sha512-5F7SDGs1T72ZczbRwbGO9lQi0NLjQxzl6i4lJxLxfW9U5UluCSyEJeniWvnhl3/euNiqQVbo8zruhsDfid0esA==}
-    engines: {node: '>=6.9.0'}
 
   '@babel/runtime@7.25.0':
     resolution: {integrity: sha512-7dRy4DwXwtzBrPbZflqxnvfxLF8kdZXPkhymtDeFoFqE6ldzjQFgYTtYIFARcLEYDrqfBfYcZt1WqFxRoyC9Rw==}
@@ -5864,8 +5860,9 @@ packages:
     peerDependencies:
       react: ^18.3.1
 
-  react-error-boundary@4.0.13:
-    resolution: {integrity: sha512-b6PwbdSv8XeOSYvjt8LpgpKrZ0yGdtZokYwkwV2wlcZbxgopHX/hgPl5VgpnoVOWd868n1hktM8Qm4b+02MiLQ==}
+  react-error-boundary@4.1.0:
+    resolution: {integrity: sha512-GFnM3kyswd+9Oy7oX1lxdr39ANHD3ty6cyAK4Kyku+w8Aq9fnK7+yRytKOaPLzOhgtGq18AfTXmDtwlojBPTRg==}
+    engines: {node: '>=20', pnpm: '=9'}
     peerDependencies:
       react: '>=16.13.1'
 
@@ -7650,10 +7647,6 @@ snapshots:
 
   '@babel/regjsgen@0.8.0':
     optional: true
-
-  '@babel/runtime@7.24.8':
-    dependencies:
-      regenerator-runtime: 0.14.0
 
   '@babel/runtime@7.25.0':
     dependencies:
@@ -12266,9 +12259,9 @@ snapshots:
       react: 18.3.1
       scheduler: 0.23.2
 
-  react-error-boundary@4.0.13(react@18.3.1):
+  react-error-boundary@4.1.0(react@18.3.1):
     dependencies:
-      '@babel/runtime': 7.24.8
+      '@babel/runtime': 7.25.0
       react: 18.3.1
 
   react-is@17.0.2: {}
