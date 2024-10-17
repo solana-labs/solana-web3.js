@@ -43,7 +43,7 @@ describe('JSON-RPC 2.0', () => {
                 api: new Proxy({} as RpcApi<TestRpcMethods>, {
                     get(_, methodName) {
                         return (...params: unknown[]) => ({
-                            payload: createRpcMessage(methodName.toString(), params),
+                            payload: createRpcMessage({ methodName: methodName.toString(), params }),
                         });
                     },
                 }),
@@ -55,7 +55,7 @@ describe('JSON-RPC 2.0', () => {
                 .send()
                 .catch(() => {});
             expect(makeHttpRequest).toHaveBeenCalledWith({
-                payload: { ...createRpcMessage('someMethod', [123]), id: expect.any(Number) },
+                payload: { ...createRpcMessage({ methodName: 'someMethod', params: [123] }), id: expect.any(Number) },
             });
         });
         it('returns results from the transport', async () => {
@@ -79,7 +79,10 @@ describe('JSON-RPC 2.0', () => {
                 api: {
                     someMethod(...params: unknown[]): RpcApiRequestPlan<unknown> {
                         return {
-                            payload: createRpcMessage('someMethodAugmented', [...params, 'augmented', 'params']),
+                            payload: createRpcMessage({
+                                methodName: 'someMethodAugmented',
+                                params: [...params, 'augmented', 'params'],
+                            }),
                         };
                     },
                 } as RpcApi<TestRpcMethods>,
@@ -92,7 +95,7 @@ describe('JSON-RPC 2.0', () => {
                 .catch(() => {});
             expect(makeHttpRequest).toHaveBeenCalledWith({
                 payload: {
-                    ...createRpcMessage('someMethodAugmented', [123, 'augmented', 'params']),
+                    ...createRpcMessage({ methodName: 'someMethodAugmented', params: [123, 'augmented', 'params'] }),
                     id: expect.any(Number),
                 },
             });
@@ -107,7 +110,7 @@ describe('JSON-RPC 2.0', () => {
                 api: {
                     someMethod(...params: unknown[]): RpcApiRequestPlan<unknown> {
                         return {
-                            payload: createRpcMessage('someMethod', params),
+                            payload: createRpcMessage({ methodName: 'someMethod', params }),
                             responseTransformer,
                         };
                     },
