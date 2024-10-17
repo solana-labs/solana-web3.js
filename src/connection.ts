@@ -6252,13 +6252,13 @@ export class Connection {
                 ] = subscription.callbacks;
                 await this._updateSubscriptions();
               } catch (e) {
-                if (e instanceof Error) {
-                  console.error(
-                    `${method} error for argument`,
+                console.error(
+                  `Received ${e instanceof Error ? '' : 'JSON-RPC '}error calling \`${method}\``,
+                  {
                     args,
-                    e.message,
-                  );
-                }
+                    error: e,
+                  },
+                );
                 if (!isCurrentConnectionStillActive()) {
                   return;
                 }
