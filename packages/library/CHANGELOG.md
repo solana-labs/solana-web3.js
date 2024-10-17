@@ -1,5 +1,32 @@
 # @solana/web3.js
 
+## 2.0.0-rc.2
+
+### Patch Changes
+
+-   [#3290](https://github.com/solana-labs/solana-web3.js/pull/3290) [`2368163`](https://github.com/solana-labs/solana-web3.js/commit/23681637fa3ee0e2242b3b6bf087a066393bcbd8) Thanks [@mcintyre94](https://github.com/mcintyre94)! - Throw an error if a transaction fails when being simulated to estimate CUs
+
+-   [#3137](https://github.com/solana-labs/solana-web3.js/pull/3137) [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a) Thanks [@mcintyre94](https://github.com/mcintyre94)! - The build is now compatible with the Vercel Edge runtime and Cloudflare Workers through the addition of `edge-light` and `workerd` to the package exports.
+
+-   Updated dependencies [[`292487d`](https://github.com/solana-labs/solana-web3.js/commit/292487da00ee57350e8faf49ccf961203aed6403), [`696c72c`](https://github.com/solana-labs/solana-web3.js/commit/696c72ce25c96f06442785bddffbc890ceb802f3), [`9dfca45`](https://github.com/solana-labs/solana-web3.js/commit/9dfca454355819444bad29e48602886428ba4cac), [`3fc388f`](https://github.com/solana-labs/solana-web3.js/commit/3fc388f0b40243436a3ecbcd2af27ea8efa683e4), [`38faba0`](https://github.com/solana-labs/solana-web3.js/commit/38faba05fab479ddbd95d0e211744d203f8aa823), [`44c8772`](https://github.com/solana-labs/solana-web3.js/commit/44c8772c8711b99e68dce3348e17bfc5b1d2a833), [`e1cb697`](https://github.com/solana-labs/solana-web3.js/commit/e1cb697d66dc906aa2433965452417e03cf86e13), [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a), [`0158b31`](https://github.com/solana-labs/solana-web3.js/commit/0158b3181ed96996f269f3bff689f76411e460b3), [`c8e6e71`](https://github.com/solana-labs/solana-web3.js/commit/c8e6e71529f219caf83ed444e53f5a1e757129dc)]:
+    -   @solana/addresses@2.0.0-rc.2
+    -   @solana/transaction-confirmation@2.0.0-rc.2
+    -   @solana/rpc@2.0.0-rc.2
+    -   @solana/rpc-subscriptions@2.0.0-rc.2
+    -   @solana/accounts@2.0.0-rc.2
+    -   @solana/rpc-parsed-types@2.0.0-rc.2
+    -   @solana/rpc-types@2.0.0-rc.2
+    -   @solana/sysvars@2.0.0-rc.2
+    -   @solana/errors@2.0.0-rc.2
+    -   @solana/transaction-messages@2.0.0-rc.2
+    -   @solana/instructions@2.0.0-rc.2
+    -   @solana/transactions@2.0.0-rc.2
+    -   @solana/functional@2.0.0-rc.2
+    -   @solana/programs@2.0.0-rc.2
+    -   @solana/signers@2.0.0-rc.2
+    -   @solana/codecs@2.0.0-rc.2
+    -   @solana/keys@2.0.0-rc.2
+
 ## 2.0.0-rc.1
 
 ### Patch Changes

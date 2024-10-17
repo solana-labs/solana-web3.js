@@ -1,5 +1,11 @@
 # @solana/functional
 
+## 2.0.0-rc.2
+
+### Patch Changes
+
+-   [#3137](https://github.com/solana-labs/solana-web3.js/pull/3137) [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a) Thanks [@mcintyre94](https://github.com/mcintyre94)! - The build is now compatible with the Vercel Edge runtime and Cloudflare Workers through the addition of `edge-light` and `workerd` to the package exports.
+
 ## 2.0.0-rc.1
 
 ## 2.0.0-rc.0

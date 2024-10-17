@@ -1,6 +1,6 @@
 {
     "name": "@solana/rpc-spec-types",
-    "version": "2.0.0-rc.1",
+    "version": "2.0.0-rc.2",
     "description": "Shared generic JSON RPC specifications",
     "exports": {
         "edge-light": {

@@ -1,5 +1,30 @@
 # @solana/rpc-subscriptions
 
+## 2.0.0-rc.2
+
+### Patch Changes
+
+-   [#3161](https://github.com/solana-labs/solana-web3.js/pull/3161) [`9dfca45`](https://github.com/solana-labs/solana-web3.js/commit/9dfca454355819444bad29e48602886428ba4cac) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Change first argument of `onIntegerOverflow` handler from `methodName: string` to `request: RpcRequest`
+
+-   [#3137](https://github.com/solana-labs/solana-web3.js/pull/3137) [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a) Thanks [@mcintyre94](https://github.com/mcintyre94)! - The build is now compatible with the Vercel Edge runtime and Cloudflare Workers through the addition of `edge-light` and `workerd` to the package exports.
+
+-   [`c8e6e71`](https://github.com/solana-labs/solana-web3.js/commit/c8e6e71529f219caf83ed444e53f5a1e757129dc) Thanks [@steveluscher](https://github.com/steveluscher)! - We refactored the lower levels of the subscriptions API entirely.
+
+    Previously, all layers of the subscriptions implementation, from the `WebSocket` transport to the API that developers use, dealt in `AsyncIterables`. These are notoriously difficult to code in such a way that expresses all of the ways in which a subscription might be cancelled or error out. Very slight omissions of care could open memory leaks that would bring down the simplest of apps. The new subscriptions infra in Release Candidate 2 deals with event-based subscriptions all the way up to the highest level API, at which point the subscription is vended to the application as an `AsyncIterable`.
+
+    This has eliminated several classes of memory leak and has made it easier to implement higher-level transports (like the autopinger and the subscription coalescer). Additionally, this update introduces a new channel pool implementation that opens new `WebSocket` connections when existing ones become ‘full.’ Lastly, performance in the new implementation has been improved through a new demultiplexing utility that can separate `message` events into several channels based on arbitrary criteria, meaning you can apply transforms to the message right at the source, and vend subscriptions to downstream consumers that care only about one particular kind of message.
+
+-   Updated dependencies [[`1d87b3c`](https://github.com/solana-labs/solana-web3.js/commit/1d87b3c9fb5637cdceb31c5675e876d8fe088677), [`9dfca45`](https://github.com/solana-labs/solana-web3.js/commit/9dfca454355819444bad29e48602886428ba4cac), [`1c25dd4`](https://github.com/solana-labs/solana-web3.js/commit/1c25dd4069a3a8f5599285c9b0eaeb71a2f897d1), [`29d5113`](https://github.com/solana-labs/solana-web3.js/commit/29d5113b2c6f8c7907127ad992bad1329edbd7e7), [`a705413`](https://github.com/solana-labs/solana-web3.js/commit/a705413e357fb5c5907c5fc1df17d241bc5c0f76), [`8c2cb9f`](https://github.com/solana-labs/solana-web3.js/commit/8c2cb9f44a52b3c27bc15c2c972bea1aae1622e7), [`9dfca45`](https://github.com/solana-labs/solana-web3.js/commit/9dfca454355819444bad29e48602886428ba4cac), [`747b9ab`](https://github.com/solana-labs/solana-web3.js/commit/747b9abb90c6baeec73a284d87a324bf3caeab03), [`38faba0`](https://github.com/solana-labs/solana-web3.js/commit/38faba05fab479ddbd95d0e211744d203f8aa823), [`28ca5d1`](https://github.com/solana-labs/solana-web3.js/commit/28ca5d17d4c574a690a5bf29d4f1fe0ad8f5883c), [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a), [`c8e6e71`](https://github.com/solana-labs/solana-web3.js/commit/c8e6e71529f219caf83ed444e53f5a1e757129dc)]:
+    -   @solana/rpc-subscriptions-spec@2.0.0-rc.2
+    -   @solana/rpc-subscriptions-api@2.0.0-rc.2
+    -   @solana/rpc-transformers@2.0.0-rc.2
+    -   @solana/subscribable@2.0.0-rc.2
+    -   @solana/rpc-types@2.0.0-rc.2
+    -   @solana/errors@2.0.0-rc.2
+    -   @solana/rpc-subscriptions-channel-websocket@2.0.0-rc.2
+    -   @solana/functional@2.0.0-rc.2
+    -   @solana/promises@2.0.0-rc.2
+
 ## 2.0.0-rc.1
 
 ### Patch Changes
