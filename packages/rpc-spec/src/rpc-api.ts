@@ -1,6 +1,10 @@
-import { Callable, createRpcMessage } from '@solana/rpc-spec-types';
-
-import { RpcRequestTransformer, RpcResponse, RpcResponseTransformer } from './rpc-shared';
+import {
+    Callable,
+    createRpcMessage,
+    RpcRequestTransformer,
+    RpcResponse,
+    RpcResponseTransformer,
+} from '@solana/rpc-spec-types';
 
 export type RpcApiConfig = Readonly<{
     requestTransformer?: RpcRequestTransformer;
