@@ -51,7 +51,7 @@ export function createJsonRpcApi<TRpcMethods extends RpcApiMethods>(config?: Rpc
                 const rawRequest = Object.freeze({ methodName, params: rawParams });
                 const request = config?.requestTransformer ? config?.requestTransformer(rawRequest) : rawRequest;
                 return Object.freeze({
-                    payload: createRpcMessage(request.methodName, request.params),
+                    payload: createRpcMessage(request),
                     ...(config?.responseTransformer
                         ? {
                               responseTransformer: (response: RpcResponse) => {
