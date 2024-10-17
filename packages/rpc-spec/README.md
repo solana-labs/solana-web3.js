@@ -41,25 +41,6 @@ Calling the `send(options)` method on a `PendingRpcRequest` will trigger the req
 
 An object that exposes all of the functions described by `TRpcMethods`, and fulfils them using `TRpcTransport`. Calling each method returns a `PendingRpcRequest<TResponse>` where `TResponse` is that method's response type.
 
-### `RpcRequest`
-
-An object that describes the elements of a JSON RPC request. It consists of the following properties:
-
--   `methodName`: The name of the JSON RPC method to be called.
--   `params`: The parameters to be passed to the JSON RPC method.
-
-### `RpcRequestTransformer`
-
-A function that accepts an `RpcRequest` and returns another `RpcRequest`. This allows the `RpcApi` to transform the request before it is sent to the JSON RPC server.
-
-### `RpcResponse`
-
-A type that represents the response from a JSON RPC server. This could be any sort of data which is why `RpcResponse` defaults to `unknown`. You may use a type parameter to specify the shape of the response — e.g. `RpcResponse<{ result: number }>`.
-
-### `RpcResponseTransformer`
-
-A function that accepts an `RpcResponse` and returns another `RpcResponse`. This allows the `RpcApi` to transform the response before it is returned to the caller.
-
 ### `RpcApi<TRpcMethods>`
 
 For each of `TRpcMethods` this object exposes a method with the same name that maps between its input arguments and a `RpcApiRequestPlan<TResponse>` that describes how to prepare a JSON RPC request to fetch `TResponse`.

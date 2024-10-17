@@ -1,7 +1,8 @@
 import '@solana/test-matchers/toBeFrozenObject';
 
+import type { RpcRequest, RpcResponse } from '@solana/rpc-spec-types';
+
 import { createJsonRpcApi } from '../rpc-api';
-import { RpcRequest, RpcResponse } from '../rpc-shared';
 
 type DummyApi = {
     someMethod(...args: unknown[]): unknown;

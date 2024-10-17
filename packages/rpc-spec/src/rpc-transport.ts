@@ -1,4 +1,4 @@
-import { RpcResponse } from './rpc-shared';
+import { RpcResponse } from '@solana/rpc-spec-types';
 
 type RpcTransportRequest = Readonly<{
     payload: unknown;

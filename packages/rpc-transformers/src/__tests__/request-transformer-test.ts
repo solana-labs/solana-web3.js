@@ -1,4 +1,4 @@
-import type { RpcRequestTransformer } from '@solana/rpc-spec';
+import type { RpcRequestTransformer } from '@solana/rpc-spec-types';
 import type { Commitment } from '@solana/rpc-types';
 
 import { getDefaultRequestTransformerForSolanaRpc } from '../request-transformer';
