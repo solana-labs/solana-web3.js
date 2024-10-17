@@ -6251,13 +6251,15 @@ export class Connection {
                   serverSubscriptionId
                 ] = subscription.callbacks;
                 await this._updateSubscriptions();
-              } catch (e) {
+              } catch (e: any) {
                 if (e instanceof Error) {
                   console.error(
                     `${method} error for argument`,
                     args,
                     e.message,
                   );
+                } else if (typeof e === 'object' && e.code) {
+                  console.log(`${method} error for argument`, args, e.message);
                 }
                 if (!isCurrentConnectionStillActive()) {
                   return;
