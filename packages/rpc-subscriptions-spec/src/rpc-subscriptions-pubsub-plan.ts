@@ -128,7 +128,10 @@ export async function executeRpcPubSubSubscriptionPlan<TNotification>({
              * must be careful not to send the unsubscribe message until the last subscriber aborts.
              */
             if (decrementSubscriberCountAndReturnNewCount(channel, subscriptionId) === 0) {
-                const unsubscribePayload = createRpcMessage(unsubscribeMethodName, [subscriptionId]);
+                const unsubscribePayload = createRpcMessage({
+                    methodName: unsubscribeMethodName,
+                    params: [subscriptionId],
+                });
                 subscriptionId = undefined;
                 channel.send(unsubscribePayload).catch(() => {});
             }
@@ -144,7 +147,7 @@ export async function executeRpcPubSubSubscriptionPlan<TNotification>({
      * STEP 2
      * Send the subscription request.
      */
-    const subscribePayload = createRpcMessage(subscribeMethodName, subscribeParams);
+    const subscribePayload = createRpcMessage({ methodName: subscribeMethodName, params: subscribeParams });
     await channel.send(subscribePayload);
     /**
      * STEP 3
