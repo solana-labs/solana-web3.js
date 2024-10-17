@@ -86,6 +86,7 @@
         "@solana/rpc-parsed-types": "workspace:*",
         "@solana/rpc-subscriptions": "workspace:*",
         "@solana/rpc-types": "workspace:*",
+        "@solana/rpc-spec-types": "workspace:*",
         "@solana/signers": "workspace:*",
         "@solana/sysvars": "workspace:*",
         "@solana/transaction-confirmation": "workspace:*",

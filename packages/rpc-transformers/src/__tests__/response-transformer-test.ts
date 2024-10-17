@@ -1,5 +1,5 @@
 import { SOLANA_ERROR__JSON_RPC__PARSE_ERROR, SolanaError } from '@solana/errors';
-import { RpcRequest } from '@solana/rpc-spec';
+import { RpcRequest } from '@solana/rpc-spec-types';
 
 import { getDefaultResponseTransformerForSolanaRpc } from '../response-transformer';
 import { KEYPATH_WILDCARD } from '../tree-traversal';

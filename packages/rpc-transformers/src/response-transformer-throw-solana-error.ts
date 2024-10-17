@@ -1,5 +1,5 @@
 import { getSolanaErrorFromJsonRpcError } from '@solana/errors';
-import { RpcResponseTransformer } from '@solana/rpc-spec';
+import { RpcResponseTransformer } from '@solana/rpc-spec-types';
 
 type JsonRpcResponse = { error: Parameters<typeof getSolanaErrorFromJsonRpcError>[0] } | { result: unknown };
 

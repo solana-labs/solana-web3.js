@@ -1,4 +1,4 @@
-import { RpcResponseTransformer } from '@solana/rpc-spec';
+import { RpcResponseTransformer } from '@solana/rpc-spec-types';
 
 type JsonRpcResponse = { result: unknown };
 

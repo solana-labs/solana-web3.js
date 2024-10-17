@@ -1,4 +1,4 @@
-import { RpcRequest, RpcRequestTransformer, RpcResponseTransformer } from '@solana/rpc-spec';
+import { RpcRequest, RpcRequestTransformer, RpcResponseTransformer } from '@solana/rpc-spec-types';
 
 export type KeyPathWildcard = { readonly __brand: unique symbol };
 export type KeyPath = ReadonlyArray<KeyPath | KeyPathWildcard | number | string>;

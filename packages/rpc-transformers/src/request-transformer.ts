@@ -1,5 +1,5 @@
 import { pipe } from '@solana/functional';
-import { RpcRequest, RpcRequestTransformer } from '@solana/rpc-spec';
+import { RpcRequest, RpcRequestTransformer } from '@solana/rpc-spec-types';
 import { Commitment } from '@solana/rpc-types';
 
 import { getBigIntDowncastRequestTransformer } from './request-transformer-bigint-downcast';
