@@ -1,5 +1,40 @@
 # @solana/rpc-api
 
+## 2.0.0-rc.2
+
+### Patch Changes
+
+-   [#3145](https://github.com/solana-labs/solana-web3.js/pull/3145) [`1c25dd4`](https://github.com/solana-labs/solana-web3.js/commit/1c25dd4069a3a8f5599285c9b0eaeb71a2f897d1) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Rename `RpcResponse` type to `RpcResponseData` to make room for a new `RpcResponse` type
+
+-   [#3213](https://github.com/solana-labs/solana-web3.js/pull/3213) [`3fc388f`](https://github.com/solana-labs/solana-web3.js/commit/3fc388f0b40243436a3ecbcd2af27ea8efa683e4) Thanks [@mcintyre94](https://github.com/mcintyre94)! - Clean up SolanaRpcApi: no longer extend RpcApiMethods + remove export
+
+-   [#3150](https://github.com/solana-labs/solana-web3.js/pull/3150) [`a705413`](https://github.com/solana-labs/solana-web3.js/commit/a705413e357fb5c5907c5fc1df17d241bc5c0f76) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Make `RpcApi` use new `RpcRequestTransformer` and `RpcResponseTransformer`
+
+-   [#3202](https://github.com/solana-labs/solana-web3.js/pull/3202) [`bf07a60`](https://github.com/solana-labs/solana-web3.js/commit/bf07a606768eef7cd37c1dd0e2c0a35fe3b12f24) Thanks [@disco-infinex](https://github.com/disco-infinex)! - PerformanceSample return type field numNonVoteTransaction corrected to numNonVoteTransactions
+
+-   [#3161](https://github.com/solana-labs/solana-web3.js/pull/3161) [`9dfca45`](https://github.com/solana-labs/solana-web3.js/commit/9dfca454355819444bad29e48602886428ba4cac) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Add `getIntegerOverflowRequestTransformer`, `getBigIntDowncastRequestTransformer` and `getTreeWalkerRequestTransformer` helpers
+
+-   [#3134](https://github.com/solana-labs/solana-web3.js/pull/3134) [`38faba0`](https://github.com/solana-labs/solana-web3.js/commit/38faba05fab479ddbd95d0e211744d203f8aa823) Thanks [@buffalojoec](https://github.com/buffalojoec)! - Change unix timestamp type to bigint with an unsafe label
+
+-   [#3148](https://github.com/solana-labs/solana-web3.js/pull/3148) [`e1cb697`](https://github.com/solana-labs/solana-web3.js/commit/e1cb697d66dc906aa2433965452417e03cf86e13) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Make `RpcTransport` return new `RpcReponse` type instead of parsed JSON data
+
+-   [#3201](https://github.com/solana-labs/solana-web3.js/pull/3201) [`02cefa7`](https://github.com/solana-labs/solana-web3.js/commit/02cefa7cc98463e602f78a8acc10d85c37f03481) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Update the response type of the `getClusterNodes` RPC method
+
+-   [#3137](https://github.com/solana-labs/solana-web3.js/pull/3137) [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a) Thanks [@mcintyre94](https://github.com/mcintyre94)! - The build is now compatible with the Vercel Edge runtime and Cloudflare Workers through the addition of `edge-light` and `workerd` to the package exports.
+
+-   Updated dependencies [[`6b43588`](https://github.com/solana-labs/solana-web3.js/commit/6b4358864cb328d1b83f11c94b29f75e1b3d635f), [`292487d`](https://github.com/solana-labs/solana-web3.js/commit/292487da00ee57350e8faf49ccf961203aed6403), [`628177f`](https://github.com/solana-labs/solana-web3.js/commit/628177ffcc1be1c40e0c82d80743b07f695cfe69), [`9dfca45`](https://github.com/solana-labs/solana-web3.js/commit/9dfca454355819444bad29e48602886428ba4cac), [`1c25dd4`](https://github.com/solana-labs/solana-web3.js/commit/1c25dd4069a3a8f5599285c9b0eaeb71a2f897d1), [`3fc388f`](https://github.com/solana-labs/solana-web3.js/commit/3fc388f0b40243436a3ecbcd2af27ea8efa683e4), [`4f87d12`](https://github.com/solana-labs/solana-web3.js/commit/4f87d12cf942fbd4f427005d5ac41671ce28a22c), [`29d5113`](https://github.com/solana-labs/solana-web3.js/commit/29d5113b2c6f8c7907127ad992bad1329edbd7e7), [`a705413`](https://github.com/solana-labs/solana-web3.js/commit/a705413e357fb5c5907c5fc1df17d241bc5c0f76), [`9dfca45`](https://github.com/solana-labs/solana-web3.js/commit/9dfca454355819444bad29e48602886428ba4cac), [`747b9ab`](https://github.com/solana-labs/solana-web3.js/commit/747b9abb90c6baeec73a284d87a324bf3caeab03), [`38faba0`](https://github.com/solana-labs/solana-web3.js/commit/38faba05fab479ddbd95d0e211744d203f8aa823), [`f5660d2`](https://github.com/solana-labs/solana-web3.js/commit/f5660d2eb4d2ee5be8c9cd8e8b58a11de1a799bf), [`e1cb697`](https://github.com/solana-labs/solana-web3.js/commit/e1cb697d66dc906aa2433965452417e03cf86e13), [`28ca5d1`](https://github.com/solana-labs/solana-web3.js/commit/28ca5d17d4c574a690a5bf29d4f1fe0ad8f5883c), [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a), [`d198638`](https://github.com/solana-labs/solana-web3.js/commit/d19863844cf28c252e6bedd7070e633692d9e46e), [`0158b31`](https://github.com/solana-labs/solana-web3.js/commit/0158b3181ed96996f269f3bff689f76411e460b3)]:
+    -   @solana/rpc-spec@2.0.0-rc.2
+    -   @solana/addresses@2.0.0-rc.2
+    -   @solana/rpc-transformers@2.0.0-rc.2
+    -   @solana/rpc-parsed-types@2.0.0-rc.2
+    -   @solana/rpc-types@2.0.0-rc.2
+    -   @solana/errors@2.0.0-rc.2
+    -   @solana/transaction-messages@2.0.0-rc.2
+    -   @solana/codecs-strings@2.0.0-rc.2
+    -   @solana/transactions@2.0.0-rc.2
+    -   @solana/codecs-core@2.0.0-rc.2
+    -   @solana/keys@2.0.0-rc.2
+
 ## 2.0.0-rc.1
 
 ### Patch Changes
