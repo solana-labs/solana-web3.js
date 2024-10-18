@@ -31,7 +31,7 @@ jobs:
           # FIXME: This is a temporary workaround until Jest work nicely with Node 23.
           # Currently, we get `No tests found, exiting with code 1` errors when running
           # Jest unit tests on Node 23.
-          # - 'current'
+          - 22.x # 'current'
           - 'lts/*'
 
     name: Build & Test on Node ${{ matrix.node }}
