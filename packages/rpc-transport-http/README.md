@@ -127,7 +127,8 @@ Using this core transport, you can implement specialized functionality for lever
 Here’s an example of how someone might implement a “round robin” approach to distribute requests to multiple transports:
 
 ```ts
-import { RpcResponse, RpcTransport } from '@solana/rpc-spec';
+import { RpcTransport } from '@solana/rpc-spec';
+import { RpcResponse } from '@solana/rpc-spec-types';
 import { createHttpTransport } from '@solana/rpc-transport-http';
 
 // Create a transport for each RPC server
@@ -153,7 +154,8 @@ Another example of a possible customization for a transport is to shard requests
 Perhaps your application needs to make a large number of requests, or needs to fan request for different methods out to different servers. Here’s an example of an implementation that does the latter:
 
 ```ts
-import { RpcResponse, RpcTransport } from '@solana/rpc-spec';
+import { RpcTransport } from '@solana/rpc-spec';
+import { RpcResponse } from '@solana/rpc-spec-types';
 import { createHttpTransport } from '@solana/rpc-transport-http';
 
 // Create multiple transports
@@ -190,7 +192,8 @@ async function shardingTransport<TResponse>(...args: Parameters<RpcTransport>): 
 The transport library can also be used to implement custom retry logic on any request:
 
 ```ts
-import { RpcResponse, RpcTransport } from '@solana/rpc-spec';
+import { RpcTransport } from '@solana/rpc-spec';
+import { RpcResponse } from '@solana/rpc-spec-types';
 import { createHttpTransport } from '@solana/rpc-transport-http';
 
 // Set the maximum number of attempts to retry a request
@@ -234,7 +237,8 @@ async function retryingTransport<TResponse>(...args: Parameters<RpcTransport>): 
 Here’s an example of some failover logic integrated into a transport:
 
 ```ts
-import { RpcResponse, RpcTransport } from '@solana/rpc-spec';
+import { RpcTransport } from '@solana/rpc-spec';
+import { RpcResponse } from '@solana/rpc-spec-types';
 import { createHttpTransport } from '@solana/rpc-transport-http';
 
 // Create a transport for each RPC server

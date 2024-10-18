@@ -1,5 +1,5 @@
 import { pipe } from '@solana/functional';
-import { RpcRequest, RpcResponse, RpcResponseTransformer } from '@solana/rpc-spec';
+import { RpcRequest, RpcResponse, RpcResponseTransformer } from '@solana/rpc-spec-types';
 
 import { AllowedNumericKeypaths } from './response-transformer-allowed-numeric-values';
 import { getBigIntUpcastResponseTransformer, getBigIntUpcastVisitor } from './response-transformer-bigint-upcast';

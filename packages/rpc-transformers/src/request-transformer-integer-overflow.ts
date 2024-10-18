@@ -1,4 +1,4 @@
-import { RpcRequest } from '@solana/rpc-spec';
+import { RpcRequest } from '@solana/rpc-spec-types';
 
 import { getTreeWalkerRequestTransformer, KeyPath, TraversalState } from './tree-traversal';
 

@@ -73,7 +73,7 @@
     "dependencies": {
         "@solana/errors": "workspace:*",
         "@solana/functional": "workspace:*",
-        "@solana/rpc-spec": "workspace:*",
+        "@solana/rpc-spec-types": "workspace:*",
         "@solana/rpc-subscriptions-spec": "workspace:*",
         "@solana/rpc-types": "workspace:*"
     },

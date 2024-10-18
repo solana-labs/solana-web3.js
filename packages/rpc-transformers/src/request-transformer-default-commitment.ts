@@ -1,4 +1,4 @@
-import type { RpcRequest, RpcRequestTransformer } from '@solana/rpc-spec';
+import type { RpcRequest, RpcRequestTransformer } from '@solana/rpc-spec-types';
 import type { Commitment } from '@solana/rpc-types';
 
 export function getDefaultCommitmentRequestTransformer({
