@@ -47,7 +47,6 @@ import { GetSignatureStatusesApi } from './getSignatureStatuses';
 import { GetSlotApi } from './getSlot';
 import { GetSlotLeaderApi } from './getSlotLeader';
 import { GetSlotLeadersApi } from './getSlotLeaders';
-import { GetStakeActivationApi } from './getStakeActivation';
 import { GetStakeMinimumDelegationApi } from './getStakeMinimumDelegation';
 import { GetSupplyApi } from './getSupply';
 import { GetTokenAccountBalanceApi } from './getTokenAccountBalance';
@@ -101,7 +100,6 @@ type SolanaRpcApiForAllClusters = GetAccountInfoApi &
     GetSlotApi &
     GetSlotLeaderApi &
     GetSlotLeadersApi &
-    GetStakeActivationApi &
     GetStakeMinimumDelegationApi &
     GetSupplyApi &
     GetTokenAccountBalanceApi &
@@ -160,7 +158,6 @@ export type {
     GetSlotApi,
     GetSlotLeaderApi,
     GetSlotLeadersApi,
-    GetStakeActivationApi,
     GetStakeMinimumDelegationApi,
     GetSupplyApi,
     GetTokenAccountBalanceApi,

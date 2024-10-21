@@ -29,7 +29,6 @@ export const OPTIONS_OBJECT_POSITION_BY_METHOD: Record<string, number> = {
     getSignaturesForAddress: 1,
     getSlot: 0,
     getSlotLeader: 0,
-    getStakeActivation: 1,
     getStakeMinimumDelegation: 0,
     getSupply: 0,
     getTokenAccountBalance: 1,
