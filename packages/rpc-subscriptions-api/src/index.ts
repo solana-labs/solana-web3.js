@@ -56,11 +56,10 @@ function createSolanaRpcSubscriptionsApi_INTERNAL<TApi extends RpcSubscriptionsA
         allowedNumericKeyPaths: getAllowedNumericKeypaths(),
     });
     return createRpcSubscriptionsApi<TApi>({
-        getSubscriptionConfigurationHash({ notificationName, params }) {
-            return fastStableStringify([notificationName, params]);
+        getSubscriptionConfigurationHash(request) {
+            return fastStableStringify([request.methodName, request.params]);
         },
-        planExecutor({ notificationName, params, ...rest }) {
-            const request = { methodName: notificationName, params };
+        planExecutor({ request, ...rest }) {
             const transformedRequest = requestTransformer(request);
             return executeRpcPubSubSubscriptionPlan({
                 ...rest,
