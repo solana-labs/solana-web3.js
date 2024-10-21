@@ -232,8 +232,8 @@ function selectShard(method: string): RpcTransport {
         case 'getAccountInfo':
         case 'getBalance':
             return transportA;
+        case 'getLatestBlockhash':
         case 'getTransaction':
-        case 'getRecentBlockhash':
             return transportB;
         case 'sendTransaction':
             return transportC;
