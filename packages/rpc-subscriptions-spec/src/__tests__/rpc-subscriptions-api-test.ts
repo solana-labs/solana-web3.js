@@ -10,7 +10,7 @@ describe('createRpcSubscriptionsApi', () => {
         it('calls the plan executor with the expected params', () => {
             const mockPlanExecutor = jest.fn().mockResolvedValue({
                 executeSubscriptionPlan: jest.fn(),
-                subscriptionConfigurationHash: 'MOCK_HASH',
+                request: { methodName: 'foo', params: [] },
             } as RpcSubscriptionsPlan<unknown>);
             const api = createRpcSubscriptionsApi({ planExecutor: mockPlanExecutor });
             const expectedParams = [1, 'hi', 3];
@@ -28,48 +28,19 @@ describe('createRpcSubscriptionsApi', () => {
             });
         });
     });
-    describe('subscriptionConfigurationHash', () => {
-        it('does not call the hash creator before it is accessed', () => {
-            const mockGetSubscriptionConfigurationHash = jest.fn();
-            const api = createRpcSubscriptionsApi({
-                getSubscriptionConfigurationHash: mockGetSubscriptionConfigurationHash,
-                planExecutor: jest.fn(),
-            });
-            api.foo('hi');
-            expect(mockGetSubscriptionConfigurationHash).not.toHaveBeenCalled();
+    describe('rpcRequest', () => {
+        it('provides the initial request object by default', () => {
+            const api = createRpcSubscriptionsApi({ planExecutor: jest.fn() });
+            const result = api.foo('hi');
+            expect(result.request).toEqual({ methodName: 'foo', params: ['hi'] });
         });
-        it('calls the hash creator when it is accessed', () => {
-            const mockGetSubscriptionConfigurationHash = jest.fn();
+        it('provides the transformed request object when a request transformer is provided', () => {
             const api = createRpcSubscriptionsApi({
-                getSubscriptionConfigurationHash: mockGetSubscriptionConfigurationHash,
                 planExecutor: jest.fn(),
+                requestTransformer: jest.fn().mockReturnValue({ methodName: 'bar', params: [1, 2, 3] }),
             });
             const result = api.foo('hi');
-            result.subscriptionConfigurationHash;
-            expect(mockGetSubscriptionConfigurationHash).toHaveBeenCalledWith({
-                methodName: 'foo',
-                params: ['hi'],
-            });
-        });
-        it('memoizes the result of the hash creator', () => {
-            const mockGetSubscriptionConfigurationHash = jest.fn();
-            const api = createRpcSubscriptionsApi({
-                getSubscriptionConfigurationHash: mockGetSubscriptionConfigurationHash,
-                planExecutor: jest.fn(),
-            });
-            const result = api.foo('hi');
-            result.subscriptionConfigurationHash;
-            result.subscriptionConfigurationHash;
-            expect(mockGetSubscriptionConfigurationHash).toHaveBeenCalledTimes(1);
-        });
-        it('returns the result of the hash creator', () => {
-            const mockGetSubscriptionConfigurationHash = jest.fn().mockReturnValue('MOCK_HASH');
-            const api = createRpcSubscriptionsApi({
-                getSubscriptionConfigurationHash: mockGetSubscriptionConfigurationHash,
-                planExecutor: jest.fn(),
-            });
-            const result = api.foo('hi');
-            expect(result.subscriptionConfigurationHash).toBe('MOCK_HASH');
+            expect(result.request).toEqual({ methodName: 'bar', params: [1, 2, 3] });
         });
     });
 });

@@ -1,4 +1,3 @@
-import fastStableStringify from '@solana/fast-stable-stringify';
 import {
     createRpcSubscriptionsApi,
     executeRpcPubSubSubscriptionPlan,
@@ -56,21 +55,15 @@ function createSolanaRpcSubscriptionsApi_INTERNAL<TApi extends RpcSubscriptionsA
         allowedNumericKeyPaths: getAllowedNumericKeypaths(),
     });
     return createRpcSubscriptionsApi<TApi>({
-        getSubscriptionConfigurationHash(request) {
-            return fastStableStringify([request.methodName, request.params]);
-        },
         planExecutor({ request, ...rest }) {
-            const transformedRequest = requestTransformer(request);
             return executeRpcPubSubSubscriptionPlan({
                 ...rest,
                 responseTransformer,
-                subscribeRequest: {
-                    ...transformedRequest,
-                    methodName: transformedRequest.methodName.replace(/Notifications$/, 'Subscribe'),
-                },
-                unsubscribeMethodName: transformedRequest.methodName.replace(/Notifications$/, 'Unsubscribe'),
+                subscribeRequest: { ...request, methodName: request.methodName.replace(/Notifications$/, 'Subscribe') },
+                unsubscribeMethodName: request.methodName.replace(/Notifications$/, 'Unsubscribe'),
             });
         },
+        requestTransformer,
     });
 }
 

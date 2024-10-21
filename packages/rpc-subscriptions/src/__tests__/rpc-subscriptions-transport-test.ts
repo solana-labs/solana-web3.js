@@ -10,8 +10,8 @@ describe('createRpcSubscriptionsTransportFromChannelCreator', () => {
         const abortSignal = new AbortController().signal;
         creator({
             executeSubscriptionPlan: jest.fn(),
+            request: { methodName: 'foo', params: [] },
             signal: abortSignal,
-            subscriptionConfigurationHash: undefined,
         }).catch(() => {});
         expect(mockCreateChannel).toHaveBeenCalledWith({ abortSignal });
     });
@@ -21,8 +21,8 @@ describe('createRpcSubscriptionsTransportFromChannelCreator', () => {
         const mockExecuteSubscriptionPlan = jest.fn();
         creator({
             executeSubscriptionPlan: mockExecuteSubscriptionPlan,
+            request: { methodName: 'foo', params: [] },
             signal: new AbortController().signal,
-            subscriptionConfigurationHash: undefined,
         }).catch(() => {});
         await jest.runAllTimersAsync();
         expect(mockExecuteSubscriptionPlan).toHaveBeenCalledWith(
@@ -38,8 +38,8 @@ describe('createRpcSubscriptionsTransportFromChannelCreator', () => {
         const signal = new AbortController().signal;
         creator({
             executeSubscriptionPlan: mockExecuteSubscriptionPlan,
+            request: { methodName: 'foo', params: [] },
             signal,
-            subscriptionConfigurationHash: undefined,
         }).catch(() => {});
         await jest.runAllTimersAsync();
         expect(mockExecuteSubscriptionPlan).toHaveBeenCalledWith(

@@ -1,3 +1,4 @@
+import fastStableStringify from '@solana/fast-stable-stringify';
 import { RpcSubscriptionsTransport } from '@solana/rpc-subscriptions-spec';
 import { DataPublisher } from '@solana/subscribable';
 
@@ -12,10 +13,9 @@ export function getRpcSubscriptionsTransportWithSubscriptionCoalescing<TTranspor
 ): TTransport {
     const cache = new Map<string, CacheEntry>();
     return function rpcSubscriptionsTransportWithSubscriptionCoalescing(config) {
-        const { subscriptionConfigurationHash, signal } = config;
-        if (subscriptionConfigurationHash === undefined) {
-            return transport(config);
-        }
+        const { request, signal } = config;
+        const subscriptionConfigurationHash = fastStableStringify([request.methodName, request.params]);
+
         let cachedDataPublisherPromise = cache.get(subscriptionConfigurationHash);
         if (!cachedDataPublisherPromise) {
             const abortController = new AbortController();

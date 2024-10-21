@@ -1,12 +1,12 @@
-import { Callable, RpcRequest } from '@solana/rpc-spec-types';
+import { Callable, RpcRequest, RpcRequestTransformer } from '@solana/rpc-spec-types';
 import { DataPublisher } from '@solana/subscribable';
 
 import { RpcSubscriptionsChannel } from './rpc-subscriptions-channel';
 import { RpcSubscriptionsTransportDataEvents } from './rpc-subscriptions-transport';
 
 export type RpcSubscriptionsApiConfig<TApiMethods extends RpcSubscriptionsApiMethods> = Readonly<{
-    getSubscriptionConfigurationHash?: (request: RpcRequest) => string | undefined;
     planExecutor: RpcSubscriptionsPlanExecutor<ReturnType<TApiMethods[keyof TApiMethods]>>;
+    requestTransformer?: RpcRequestTransformer;
 }>;
 
 type RpcSubscriptionsPlanExecutor<TNotification> = (
@@ -28,10 +28,11 @@ export type RpcSubscriptionsPlan<TNotification> = Readonly<{
         }>,
     ) => Promise<DataPublisher<RpcSubscriptionsTransportDataEvents<TNotification>>>;
     /**
-     * This hash uniquely identifies the configuration of a subscription. It is typically used by
-     * consumers of this API to deduplicate multiple subscriptions for the same notification.
+     * This request is used to uniquely identify the subscription.
+     * It typically comes from the method name and parameters of the subscription call,
+     * after potentially being transformed by the RPC Subscriptions API.
      */
-    subscriptionConfigurationHash: string | undefined;
+    request: RpcRequest;
 }>;
 
 export type RpcSubscriptionsApi<TRpcSubscriptionMethods> = {
@@ -49,8 +50,6 @@ type RpcSubscriptionsApiMethod = (...args: any) => any;
 export interface RpcSubscriptionsApiMethods {
     [methodName: string]: RpcSubscriptionsApiMethod;
 }
-
-const UNINITIALIZED = Symbol();
 
 export function createRpcSubscriptionsApi<TRpcSubscriptionsApiMethods extends RpcSubscriptionsApiMethods>(
     config: RpcSubscriptionsApiConfig<TRpcSubscriptionsApiMethods>,
@@ -74,18 +73,13 @@ export function createRpcSubscriptionsApi<TRpcSubscriptionsApiMethods extends Rp
                         : never
                 >
             ): RpcSubscriptionsPlan<ReturnType<TRpcSubscriptionsApiMethods[TNotificationName]>> {
-                let _cachedSubscriptionHash: string | typeof UNINITIALIZED | undefined = UNINITIALIZED;
-                const request = { methodName, params };
+                const rawRequest = { methodName, params };
+                const request = config.requestTransformer ? config.requestTransformer(rawRequest) : rawRequest;
                 return {
                     executeSubscriptionPlan(planConfig) {
                         return config.planExecutor({ ...planConfig, request });
                     },
-                    get subscriptionConfigurationHash() {
-                        if (_cachedSubscriptionHash === UNINITIALIZED) {
-                            _cachedSubscriptionHash = config?.getSubscriptionConfigurationHash?.(request);
-                        }
-                        return _cachedSubscriptionHash;
-                    },
+                    request,
                 };
             };
         },
