@@ -51,25 +51,25 @@ type Config = RequestTransformerConfig;
 function createSolanaRpcSubscriptionsApi_INTERNAL<TApi extends RpcSubscriptionsApiMethods>(
     config?: Config,
 ): RpcSubscriptionsApi<TApi> {
+    const requestTransformer = getDefaultRequestTransformerForSolanaRpc(config);
     const responseTransformer = getDefaultResponseTransformerForSolanaRpcSubscriptions({
         allowedNumericKeyPaths: getAllowedNumericKeypaths(),
     });
-    // TODO(loris): Replace with request transformer.
-    const parametersTransformer = <T extends unknown[]>(notificationName: string, params?: T) => {
-        return getDefaultRequestTransformerForSolanaRpc(config)({ methodName: notificationName, params })
-            .params as unknown[];
-    };
     return createRpcSubscriptionsApi<TApi>({
         getSubscriptionConfigurationHash({ notificationName, params }) {
             return fastStableStringify([notificationName, params]);
         },
         planExecutor({ notificationName, params, ...rest }) {
+            const request = { methodName: notificationName, params };
+            const transformedRequest = requestTransformer(request);
             return executeRpcPubSubSubscriptionPlan({
                 ...rest,
                 responseTransformer,
-                subscribeMethodName: notificationName.replace(/Notifications$/, 'Subscribe'),
-                subscribeParams: parametersTransformer(notificationName, params),
-                unsubscribeMethodName: notificationName.replace(/Notifications$/, 'Unsubscribe'),
+                subscribeRequest: {
+                    ...transformedRequest,
+                    methodName: transformedRequest.methodName.replace(/Notifications$/, 'Subscribe'),
+                },
+                unsubscribeMethodName: transformedRequest.methodName.replace(/Notifications$/, 'Unsubscribe'),
             });
         },
     });

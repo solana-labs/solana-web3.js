@@ -31,7 +31,7 @@ describe('createSolanaRpcSubscriptionsApi', () => {
         });
         expect(executeRpcPubSubSubscriptionPlan).toHaveBeenCalledWith(
             expect.objectContaining({
-                subscribeMethodName: 'thingSubscribe',
+                subscribeRequest: { methodName: 'thingSubscribe', params: [] },
                 unsubscribeMethodName: 'thingUnsubscribe',
             }),
         );
