@@ -102,5 +102,8 @@
                 "path": "./dist/index*.js"
             }
         ]
+    },
+    "engines": {
+        "node": ">=20.18.0"
     }
 }

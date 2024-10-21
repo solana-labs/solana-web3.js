@@ -56,5 +56,8 @@
     },
     "peerDependencies": {
         "ws": "^8.18.0"
+    },
+    "engines": {
+        "node": ">=20.18.0"
     }
 }
