@@ -15,5 +15,8 @@
         "@jest/types": "^29.6.3",
         "undici": "^6.20.0",
         "whatwg-fetch": "^3.6.20"
+    },
+    "engines": {
+        "node": ">=20.18.0"
     }
 }

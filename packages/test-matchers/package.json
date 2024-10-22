@@ -4,5 +4,8 @@
     "private": true,
     "files": [
         "toBeFrozenObject.ts"
-    ]
+    ],
+    "engines": {
+        "node": ">=20.18.0"
+    }
 }

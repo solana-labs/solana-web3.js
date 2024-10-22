@@ -55,5 +55,8 @@
     },
     "peerDependencies": {
         "fastestsmallesttextencoderdecoder": "^1.0.22"
+    },
+    "engines": {
+        "node": ">=20.18.0"
     }
 }
