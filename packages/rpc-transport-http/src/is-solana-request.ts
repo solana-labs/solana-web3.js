@@ -37,7 +37,6 @@ const SOLANA_RPC_METHODS = [
     'getSlot',
     'getSlotLeader',
     'getSlotLeaders',
-    'getStakeActivation',
     'getStakeMinimumDelegation',
     'getSupply',
     'getTokenAccountBalance',

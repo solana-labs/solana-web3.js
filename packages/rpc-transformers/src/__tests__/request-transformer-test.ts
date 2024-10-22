@@ -68,7 +68,6 @@ describe('getDefaultRequestTransformerForSolanaRpc', () => {
             'getSignaturesForAddress',
             'getSlot',
             'getSlotLeader',
-            'getStakeActivation',
             'getStakeMinimumDelegation',
             'getSupply',
             'getTokenAccountBalance',
