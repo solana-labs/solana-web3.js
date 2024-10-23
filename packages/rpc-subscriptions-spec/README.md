@@ -58,11 +58,11 @@ Subscription channels publish events on two channel names:
 
 ## Functions
 
-### `executeRpcPubSubSubscriptionPlan({ channel, responseTransformer, signal, subscribeMethodName, subscribeParams, unsubscribeMethodName })`
+### `executeRpcPubSubSubscriptionPlan({ channel, responseTransformer, signal, subscribeRequest, unsubscribeMethodName })`
 
 Given a channel, this function executes the particular subscription plan required by the Solana JSON RPC Subscriptions API.
 
-1. Calls the `subscribeMethodName` on the remote RPC
+1. Calls the `subscribeRequest` on the remote RPC
 2. Waits for a response containing the subscription id
 3. Returns a `DataPublisher` that publishes notifications related to that subscriptions id, filtering out all others
 4. Calls the `unsubscribeMethodName` on the remote RPC when the abort signal is fired.

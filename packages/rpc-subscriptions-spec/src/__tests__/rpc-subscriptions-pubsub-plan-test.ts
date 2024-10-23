@@ -46,8 +46,7 @@ describe('executeRpcPubSubSubscriptionPlan', () => {
         const publisherPromise = executeRpcPubSubSubscriptionPlan({
             channel: mockChannel as RpcSubscriptionsChannel<unknown, unknown>,
             signal: abortController.signal,
-            subscribeMethodName: 'thingSubscribe',
-            subscribeParams: [],
+            subscribeRequest: { methodName: 'thingSubscribe', params: [] },
             unsubscribeMethodName: 'thingUnsubscribe',
         });
         await expect(publisherPromise).rejects.toThrow();
@@ -56,8 +55,7 @@ describe('executeRpcPubSubSubscriptionPlan', () => {
         executeRpcPubSubSubscriptionPlan({
             channel: mockChannel as RpcSubscriptionsChannel<unknown, unknown>,
             signal: abortController.signal,
-            subscribeMethodName: 'thingSubscribe',
-            subscribeParams: [],
+            subscribeRequest: { methodName: 'thingSubscribe', params: [] },
             unsubscribeMethodName: 'thingUnsubscribe',
         }).catch(() => {});
         expect(mockChannel.on).toHaveBeenCalledWith('error', expect.any(Function), {
@@ -69,8 +67,7 @@ describe('executeRpcPubSubSubscriptionPlan', () => {
         executeRpcPubSubSubscriptionPlan({
             channel: mockChannel as RpcSubscriptionsChannel<unknown, unknown>,
             signal: abortController.signal,
-            subscribeMethodName: 'thingSubscribe',
-            subscribeParams: expectedParams,
+            subscribeRequest: { methodName: 'thingSubscribe', params: expectedParams },
             unsubscribeMethodName: 'thingUnsubscribe',
         }).catch(() => {});
         expect(mockSend).toHaveBeenCalledWith(
@@ -91,8 +88,7 @@ describe('executeRpcPubSubSubscriptionPlan', () => {
             const publisherPromise = executeRpcPubSubSubscriptionPlan({
                 channel: mockChannel as RpcSubscriptionsChannel<unknown, unknown>,
                 signal: abortController.signal,
-                subscribeMethodName: 'thingSubscribe',
-                subscribeParams: [],
+                subscribeRequest: { methodName: 'thingSubscribe', params: [] },
                 unsubscribeMethodName: 'thingUnsubscribe',
             });
             await expect(publisherPromise).rejects.toBe('o no');
@@ -110,8 +106,7 @@ describe('executeRpcPubSubSubscriptionPlan', () => {
             publisherPromise = executeRpcPubSubSubscriptionPlan({
                 channel: mockChannel as RpcSubscriptionsChannel<unknown, unknown>,
                 signal: abortController.signal,
-                subscribeMethodName: 'thingSubscribe',
-                subscribeParams: [],
+                subscribeRequest: { methodName: 'thingSubscribe', params: [] },
                 unsubscribeMethodName: 'thingUnsubscribe',
             });
         });
@@ -135,8 +130,7 @@ describe('executeRpcPubSubSubscriptionPlan', () => {
         const publisherPromise = executeRpcPubSubSubscriptionPlan({
             channel: mockChannel as RpcSubscriptionsChannel<unknown, unknown>,
             signal: abortController.signal,
-            subscribeMethodName: 'thingSubscribe',
-            subscribeParams: [],
+            subscribeRequest: { methodName: 'thingSubscribe', params: [] },
             unsubscribeMethodName: 'thingUnsubscribe',
         });
         await Promise.resolve();
@@ -158,8 +152,7 @@ describe('executeRpcPubSubSubscriptionPlan', () => {
                 channel: mockChannel as RpcSubscriptionsChannel<unknown, unknown>,
                 responseTransformer: mockResponseTransformer,
                 signal: abortController.signal,
-                subscribeMethodName: 'thingSubscribe',
-                subscribeParams: [],
+                subscribeRequest: { methodName: 'thingSubscribe', params: [] },
                 unsubscribeMethodName: 'thingUnsubscribe',
             });
             await jest.runAllTimersAsync();
@@ -285,8 +278,7 @@ describe('executeRpcPubSubSubscriptionPlan', () => {
                 executeRpcPubSubSubscriptionPlan({
                     channel: mockChannel as RpcSubscriptionsChannel<unknown, unknown>,
                     signal: secondAbortController.signal,
-                    subscribeMethodName: 'thingSubscribe',
-                    subscribeParams: [],
+                    subscribeRequest: { methodName: 'thingSubscribe', params: [] },
                     unsubscribeMethodName: 'thingUnsubscribe',
                 }).catch(() => {});
                 await jest.runAllTimersAsync();

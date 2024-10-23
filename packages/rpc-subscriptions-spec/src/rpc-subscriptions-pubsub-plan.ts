@@ -5,7 +5,7 @@ import {
     SolanaError,
 } from '@solana/errors';
 import { safeRace } from '@solana/promises';
-import { createRpcMessage, RpcResponseData } from '@solana/rpc-spec-types';
+import { createRpcMessage, RpcRequest, RpcResponseData } from '@solana/rpc-spec-types';
 import { DataPublisher } from '@solana/subscribable';
 import { demultiplexDataPublisher } from '@solana/subscribable';
 
@@ -16,8 +16,7 @@ type Config<TNotification> = Readonly<{
     channel: RpcSubscriptionsChannel<unknown, RpcNotification<TNotification> | RpcResponseData<RpcSubscriptionId>>;
     responseTransformer?: <T>(response: unknown, notificationName: string) => T;
     signal: AbortSignal;
-    subscribeMethodName: string;
-    subscribeParams?: unknown[];
+    subscribeRequest: RpcRequest;
     unsubscribeMethodName: string;
 }>;
 
@@ -98,8 +97,7 @@ export async function executeRpcPubSubSubscriptionPlan<TNotification>({
     channel,
     responseTransformer,
     signal,
-    subscribeMethodName,
-    subscribeParams,
+    subscribeRequest,
     unsubscribeMethodName,
 }: Config<TNotification>): Promise<DataPublisher<RpcSubscriptionNotificationEvents<TNotification>>> {
     let subscriptionId: number | undefined;
@@ -147,7 +145,7 @@ export async function executeRpcPubSubSubscriptionPlan<TNotification>({
      * STEP 2
      * Send the subscription request.
      */
-    const subscribePayload = createRpcMessage({ methodName: subscribeMethodName, params: subscribeParams });
+    const subscribePayload = createRpcMessage(subscribeRequest);
     await channel.send(subscribePayload);
     /**
      * STEP 3
