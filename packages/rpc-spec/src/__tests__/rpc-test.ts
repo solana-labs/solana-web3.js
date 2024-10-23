@@ -42,7 +42,12 @@ describe('JSON-RPC 2.0', () => {
             rpc = createRpc({
                 api: new Proxy({} as RpcApi<TestRpcMethods>, {
                     get(_, methodName) {
-                        return (...params: unknown[]) => ({
+                        return (...params: unknown[]): RpcPlan<TestRpcMethods> => ({
+                            execute: ({ signal, transport }) =>
+                                transport({
+                                    payload: createRpcMessage({ methodName: methodName.toString(), params }),
+                                    signal,
+                                }),
                             payload: createRpcMessage({ methodName: methodName.toString(), params }),
                         });
                     },
@@ -78,12 +83,11 @@ describe('JSON-RPC 2.0', () => {
             rpc = createRpc({
                 api: {
                     someMethod(...params: unknown[]): RpcPlan<unknown> {
-                        return {
-                            payload: createRpcMessage({
-                                methodName: 'someMethodAugmented',
-                                params: [...params, 'augmented', 'params'],
-                            }),
-                        };
+                        const payload = createRpcMessage({
+                            methodName: 'someMethodAugmented',
+                            params: [...params, 'augmented', 'params'],
+                        });
+                        return { execute: ({ signal, transport }) => transport({ payload, signal }), payload };
                     },
                 } as RpcApi<TestRpcMethods>,
                 transport: makeHttpRequest,
@@ -109,8 +113,10 @@ describe('JSON-RPC 2.0', () => {
             rpc = createRpc({
                 api: {
                     someMethod(...params: unknown[]): RpcPlan<unknown> {
+                        const payload = createRpcMessage({ methodName: 'someMethod', params });
                         return {
-                            payload: createRpcMessage({ methodName: 'someMethod', params }),
+                            execute: ({ signal, transport }) => transport({ payload, signal }),
+                            payload,
                             responseTransformer,
                         };
                     },

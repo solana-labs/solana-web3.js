@@ -51,10 +51,13 @@ This is a marker interface that all RPC method definitions must extend to be acc
 
 ### `RpcPlan`
 
-This type allows an `RpcApi` to describe how a particular request should be issued to the JSON RPC server. Given a function that was called on a `Rpc`, this object gives you the opportunity to:
+This type allows an `RpcApi` to describe how a particular request should be issued to the JSON RPC server. Given a function that was called on a `Rpc`, this object returns an `execute` function that dictates which request will be sent, how the underlying transport will be used and how the responses will be transformed.
 
--   provide a `payload` from the requested method name and parameters.
--   provide a function to transform the JSON RPC server's response, in case it does not match the `TResponse` specified by the `PendingRpcRequest<TResponse>` returned from that function.
+This function accepts an `RpcTransport` and an `AbortSignal` and asynchronously returns an `RpcResponse`. This gives us the opportunity to:
+
+-   define the `payload` from the requested method name and parameters before passing it to the transport.
+-   call the underlying transport zero, one or multiple times depending on the use-case (e.g. caching or aggregating multiple responses).
+-   transform the response from the JSON RPC server, in case it does not match the `TResponse` specified by the `PendingRpcRequest<TResponse>` returned from that function.
 
 ### `RpcSendOptions`
 
