@@ -6,12 +6,20 @@ import {
     RpcResponseTransformer,
 } from '@solana/rpc-spec-types';
 
+import type { RpcTransport } from './rpc-transport';
+
 export type RpcApiConfig = Readonly<{
     requestTransformer?: RpcRequestTransformer;
     responseTransformer?: RpcResponseTransformer;
 }>;
 
 export type RpcPlan<TResponse> = {
+    execute: (
+        config: Readonly<{
+            signal?: AbortSignal;
+            transport: RpcTransport;
+        }>,
+    ) => Promise<RpcResponse<TResponse>>;
     payload: unknown;
     responseTransformer?: (response: RpcResponse) => RpcResponse<TResponse>;
 };
@@ -50,7 +58,15 @@ export function createJsonRpcApi<TRpcMethods extends RpcApiMethods>(config?: Rpc
             ): RpcPlan<ReturnType<TRpcMethods[TMethodName]>> {
                 const rawRequest = Object.freeze({ methodName, params: rawParams });
                 const request = config?.requestTransformer ? config?.requestTransformer(rawRequest) : rawRequest;
-                return Object.freeze({
+                return Object.freeze(<RpcPlan<ReturnType<TRpcMethods[TMethodName]>>>{
+                    execute: async ({ signal, transport }) => {
+                        const payload = createRpcMessage(request);
+                        const response = await transport({ payload, signal });
+                        if (!config?.responseTransformer) {
+                            return response;
+                        }
+                        return config.responseTransformer(response, request);
+                    },
                     payload: createRpcMessage(request),
                     ...(config?.responseTransformer
                         ? {
