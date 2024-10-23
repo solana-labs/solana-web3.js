@@ -21,8 +21,8 @@ describe('createSolanaRpcSubscriptionsApi', () => {
         api = createSolanaRpcSubscriptionsApi();
     });
     it('creates a subscription plan that synthesizes the correct subscribe/unsubscribe method names from the name of the notification', () => {
-        const { executeSubscriptionPlan } = api.thingNotifications();
-        void executeSubscriptionPlan({
+        const { execute } = api.thingNotifications();
+        void execute({
             channel: {
                 on: jest.fn(),
                 send: jest.fn(),

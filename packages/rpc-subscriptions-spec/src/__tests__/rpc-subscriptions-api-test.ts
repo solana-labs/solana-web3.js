@@ -6,17 +6,17 @@ describe('createRpcSubscriptionsApi', () => {
     beforeEach(() => {
         mockChannel = { on: jest.fn(), send: jest.fn() };
     });
-    describe('executeSubscriptionPlan', () => {
+    describe('execute', () => {
         it('calls the plan executor with the expected params', () => {
             const mockPlanExecutor = jest.fn().mockResolvedValue({
-                executeSubscriptionPlan: jest.fn(),
+                execute: jest.fn(),
                 request: { methodName: 'foo', params: [] },
             } as RpcSubscriptionsPlan<unknown>);
             const api = createRpcSubscriptionsApi({ planExecutor: mockPlanExecutor });
             const expectedParams = [1, 'hi', 3];
             const expectedSignal = new AbortController().signal;
             api.foo(...expectedParams)
-                .executeSubscriptionPlan({
+                .execute({
                     channel: mockChannel,
                     signal: expectedSignal,
                 })

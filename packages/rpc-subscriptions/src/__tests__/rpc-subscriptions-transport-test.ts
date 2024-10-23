@@ -9,40 +9,40 @@ describe('createRpcSubscriptionsTransportFromChannelCreator', () => {
         const creator = createRpcSubscriptionsTransportFromChannelCreator(mockCreateChannel);
         const abortSignal = new AbortController().signal;
         creator({
-            executeSubscriptionPlan: jest.fn(),
+            execute: jest.fn(),
             request: { methodName: 'foo', params: [] },
             signal: abortSignal,
         }).catch(() => {});
         expect(mockCreateChannel).toHaveBeenCalledWith({ abortSignal });
     });
-    it('creates a function that calls `executeSubscriptionPlan` with the created channel', async () => {
+    it('creates a function that calls `execute` with the created channel', async () => {
         expect.assertions(1);
         const creator = createRpcSubscriptionsTransportFromChannelCreator(jest.fn().mockResolvedValue('MOCK_CHANNEL'));
-        const mockExecuteSubscriptionPlan = jest.fn();
+        const mockExecute = jest.fn();
         creator({
-            executeSubscriptionPlan: mockExecuteSubscriptionPlan,
+            execute: mockExecute,
             request: { methodName: 'foo', params: [] },
             signal: new AbortController().signal,
         }).catch(() => {});
         await jest.runAllTimersAsync();
-        expect(mockExecuteSubscriptionPlan).toHaveBeenCalledWith(
+        expect(mockExecute).toHaveBeenCalledWith(
             expect.objectContaining({
                 channel: 'MOCK_CHANNEL',
             }),
         );
     });
-    it('creates a function that calls `executeSubscriptionPlan` with the abort signal', async () => {
+    it('creates a function that calls `execute` with the abort signal', async () => {
         expect.assertions(1);
         const creator = createRpcSubscriptionsTransportFromChannelCreator(jest.fn());
-        const mockExecuteSubscriptionPlan = jest.fn();
+        const mockExecute = jest.fn();
         const signal = new AbortController().signal;
         creator({
-            executeSubscriptionPlan: mockExecuteSubscriptionPlan,
+            execute: mockExecute,
             request: { methodName: 'foo', params: [] },
             signal,
         }).catch(() => {});
         await jest.runAllTimersAsync();
-        expect(mockExecuteSubscriptionPlan).toHaveBeenCalledWith(
+        expect(mockExecute).toHaveBeenCalledWith(
             expect.objectContaining({
                 signal,
             }),
