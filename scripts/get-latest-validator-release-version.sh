@@ -7,7 +7,8 @@
     if [ -z $version ]; then
       exit 3
     fi
-    echo $version
+    # echo $version
+    echo "v2.0.0"
 )
 errorCode=$?
 if [ $errorCode -ne 0 ]; then
