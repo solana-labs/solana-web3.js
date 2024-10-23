@@ -21,7 +21,7 @@ export type RpcSubscriptionsPlan<TNotification> = Readonly<{
     /**
      * This method may be called with a newly-opened channel or a pre-established channel.
      */
-    executeSubscriptionPlan: (
+    execute: (
         config: Readonly<{
             channel: RpcSubscriptionsChannel<unknown, unknown>;
             signal: AbortSignal;
@@ -76,7 +76,7 @@ export function createRpcSubscriptionsApi<TRpcSubscriptionsApiMethods extends Rp
                 const rawRequest = { methodName, params };
                 const request = config.requestTransformer ? config.requestTransformer(rawRequest) : rawRequest;
                 return {
-                    executeSubscriptionPlan(planConfig) {
+                    execute(planConfig) {
                         return config.planExecutor({ ...planConfig, request });
                     },
                     request,

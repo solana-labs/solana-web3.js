@@ -19,29 +19,29 @@ describe('getRpcSubscriptionsTransportWithSubscriptionCoalescing', () => {
         const expectedDataPublisher = { on: mockOn };
         mockInnerTransport.mockResolvedValue(expectedDataPublisher);
         const config = {
-            executeSubscriptionPlan: jest.fn(),
+            execute: jest.fn(),
             request: { methodName: 'foo', params: [] },
             signal: new AbortController().signal,
         };
         const transportPromise = coalescedTransport(config);
         await expect(transportPromise).resolves.toBe(expectedDataPublisher);
     });
-    it('passes the `executeSubscriptionPlan` config to the inner transport', () => {
+    it('passes the `execute` config to the inner transport', () => {
         const config = {
-            executeSubscriptionPlan: jest.fn(),
+            execute: jest.fn(),
             request: { methodName: 'foo', params: [] },
             signal: new AbortController().signal,
         };
         coalescedTransport(config).catch(() => {});
         expect(mockInnerTransport).toHaveBeenCalledWith(
             expect.objectContaining({
-                executeSubscriptionPlan: config.executeSubscriptionPlan,
+                execute: config.execute,
             }),
         );
     });
     it('passes the `rpcRequest` config to the inner transport', () => {
         const config = {
-            executeSubscriptionPlan: jest.fn(),
+            execute: jest.fn(),
             request: { methodName: 'foo', params: [] },
             signal: new AbortController().signal,
         };
@@ -54,7 +54,7 @@ describe('getRpcSubscriptionsTransportWithSubscriptionCoalescing', () => {
     });
     it('calls the inner transport once per subscriber whose hashes do not match, in the same runloop', () => {
         const config = {
-            executeSubscriptionPlan: jest.fn(),
+            execute: jest.fn(),
             signal: new AbortController().signal,
         };
         coalescedTransport({
@@ -70,7 +70,7 @@ describe('getRpcSubscriptionsTransportWithSubscriptionCoalescing', () => {
     it('calls the inner transport once per subscriber whose hashes do not match, in different runloops', async () => {
         expect.assertions(1);
         const config = {
-            executeSubscriptionPlan: jest.fn(),
+            execute: jest.fn(),
             signal: new AbortController().signal,
         };
         await coalescedTransport({ ...config, request: { methodName: 'methodA', params: [] } });
@@ -79,7 +79,7 @@ describe('getRpcSubscriptionsTransportWithSubscriptionCoalescing', () => {
     });
     it('only calls the inner transport once, in the same runloop', () => {
         const config = {
-            executeSubscriptionPlan: jest.fn(),
+            execute: jest.fn(),
             request: { methodName: 'foo', params: [] },
             signal: new AbortController().signal,
         };
@@ -90,7 +90,7 @@ describe('getRpcSubscriptionsTransportWithSubscriptionCoalescing', () => {
     it('only calls the inner transport once, in different runloops', async () => {
         expect.assertions(1);
         const config = {
-            executeSubscriptionPlan: jest.fn(),
+            execute: jest.fn(),
             request: { methodName: 'foo', params: [] },
             signal: new AbortController().signal,
         };
@@ -101,7 +101,7 @@ describe('getRpcSubscriptionsTransportWithSubscriptionCoalescing', () => {
     it('delivers the same value to each subscriber, in the same runloop', async () => {
         expect.assertions(1);
         const config = {
-            executeSubscriptionPlan: jest.fn(),
+            execute: jest.fn(),
             request: { methodName: 'foo', params: [] },
             signal: new AbortController().signal,
         };
@@ -111,7 +111,7 @@ describe('getRpcSubscriptionsTransportWithSubscriptionCoalescing', () => {
     it('delivers the same value to each subscriber, in different runloops', async () => {
         expect.assertions(1);
         const config = {
-            executeSubscriptionPlan: jest.fn(),
+            execute: jest.fn(),
             request: { methodName: 'foo', params: [] },
             signal: new AbortController().signal,
         };
@@ -122,7 +122,7 @@ describe('getRpcSubscriptionsTransportWithSubscriptionCoalescing', () => {
     it('does not fire the inner abort signal if fewer than all subscribers abort, in the same runloop', () => {
         jest.useFakeTimers();
         const config = {
-            executeSubscriptionPlan: jest.fn(),
+            execute: jest.fn(),
             request: { methodName: 'foo', params: [] },
         };
         const abortControllerB = new AbortController();
@@ -135,7 +135,7 @@ describe('getRpcSubscriptionsTransportWithSubscriptionCoalescing', () => {
     it('fires the inner abort signal if all subscribers abort, in the same runloop', () => {
         jest.useFakeTimers();
         const config = {
-            executeSubscriptionPlan: jest.fn(),
+            execute: jest.fn(),
             request: { methodName: 'foo', params: [] },
         };
         const abortControllerA = new AbortController();
@@ -150,7 +150,7 @@ describe('getRpcSubscriptionsTransportWithSubscriptionCoalescing', () => {
     it('fires the inner abort signal if all subscribers abort, in different runloops', async () => {
         expect.assertions(1);
         const config = {
-            executeSubscriptionPlan: jest.fn(),
+            execute: jest.fn(),
             request: { methodName: 'foo', params: [] },
         };
         const abortControllerA = new AbortController();
@@ -166,7 +166,7 @@ describe('getRpcSubscriptionsTransportWithSubscriptionCoalescing', () => {
     });
     it('does not fire the inner abort signal if the subscriber count is non zero at the end of the runloop, despite having aborted all in the middle of it', () => {
         const config = {
-            executeSubscriptionPlan: jest.fn(),
+            execute: jest.fn(),
             request: { methodName: 'foo', params: [] },
         };
         const abortControllerA = new AbortController();
@@ -180,7 +180,7 @@ describe('getRpcSubscriptionsTransportWithSubscriptionCoalescing', () => {
         expect.assertions(1);
         jest.useFakeTimers();
         const config = {
-            executeSubscriptionPlan: jest.fn(),
+            execute: jest.fn(),
             request: { methodName: 'foo', params: [] },
         };
         coalescedTransport({ ...config, signal: new AbortController().signal }).catch(() => {});
@@ -193,7 +193,7 @@ describe('getRpcSubscriptionsTransportWithSubscriptionCoalescing', () => {
         expect.assertions(2);
         jest.useFakeTimers();
         const config = {
-            executeSubscriptionPlan: jest.fn(),
+            execute: jest.fn(),
             request: { methodName: 'foo', params: [] },
         };
         const abortControllerA = new AbortController();

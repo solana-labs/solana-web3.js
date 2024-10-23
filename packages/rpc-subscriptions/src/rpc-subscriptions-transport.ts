@@ -34,9 +34,9 @@ export function createRpcSubscriptionsTransportFromChannelCreator<
     TInboundMessage,
     TOutboundMessage,
 >(createChannel: TChannelCreator) {
-    return (async ({ executeSubscriptionPlan, signal }) => {
+    return (async ({ execute, signal }) => {
         const channel = await createChannel({ abortSignal: signal });
-        return await executeSubscriptionPlan({ channel, signal });
+        return await execute({ channel, signal });
     }) as TChannelCreator extends RpcSubscriptionsChannelCreatorDevnet<TOutboundMessage, TInboundMessage>
         ? RpcSubscriptionsTransportDevnet
         : TChannelCreator extends RpcSubscriptionsChannelCreatorTestnet<TOutboundMessage, TInboundMessage>

@@ -12,7 +12,7 @@ export function createLocalhostSolanaRpcSubscriptions(): RpcSubscriptions<
 > {
     return createSubscriptionRpc({
         api: createSolanaRpcSubscriptionsApi_UNSTABLE(),
-        async transport({ executeSubscriptionPlan, signal }) {
+        async transport({ execute, signal }) {
             const webSocketChannel = await createWebSocketChannel({
                 sendBufferHighWatermark: Number.POSITIVE_INFINITY,
                 signal,
@@ -38,7 +38,7 @@ export function createLocalhostSolanaRpcSubscriptions(): RpcSubscriptions<
                     return webSocketChannel.send(serializedMessage);
                 },
             } as RpcSubscriptionsChannel<unknown, unknown>;
-            return await executeSubscriptionPlan({ channel, signal });
+            return await execute({ channel, signal });
         },
     });
 }
