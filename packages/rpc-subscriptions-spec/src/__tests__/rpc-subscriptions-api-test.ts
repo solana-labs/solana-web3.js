@@ -23,8 +23,7 @@ describe('createRpcSubscriptionsApi', () => {
                 .catch(() => {});
             expect(mockPlanExecutor).toHaveBeenCalledWith({
                 channel: mockChannel,
-                notificationName: 'foo',
-                params: expectedParams,
+                request: { methodName: 'foo', params: expectedParams },
                 signal: expectedSignal,
             });
         });
@@ -48,7 +47,7 @@ describe('createRpcSubscriptionsApi', () => {
             const result = api.foo('hi');
             result.subscriptionConfigurationHash;
             expect(mockGetSubscriptionConfigurationHash).toHaveBeenCalledWith({
-                notificationName: 'foo',
+                methodName: 'foo',
                 params: ['hi'],
             });
         });

@@ -1,24 +1,18 @@
-import { Callable } from '@solana/rpc-spec-types';
+import { Callable, RpcRequest } from '@solana/rpc-spec-types';
 import { DataPublisher } from '@solana/subscribable';
 
 import { RpcSubscriptionsChannel } from './rpc-subscriptions-channel';
 import { RpcSubscriptionsTransportDataEvents } from './rpc-subscriptions-transport';
 
 export type RpcSubscriptionsApiConfig<TApiMethods extends RpcSubscriptionsApiMethods> = Readonly<{
-    getSubscriptionConfigurationHash?: (
-        details: Readonly<{
-            notificationName: string;
-            params: unknown;
-        }>,
-    ) => string | undefined;
+    getSubscriptionConfigurationHash?: (request: RpcRequest) => string | undefined;
     planExecutor: RpcSubscriptionsPlanExecutor<ReturnType<TApiMethods[keyof TApiMethods]>>;
 }>;
 
 type RpcSubscriptionsPlanExecutor<TNotification> = (
     config: Readonly<{
         channel: RpcSubscriptionsChannel<unknown, unknown>;
-        notificationName: string;
-        params?: unknown[];
+        request: RpcRequest;
         signal: AbortSignal;
     }>,
 ) => Promise<DataPublisher<RpcSubscriptionsTransportDataEvents<TNotification>>>;
@@ -72,7 +66,7 @@ export function createRpcSubscriptionsApi<TRpcSubscriptionsApiMethods extends Rp
             ...args: Parameters<NonNullable<ProxyHandler<RpcSubscriptionsApi<TRpcSubscriptionsApiMethods>>['get']>>
         ) {
             const [_, p] = args;
-            const notificationName = p.toString() as keyof TRpcSubscriptionsApiMethods as string;
+            const methodName = p.toString() as keyof TRpcSubscriptionsApiMethods as string;
             return function (
                 ...params: Parameters<
                     TRpcSubscriptionsApiMethods[TNotificationName] extends CallableFunction
@@ -81,20 +75,14 @@ export function createRpcSubscriptionsApi<TRpcSubscriptionsApiMethods extends Rp
                 >
             ): RpcSubscriptionsPlan<ReturnType<TRpcSubscriptionsApiMethods[TNotificationName]>> {
                 let _cachedSubscriptionHash: string | typeof UNINITIALIZED | undefined = UNINITIALIZED;
+                const request = { methodName, params };
                 return {
                     executeSubscriptionPlan(planConfig) {
-                        return config.planExecutor({
-                            ...planConfig,
-                            notificationName,
-                            params,
-                        });
+                        return config.planExecutor({ ...planConfig, request });
                     },
                     get subscriptionConfigurationHash() {
                         if (_cachedSubscriptionHash === UNINITIALIZED) {
-                            _cachedSubscriptionHash = config?.getSubscriptionConfigurationHash?.({
-                                notificationName,
-                                params,
-                            });
+                            _cachedSubscriptionHash = config?.getSubscriptionConfigurationHash?.(request);
                         }
                         return _cachedSubscriptionHash;
                     },
