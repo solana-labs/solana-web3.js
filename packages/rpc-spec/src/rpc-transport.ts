@@ -1,12 +1,12 @@
 import { RpcResponse } from '@solana/rpc-spec-types';
 
-type RpcTransportRequest = Readonly<{
+type Config = Readonly<{
     payload: unknown;
     signal?: AbortSignal;
 }>;
 
 export type RpcTransport = {
-    <TResponse>(request: RpcTransportRequest): Promise<RpcResponse<TResponse>>;
+    <TResponse>(config: Config): Promise<RpcResponse<TResponse>>;
 };
 
 export function isJsonRpcPayload(payload: unknown): payload is Readonly<{
