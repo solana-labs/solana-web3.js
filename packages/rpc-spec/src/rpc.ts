@@ -1,7 +1,7 @@
 import { SOLANA_ERROR__RPC__API_PLAN_MISSING_FOR_RPC_METHOD, SolanaError } from '@solana/errors';
 import { Callable, Flatten, OverloadImplementations, UnionToIntersection } from '@solana/rpc-spec-types';
 
-import { RpcApi, RpcApiRequestPlan } from './rpc-api';
+import { RpcApi, RpcPlan } from './rpc-api';
 import { RpcTransport } from './rpc-transport';
 
 export type RpcConfig<TRpcMethods, TRpcTransport extends RpcTransport> = Readonly<{
@@ -68,7 +68,7 @@ function makeProxy<TRpcMethods, TRpcTransport extends RpcTransport>(
 
 function createPendingRpcRequest<TRpcMethods, TRpcTransport extends RpcTransport, TResponse>(
     rpcConfig: RpcConfig<TRpcMethods, TRpcTransport>,
-    apiPlan: RpcApiRequestPlan<TResponse>,
+    apiPlan: RpcPlan<TResponse>,
 ): PendingRpcRequest<TResponse> {
     return {
         async send(options?: RpcSendOptions): Promise<TResponse> {

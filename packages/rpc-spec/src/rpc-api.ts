@@ -11,7 +11,7 @@ export type RpcApiConfig = Readonly<{
     responseTransformer?: RpcResponseTransformer;
 }>;
 
-export type RpcApiRequestPlan<TResponse> = {
+export type RpcPlan<TResponse> = {
     payload: unknown;
     responseTransformer?: (response: RpcResponse) => RpcResponse<TResponse>;
 };
@@ -21,7 +21,7 @@ export type RpcApi<TRpcMethods> = {
 };
 
 type RpcReturnTypeMapper<TRpcMethod> = TRpcMethod extends Callable
-    ? (...rawParams: unknown[]) => RpcApiRequestPlan<ReturnType<TRpcMethod>>
+    ? (...rawParams: unknown[]) => RpcPlan<ReturnType<TRpcMethod>>
     : never;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -47,7 +47,7 @@ export function createJsonRpcApi<TRpcMethods extends RpcApiMethods>(config?: Rpc
                 ...rawParams: Parameters<
                     TRpcMethods[TMethodName] extends CallableFunction ? TRpcMethods[TMethodName] : never
                 >
-            ): RpcApiRequestPlan<ReturnType<TRpcMethods[TMethodName]>> {
+            ): RpcPlan<ReturnType<TRpcMethods[TMethodName]>> {
                 const rawRequest = Object.freeze({ methodName, params: rawParams });
                 const request = config?.requestTransformer ? config?.requestTransformer(rawRequest) : rawRequest;
                 return Object.freeze({

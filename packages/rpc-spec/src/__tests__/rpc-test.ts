@@ -2,7 +2,7 @@ import { SOLANA_ERROR__RPC__API_PLAN_MISSING_FOR_RPC_METHOD, SolanaError } from 
 import { createRpcMessage } from '@solana/rpc-spec-types';
 
 import { createRpc, Rpc } from '../rpc';
-import { RpcApi, RpcApiRequestPlan } from '../rpc-api';
+import { RpcApi, RpcPlan } from '../rpc-api';
 import { RpcTransport } from '../rpc-transport';
 
 interface TestRpcMethods {
@@ -77,7 +77,7 @@ describe('JSON-RPC 2.0', () => {
         beforeEach(() => {
             rpc = createRpc({
                 api: {
-                    someMethod(...params: unknown[]): RpcApiRequestPlan<unknown> {
+                    someMethod(...params: unknown[]): RpcPlan<unknown> {
                         return {
                             payload: createRpcMessage({
                                 methodName: 'someMethodAugmented',
@@ -108,7 +108,7 @@ describe('JSON-RPC 2.0', () => {
             responseTransformer = jest.fn(json => `${json} processed response`);
             rpc = createRpc({
                 api: {
-                    someMethod(...params: unknown[]): RpcApiRequestPlan<unknown> {
+                    someMethod(...params: unknown[]): RpcPlan<unknown> {
                         return {
                             payload: createRpcMessage({ methodName: 'someMethod', params }),
                             responseTransformer,
