@@ -5,7 +5,7 @@ import {
     SolanaError,
 } from '@solana/errors';
 import { safeRace } from '@solana/promises';
-import { createRpcMessage, RpcRequest, RpcResponseData } from '@solana/rpc-spec-types';
+import { createRpcMessage, RpcRequest, RpcResponseData, RpcResponseTransformer } from '@solana/rpc-spec-types';
 import { DataPublisher } from '@solana/subscribable';
 import { demultiplexDataPublisher } from '@solana/subscribable';
 
@@ -14,7 +14,7 @@ import { RpcSubscriptionsChannel } from './rpc-subscriptions-channel';
 
 type Config<TNotification> = Readonly<{
     channel: RpcSubscriptionsChannel<unknown, RpcNotification<TNotification> | RpcResponseData<RpcSubscriptionId>>;
-    responseTransformer?: <T>(response: unknown, notificationName: string) => T;
+    responseTransformer?: RpcResponseTransformer;
     signal: AbortSignal;
     subscribeRequest: RpcRequest;
     unsubscribeMethodName: string;
@@ -65,7 +65,8 @@ function augmentSubscriberCountAndReturnNewCount(
 const cache = new WeakMap();
 function getMemoizedDemultiplexedNotificationPublisherFromChannelAndResponseTransformer<TNotification>(
     channel: RpcSubscriptionsChannel<unknown, RpcNotification<TNotification>>,
-    responseTransformer?: <T>(response: unknown, notificationName: string) => T,
+    subscribeRequest: RpcRequest,
+    responseTransformer?: RpcResponseTransformer,
 ): DataPublisher<{
     [channelName: `notification:${number}`]: TNotification;
 }> {
@@ -84,7 +85,7 @@ function getMemoizedDemultiplexedNotificationPublisherFromChannelAndResponseTran
                     return;
                 }
                 const transformedNotification = responseTransformer
-                    ? responseTransformer(message.params.result, message.method)
+                    ? responseTransformer(message.params.result, subscribeRequest)
                     : message.params.result;
                 return [`notification:${message.params.subscription}`, transformedNotification];
             })),
@@ -189,6 +190,7 @@ export async function executeRpcPubSubSubscriptionPlan<TNotification>({
      */
     const notificationPublisher = getMemoizedDemultiplexedNotificationPublisherFromChannelAndResponseTransformer(
         channel,
+        subscribeRequest,
         responseTransformer,
     );
     const notificationKey = `notification:${subscriptionId}` as const;
