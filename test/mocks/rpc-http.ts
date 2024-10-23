@@ -160,7 +160,7 @@ const recentBlockhash = async ({
   }
 
   await mockRpcResponse({
-    method: 'getRecentBlockhash',
+    method: 'getLatestBlockhash',
     params,
     value: {
       blockhash,

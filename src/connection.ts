@@ -4566,7 +4566,7 @@ export class Connection {
     }>
   > {
     const args = this._buildArgs([], commitment);
-    const unsafeRes = await this._rpcRequest('getRecentBlockhash', args);
+    const unsafeRes = await this._rpcRequest('getLatestBlockhash', args);
     const res = create(unsafeRes, GetRecentBlockhashAndContextRpcResult);
     if ('error' in res) {
       throw new SolanaJSONRPCError(res.error, 'failed to get recent blockhash');
