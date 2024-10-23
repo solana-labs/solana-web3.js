@@ -87,10 +87,10 @@ A config object with the following properties:
 
 ### `createJsonRpcApi(config)`
 
-Creates a JavaScript proxy that converts _any_ function call called on it to a `RpcPlan` by:
+Creates a JavaScript proxy that converts _any_ function call called on it to a `RpcPlan` by creating an `execute` function that:
 
--   setting `payload` to a JSON RPC v2 payload object with the requested `methodName` and `params` properties, optionally transformed by `config.requestTransformer`.
--   setting `responseTransformer` to `config.responseTransformer`, if provided.
+-   sets the transport payload to a JSON RPC v2 payload object with the requested `methodName` and `params` properties, optionally transformed by `config.requestTransformer`.
+-   transforms the transport's response using the `config.responseTransformer` function, if provided.
 
 ```ts
 // For example, given this `RpcApi`:
@@ -102,12 +102,9 @@ const rpcApi = createJsonRpcApi({
 // ...the following function call:
 rpcApi.foo('bar', { baz: 'bat' });
 
-// ...will produce the following `RpcPlan` object:
-//
-//     {
-//         payload: { id: 1, jsonrpc: '2.0', method: 'foo', params: ['bar', { baz: 'bat' }] },
-//         responseTransformer: (response) => response.result,
-//     }
+// ...will produce an `RpcPlan` that:
+// -   Uses the following payload: { id: 1, jsonrpc: '2.0', method: 'foo', params: ['bar', { baz: 'bat' }] }.
+// -   Returns the "result" attribute of the RPC response.
 ```
 
 #### Arguments

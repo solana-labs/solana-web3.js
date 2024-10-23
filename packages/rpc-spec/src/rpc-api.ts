@@ -20,8 +20,6 @@ export type RpcPlan<TResponse> = {
             transport: RpcTransport;
         }>,
     ) => Promise<RpcResponse<TResponse>>;
-    payload: unknown;
-    responseTransformer?: (response: RpcResponse) => RpcResponse<TResponse>;
 };
 
 export type RpcApi<TRpcMethods> = {
@@ -67,17 +65,6 @@ export function createJsonRpcApi<TRpcMethods extends RpcApiMethods>(config?: Rpc
                         }
                         return config.responseTransformer(response, request);
                     },
-                    payload: createRpcMessage(request),
-                    ...(config?.responseTransformer
-                        ? {
-                              responseTransformer: (response: RpcResponse) => {
-                                  const configTransformer = config.responseTransformer as RpcResponseTransformer<
-                                      ReturnType<TRpcMethods[TMethodName]>
-                                  >;
-                                  return configTransformer(response, request);
-                              },
-                          }
-                        : {}),
                 });
             };
         },
