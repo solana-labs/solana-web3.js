@@ -72,7 +72,6 @@
     ],
     "dependencies": {
         "@solana/addresses": "workspace:*",
-        "@solana/fast-stable-stringify": "workspace:*",
         "@solana/keys": "workspace:*",
         "@solana/rpc-subscriptions-spec": "workspace:*",
         "@solana/rpc-transformers": "workspace:*",
