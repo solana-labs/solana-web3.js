@@ -5225,7 +5225,7 @@ export class Connection {
     commitment?: Finality,
   ): Promise<ConfirmedBlock> {
     const args = this._buildArgsAtLeastConfirmed([slot], commitment);
-    const unsafeRes = await this._rpcRequest('getConfirmedBlock', args);
+    const unsafeRes = await this._rpcRequest('getBlock', args);
     const res = create(unsafeRes, GetConfirmedBlockRpcResult);
 
     if ('error' in res) {
@@ -5331,7 +5331,7 @@ export class Connection {
         rewards: false,
       },
     );
-    const unsafeRes = await this._rpcRequest('getConfirmedBlock', args);
+    const unsafeRes = await this._rpcRequest('getBlock', args);
     const res = create(unsafeRes, GetBlockSignaturesRpcResult);
     if ('error' in res) {
       throw new SolanaJSONRPCError(res.error, 'failed to get confirmed block');
