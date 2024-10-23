@@ -65,7 +65,7 @@ importers:
         version: 7.25.7(@babel/core@7.25.8)
       '@babel/plugin-transform-private-property-in-object':
         specifier: ^7.24.7
-        version: 7.25.8(@babel/core@7.25.8)
+        version: 7.25.9(@babel/core@7.25.8)
       '@babel/plugin-transform-runtime':
         specifier: ^7.24.7
         version: 7.25.7(@babel/core@7.25.8)
@@ -250,10 +250,6 @@ packages:
 
   '@babel/generator@7.25.9':
     resolution: {integrity: sha512-omlUGkr5EaoIJrhLf9CJ0TvjBRpd9+AXRG//0GEQ9THSo8wPiTlbpy1/Ow8ZTrbXpjd9FHXfbFQx32I04ht0FA==}
-    engines: {node: '>=6.9.0'}
-
-  '@babel/helper-annotate-as-pure@7.25.7':
-    resolution: {integrity: sha512-4xwU8StnqnlIhhioZf1tqnVWeQ9pvH/ujS8hRfw/WOza+/a+1qv69BWNy+oY231maTCWgKWhfBU7kDpsds6zAA==}
     engines: {node: '>=6.9.0'}
 
   '@babel/helper-annotate-as-pure@7.25.9':
@@ -715,12 +711,6 @@ packages:
 
   '@babel/plugin-transform-private-methods@7.25.9':
     resolution: {integrity: sha512-D/JUozNpQLAPUVusvqMxyvjzllRaF8/nSrP1s2YGQT/W4LHK4xxsMcHjhOGTS01mp9Hda8nswb+FblLdJornQw==}
-    engines: {node: '>=6.9.0'}
-    peerDependencies:
-      '@babel/core': ^7.0.0-0
-
-  '@babel/plugin-transform-private-property-in-object@7.25.8':
-    resolution: {integrity: sha512-8Uh966svuB4V8RHHg0QJOB32QK287NBksJOByoKmHMp1TAobNniNalIkI2i5IPj5+S9NYCG4VIjbEuiSN8r+ow==}
     engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0-0
@@ -4722,10 +4712,6 @@ snapshots:
       '@jridgewell/trace-mapping': 0.3.25
       jsesc: 3.0.2
 
-  '@babel/helper-annotate-as-pure@7.25.7':
-    dependencies:
-      '@babel/types': 7.25.8
-
   '@babel/helper-annotate-as-pure@7.25.9':
     dependencies:
       '@babel/types': 7.25.9
@@ -4756,7 +4742,7 @@ snapshots:
   '@babel/helper-create-class-features-plugin@7.25.7(@babel/core@7.25.8)':
     dependencies:
       '@babel/core': 7.25.8
-      '@babel/helper-annotate-as-pure': 7.25.7
+      '@babel/helper-annotate-as-pure': 7.25.9
       '@babel/helper-member-expression-to-functions': 7.25.7
       '@babel/helper-optimise-call-expression': 7.25.7
       '@babel/helper-replace-supers': 7.25.7(@babel/core@7.25.8)
@@ -5285,15 +5271,6 @@ snapshots:
       '@babel/core': 7.25.8
       '@babel/helper-create-class-features-plugin': 7.25.9(@babel/core@7.25.8)
       '@babel/helper-plugin-utils': 7.25.9
-    transitivePeerDependencies:
-      - supports-color
-
-  '@babel/plugin-transform-private-property-in-object@7.25.8(@babel/core@7.25.8)':
-    dependencies:
-      '@babel/core': 7.25.8
-      '@babel/helper-annotate-as-pure': 7.25.7
-      '@babel/helper-create-class-features-plugin': 7.25.7(@babel/core@7.25.8)
-      '@babel/helper-plugin-utils': 7.25.7
     transitivePeerDependencies:
       - supports-color
 
