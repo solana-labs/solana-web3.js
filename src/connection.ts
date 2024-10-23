@@ -5351,7 +5351,7 @@ export class Connection {
     commitment?: Finality,
   ): Promise<ConfirmedTransaction | null> {
     const args = this._buildArgsAtLeastConfirmed([signature], commitment);
-    const unsafeRes = await this._rpcRequest('getConfirmedTransaction', args);
+    const unsafeRes = await this._rpcRequest('getTransaction', args);
     const res = create(unsafeRes, GetTransactionRpcResult);
     if ('error' in res) {
       throw new SolanaJSONRPCError(res.error, 'failed to get transaction');
@@ -5382,7 +5382,7 @@ export class Connection {
       commitment,
       'jsonParsed',
     );
-    const unsafeRes = await this._rpcRequest('getConfirmedTransaction', args);
+    const unsafeRes = await this._rpcRequest('getTransaction', args);
     const res = create(unsafeRes, GetParsedTransactionRpcResult);
     if ('error' in res) {
       throw new SolanaJSONRPCError(
@@ -5409,7 +5409,7 @@ export class Connection {
         'jsonParsed',
       );
       return {
-        methodName: 'getConfirmedTransaction',
+        methodName: 'getTransaction',
         args,
       };
     });
