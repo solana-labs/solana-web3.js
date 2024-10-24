@@ -1,5 +1,6 @@
 {
     "$schema": "https://turbo.build/schema.json",
+    "globalEnv": ["CI"],
     "remoteCache": {
         "signature": true
     },
@@ -15,7 +16,8 @@
                 "test:treeshakability:node",
                 "test:typecheck",
                 "test:unit:browser",
-                "test:unit:node"
+                "test:unit:node",
+                "start"
             ],
             "outputs": ["dist/**"]
         },
@@ -44,6 +46,10 @@
                 "test:treeshakability:node"
             ],
             "passThroughEnv": ["GH_TOKEN", "NPM_TOKEN"]
+        },
+        "start": {
+            "dependsOn": ["^compile:js", "^compile:typedefs"],
+            "inputs": ["$TURBO_DEFAULT$", "src/**", "../utils/**"]
         },
         "style:fix": {
             "inputs": ["$TURBO_DEFAULT$", "*"],
