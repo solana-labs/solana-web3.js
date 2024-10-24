@@ -1,6 +1,6 @@
 {
     "name": "@solana/rpc-transport-http",
-    "version": "2.0.0-rc.1",
+    "version": "2.0.0-rc.2",
     "description": "An RPC transport that uses HTTP requests",
     "exports": {
         "edge-light": {
