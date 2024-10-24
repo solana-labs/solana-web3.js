@@ -12,12 +12,27 @@ import {
     createRpc,
     createSolanaRpcApi,
     DEFAULT_RPC_CONFIG,
+    isJsonRpcPayload,
     mainnet,
     RpcApi,
+    RpcTransport,
+    RpcTransportMainnet,
     SolanaRpcApiMainnet,
 } from '@solana/web3.js';
 
 const log = createLogger('Custom JSON RPC API');
+
+// This is a workaround that avoids the need to send RPC calls to mainnet during CI.
+function mockRpcTransportForCI(): RpcTransportMainnet {
+    const transport = createDefaultRpcTransport({ url: 'http://127.0.0.1:8899' });
+    return (async <TResponse>({ payload, signal }: Parameters<RpcTransport>[0]) => {
+        if (isJsonRpcPayload(payload) && payload.method === 'getAsset') {
+            const metadata = { name: 'USD Coin', symbol: 'USDC' };
+            return { result: { content: { metadata } } } as TResponse;
+        }
+        return await transport({ payload, signal });
+    }) as RpcTransportMainnet;
+}
 
 /**
  * STEP 1: CUSTOM JSON RPC API CALL SIGNATURE
@@ -97,7 +112,9 @@ const customizedRpcApi = new Proxy(solanaRpcApi, {
  */
 const customizedRpc = createRpc({
     api: customizedRpcApi,
-    transport: createDefaultRpcTransport({ url: mainnet('https://api.mainnet-beta.solana.com') }),
+    transport: process.env.CI
+        ? mockRpcTransportForCI()
+        : createDefaultRpcTransport({ url: mainnet('https://api.mainnet-beta.solana.com') }),
 });
 
 /**
