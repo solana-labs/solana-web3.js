@@ -1,6 +1,6 @@
 {
     "name": "@solana/transaction-messages",
-    "version": "2.0.0-rc.1",
+    "version": "2.0.0-rc.2",
     "description": "Helpers for creating transaction messages",
     "exports": {
         "edge-light": {

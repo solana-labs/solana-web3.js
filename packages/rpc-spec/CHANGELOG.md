@@ -1,5 +1,60 @@
 # @solana/rpc-spec
 
+## 2.0.0-rc.2
+
+### Patch Changes
+
+-   [#3221](https://github.com/solana-labs/solana-web3.js/pull/3221) [`6b43588`](https://github.com/solana-labs/solana-web3.js/commit/6b4358864cb328d1b83f11c94b29f75e1b3d635f) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Add new `isJsonRpcPayload` helper method
+
+-   [#3407](https://github.com/solana-labs/solana-web3.js/pull/3407) [`10b08ac`](https://github.com/solana-labs/solana-web3.js/commit/10b08ac8cdb61aa1412475426cfcaf0eefe32722) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Use `RpcRequest`, `RpcResponse` and their transformers in RPC Subscriptions packages
+
+    This change makes the RPC and RPC Subscriptions architecture more consistent by using the same `RpcRequest` and `RpcResponse` types and transformers as the basis for handling user requests (RPC calls or subscriptions) and returning responses to them.
+
+    See the following PRs for more details:
+
+    -   [PR #3393](https://github.com/solana-labs/solana-web3.js/pull/3393)
+    -   [PR #3394](https://github.com/solana-labs/solana-web3.js/pull/3394)
+    -   [PR #3403](https://github.com/solana-labs/solana-web3.js/pull/3403)
+    -   [PR #3404](https://github.com/solana-labs/solana-web3.js/pull/3404)
+    -   [PR #3405](https://github.com/solana-labs/solana-web3.js/pull/3405)
+
+-   [#3146](https://github.com/solana-labs/solana-web3.js/pull/3146) [`628177f`](https://github.com/solana-labs/solana-web3.js/commit/628177ffcc1be1c40e0c82d80743b07f695cfe69) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Rename `RpcRequest` type to `RpcApiRequestPlan` to make room for new `RpcRequest` type
+
+-   [#3429](https://github.com/solana-labs/solana-web3.js/pull/3429) [`06dcd86`](https://github.com/solana-labs/solana-web3.js/commit/06dcd86d830e866eb3ee7c47ea1bb99b8205bd1e) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Rename `RpcApiRequestPlan` to `RpcPlan` to stay consistent with the `RpcSusbscriptionsPlan` of the RPC Subscription architecture.
+
+-   [#3393](https://github.com/solana-labs/solana-web3.js/pull/3393) [`3c02c35`](https://github.com/solana-labs/solana-web3.js/commit/3c02c3582f5b87151b7ac1d9cd24b9d20f6945ea) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Move RpcRequest and RpcResponse types to rpc-spec-types
+
+-   [#3145](https://github.com/solana-labs/solana-web3.js/pull/3145) [`1c25dd4`](https://github.com/solana-labs/solana-web3.js/commit/1c25dd4069a3a8f5599285c9b0eaeb71a2f897d1) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Rename `RpcResponse` type to `RpcResponseData` to make room for a new `RpcResponse` type
+
+-   [#3213](https://github.com/solana-labs/solana-web3.js/pull/3213) [`3fc388f`](https://github.com/solana-labs/solana-web3.js/commit/3fc388f0b40243436a3ecbcd2af27ea8efa683e4) Thanks [@mcintyre94](https://github.com/mcintyre94)! - Clean up SolanaRpcApi: no longer extend RpcApiMethods + remove export
+
+-   [#3147](https://github.com/solana-labs/solana-web3.js/pull/3147) [`4f87d12`](https://github.com/solana-labs/solana-web3.js/commit/4f87d12cf942fbd4f427005d5ac41671ce28a22c) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Add new `RpcRequest` and `RpcResponse` types with `RpcRequestTransformer` and `RpcResponseTransformer` functions
+
+-   [#3150](https://github.com/solana-labs/solana-web3.js/pull/3150) [`a705413`](https://github.com/solana-labs/solana-web3.js/commit/a705413e357fb5c5907c5fc1df17d241bc5c0f76) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Make `RpcApi` use new `RpcRequestTransformer` and `RpcResponseTransformer`
+
+-   [#3432](https://github.com/solana-labs/solana-web3.js/pull/3432) [`91076ba`](https://github.com/solana-labs/solana-web3.js/commit/91076ba1884eb72880d1ee964b6800d90afb4460) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Redesign the `RpcPlan` by using a plan executor function.
+
+    This change replaces the `payload` and `responseTransformer` attributes of the `RpcPlan` type (returned by the RPC API) in favour of a new `execute` function that accepts an `RpcTransport` and an optional `AbortSignal` and return an `RpcResponse`. That way, the RPC API is able to completely wrap the RPC Transport layer and can do things like: not calling the transport at all for caching purposes or calling the transport multiple times for retries or even for aggregating responses from multiple RPC calls.
+
+    See the following PRs for more details:
+
+    -   [PR #3430](https://github.com/solana-labs/solana-web3.js/pull/3430)
+    -   [PR #3431](https://github.com/solana-labs/solana-web3.js/pull/3431)
+
+-   [#3229](https://github.com/solana-labs/solana-web3.js/pull/3229) [`f5660d2`](https://github.com/solana-labs/solana-web3.js/commit/f5660d2eb4d2ee5be8c9cd8e8b58a11de1a799bf) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Make API plans return payloads
+
+-   [#3148](https://github.com/solana-labs/solana-web3.js/pull/3148) [`e1cb697`](https://github.com/solana-labs/solana-web3.js/commit/e1cb697d66dc906aa2433965452417e03cf86e13) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Make `RpcTransport` return new `RpcReponse` type instead of parsed JSON data
+
+-   [#3137](https://github.com/solana-labs/solana-web3.js/pull/3137) [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a) Thanks [@mcintyre94](https://github.com/mcintyre94)! - The build is now compatible with the Vercel Edge runtime and Cloudflare Workers through the addition of `edge-light` and `workerd` to the package exports.
+
+-   [#3230](https://github.com/solana-labs/solana-web3.js/pull/3230) [`d198638`](https://github.com/solana-labs/solana-web3.js/commit/d19863844cf28c252e6bedd7070e633692d9e46e) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Rename `createRpcApi` to `createJsonRpcApi`
+
+-   [#3394](https://github.com/solana-labs/solana-web3.js/pull/3394) [`db144da`](https://github.com/solana-labs/solana-web3.js/commit/db144da362e3389837b56f97abfb766cc8c847c2) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Use RpcRequest in createRpcMessage helper
+
+-   Updated dependencies [[`10b08ac`](https://github.com/solana-labs/solana-web3.js/commit/10b08ac8cdb61aa1412475426cfcaf0eefe32722), [`3c02c35`](https://github.com/solana-labs/solana-web3.js/commit/3c02c3582f5b87151b7ac1d9cd24b9d20f6945ea), [`1c25dd4`](https://github.com/solana-labs/solana-web3.js/commit/1c25dd4069a3a8f5599285c9b0eaeb71a2f897d1), [`38faba0`](https://github.com/solana-labs/solana-web3.js/commit/38faba05fab479ddbd95d0e211744d203f8aa823), [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a), [`db144da`](https://github.com/solana-labs/solana-web3.js/commit/db144da362e3389837b56f97abfb766cc8c847c2)]:
+    -   @solana/rpc-spec-types@2.0.0-rc.2
+    -   @solana/errors@2.0.0-rc.2
+
 ## 2.0.0-rc.1
 
 ### Patch Changes
