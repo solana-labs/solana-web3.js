@@ -75,6 +75,7 @@
         "@solana/fast-stable-stringify": "workspace:*",
         "@solana/functional": "workspace:*",
         "@solana/promises": "workspace:*",
+        "@solana/rpc-spec-types": "workspace:*",
         "@solana/rpc-subscriptions-api": "workspace:*",
         "@solana/rpc-subscriptions-channel-websocket": "workspace:*",
         "@solana/rpc-subscriptions-spec": "workspace:*",
