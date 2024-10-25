@@ -4,24 +4,24 @@
     "private": true,
     "exports": {
         "edge-light": {
+            "types": "./dist/types/index.browser.d.ts",
             "import": "./dist/index.node.mjs",
-            "require": "./dist/index.node.cjs",
-            "types": "./dist/types/index.browser.d.ts"
+            "require": "./dist/index.node.cjs"
         },
         "workerd": {
+            "types": "./dist/types/index.browser.d.ts",
             "import": "./dist/index.node.mjs",
-            "require": "./dist/index.node.cjs",
-            "types": "./dist/types/index.browser.d.ts"
+            "require": "./dist/index.node.cjs"
         },
         "browser": {
+            "types": "./dist/types/index.browser.d.ts",
             "import": "./dist/index.browser.mjs",
-            "require": "./dist/index.browser.cjs",
-            "types": "./dist/types/index.browser.d.ts"
+            "require": "./dist/index.browser.cjs"
         },
         "node": {
+            "types": "./dist/types/index.browser.d.ts",
             "import": "./dist/index.node.mjs",
-            "require": "./dist/index.node.cjs",
-            "types": "./dist/types/index.browser.d.ts"
+            "require": "./dist/index.node.cjs"
         }
     },
     "browser": {
