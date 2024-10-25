@@ -10,10 +10,12 @@ import {
     address,
     createDefaultRpcTransport,
     createRpc,
+    createRpcMessage,
     createSolanaRpcApi,
     DEFAULT_RPC_CONFIG,
     mainnet,
     RpcApi,
+    RpcPlan,
     SolanaRpcApiMainnet,
 } from '@solana/web3.js';
 
@@ -55,14 +57,14 @@ const customizedRpcApi = new Proxy(solanaRpcApi, {
     deleteProperty() {
         return false;
     },
-    get(target, p, receiver) {
+    get(target, p, receiver): (address: Address) => RpcPlan<AssetMetadata> {
         const methodName = p.toString();
         if (methodName === 'getAssetMetadata') {
             /**
              * When the `getAssetMetadata` method is called on the RPC, return a custom definition.
              */
-            return (address: Address) => {
-                return {
+            return address => {
+                const request = {
                     /**
                      * If the JSON RPC API method is named differently than the method exposed on
                      * the custom API, supply it here.
@@ -73,12 +75,18 @@ const customizedRpcApi = new Proxy(solanaRpcApi, {
                      * the arguments to the method exposed on the custom API, reformat them here.
                      */
                     params: { id: address },
-                    /**
-                     * When the return type of the method exposed on the custom API has a different
-                     * shape than the result returned from the JSON RPC API, supply a transform.
-                     */
-                    responseTransformer(rawResponse: { result: { content: { metadata: AssetMetadata } } }) {
-                        return rawResponse.result.content.metadata;
+                };
+                return {
+                    execute: async ({ signal, transport }) => {
+                        const response: { result: { content: { metadata: AssetMetadata } } } = await transport({
+                            payload: createRpcMessage(request),
+                            signal,
+                        });
+                        /**
+                         * When the return type of the method exposed on the custom API has a different
+                         * shape than the result returned from the JSON RPC API, supply a transform.
+                         */
+                        return response.result.content.metadata;
                     },
                 };
             };
