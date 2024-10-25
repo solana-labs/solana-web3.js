@@ -8,12 +8,12 @@ import {
     TransactionMessage,
 } from '@solana/transaction-messages';
 
-import { decodeTransactionMessage } from '../decode-transaction-message';
+import { decompileTransactionMessageFetchingLookupTables } from '../decompile-transaction-message-fetching-lookup-tables';
 
 jest.mock('@solana/accounts');
 jest.mock('@solana/transaction-messages');
 
-describe('decodeTransactionMessage', () => {
+describe('decompileTransactionMessageFetchingLookupTables', () => {
     const blockhash = 'abc' as Blockhash;
     const rpc: Rpc<GetMultipleAccountsApi> = {
         getMultipleAccounts: jest.fn(),
@@ -43,20 +43,20 @@ describe('decodeTransactionMessage', () => {
 
         it('should return the result of `decompileTransactionMessage`', async () => {
             expect.assertions(1);
-            await expect(decodeTransactionMessage(compiledTransactionMessage, rpc)).resolves.toStrictEqual(
-                transactionMessage,
-            );
+            await expect(
+                decompileTransactionMessageFetchingLookupTables(compiledTransactionMessage, rpc),
+            ).resolves.toStrictEqual(transactionMessage);
         });
 
         it('should not call the `fetchJsonParsedAccounts` function', async () => {
             expect.assertions(1);
-            await decodeTransactionMessage(compiledTransactionMessage, rpc);
+            await decompileTransactionMessageFetchingLookupTables(compiledTransactionMessage, rpc);
             expect(fetchJsonParsedAccounts).not.toHaveBeenCalled();
         });
 
         it('should call `decompileTransactionMessage` with the input transaction', async () => {
             expect.assertions(1);
-            await decodeTransactionMessage(compiledTransactionMessage, rpc);
+            await decompileTransactionMessageFetchingLookupTables(compiledTransactionMessage, rpc);
             expect(decompileTransactionMessage).toHaveBeenCalledWith(
                 compiledTransactionMessage,
                 expect.any(Object), // config
@@ -65,7 +65,7 @@ describe('decodeTransactionMessage', () => {
 
         it('should call the `decompileTransactionMessage` with no lookup tables', async () => {
             expect.assertions(1);
-            await decodeTransactionMessage(compiledTransactionMessage, rpc);
+            await decompileTransactionMessageFetchingLookupTables(compiledTransactionMessage, rpc);
             expect(decompileTransactionMessage).toHaveBeenCalledWith(
                 expect.any(Object), // transaction
                 expect.objectContaining({
@@ -76,7 +76,9 @@ describe('decodeTransactionMessage', () => {
 
         it('should pass `lastValidBlockHeight` to `decompileTransactionMessage`', async () => {
             expect.assertions(1);
-            await decodeTransactionMessage(compiledTransactionMessage, rpc, { lastValidBlockHeight: 100n });
+            await decompileTransactionMessageFetchingLookupTables(compiledTransactionMessage, rpc, {
+                lastValidBlockHeight: 100n,
+            });
             expect(decompileTransactionMessage).toHaveBeenCalledWith(
                 expect.any(Object), // transaction
                 expect.objectContaining({
@@ -110,20 +112,20 @@ describe('decodeTransactionMessage', () => {
 
         it('should return the result of `decompileTransactionMessage`', async () => {
             expect.assertions(1);
-            await expect(decodeTransactionMessage(compiledTransactionMessage, rpc)).resolves.toStrictEqual(
-                transactionMessage,
-            );
+            await expect(
+                decompileTransactionMessageFetchingLookupTables(compiledTransactionMessage, rpc),
+            ).resolves.toStrictEqual(transactionMessage);
         });
 
         it('should not call the `fetchJsonParsedAccounts` function', async () => {
             expect.assertions(1);
-            await decodeTransactionMessage(compiledTransactionMessage, rpc);
+            await decompileTransactionMessageFetchingLookupTables(compiledTransactionMessage, rpc);
             expect(fetchJsonParsedAccounts).not.toHaveBeenCalled();
         });
 
         it('should call `decompileTransactionMessage` with the input transaction', async () => {
             expect.assertions(1);
-            await decodeTransactionMessage(compiledTransactionMessage, rpc);
+            await decompileTransactionMessageFetchingLookupTables(compiledTransactionMessage, rpc);
             expect(decompileTransactionMessage).toHaveBeenCalledWith(
                 compiledTransactionMessage,
                 expect.any(Object), // config
@@ -132,7 +134,7 @@ describe('decodeTransactionMessage', () => {
 
         it('should call `decompileTransactionMessage` with no lookup tables', async () => {
             expect.assertions(1);
-            await decodeTransactionMessage(compiledTransactionMessage, rpc);
+            await decompileTransactionMessageFetchingLookupTables(compiledTransactionMessage, rpc);
             expect(decompileTransactionMessage).toHaveBeenCalledWith(
                 expect.any(Object), // transaction
                 expect.objectContaining({
@@ -143,7 +145,9 @@ describe('decodeTransactionMessage', () => {
 
         it('should pass `lastValidBlockHeight` to `decompileTransactionMessage`', async () => {
             expect.assertions(1);
-            await decodeTransactionMessage(compiledTransactionMessage, rpc, { lastValidBlockHeight: 100n });
+            await decompileTransactionMessageFetchingLookupTables(compiledTransactionMessage, rpc, {
+                lastValidBlockHeight: 100n,
+            });
             expect(decompileTransactionMessage).toHaveBeenCalledWith(
                 expect.any(Object), // transaction
                 expect.objectContaining({
@@ -177,20 +181,20 @@ describe('decodeTransactionMessage', () => {
 
         it('should return the result of `decompileTransactionMessage`', async () => {
             expect.assertions(1);
-            await expect(decodeTransactionMessage(compiledTransactionMessage, rpc)).resolves.toStrictEqual(
-                transactionMessage,
-            );
+            await expect(
+                decompileTransactionMessageFetchingLookupTables(compiledTransactionMessage, rpc),
+            ).resolves.toStrictEqual(transactionMessage);
         });
 
         it('should not call the `fetchJsonParsedAccounts` function', async () => {
             expect.assertions(1);
-            await decodeTransactionMessage(compiledTransactionMessage, rpc);
+            await decompileTransactionMessageFetchingLookupTables(compiledTransactionMessage, rpc);
             expect(fetchJsonParsedAccounts).not.toHaveBeenCalled();
         });
 
         it('should call `decompileTransactionMessage` with the input transaction', async () => {
             expect.assertions(1);
-            await decodeTransactionMessage(compiledTransactionMessage, rpc);
+            await decompileTransactionMessageFetchingLookupTables(compiledTransactionMessage, rpc);
             expect(decompileTransactionMessage).toHaveBeenCalledWith(
                 compiledTransactionMessage,
                 expect.any(Object), // config
@@ -199,7 +203,7 @@ describe('decodeTransactionMessage', () => {
 
         it('should call `decompileTransactionMessage` with no lookup tables', async () => {
             expect.assertions(1);
-            await decodeTransactionMessage(compiledTransactionMessage, rpc);
+            await decompileTransactionMessageFetchingLookupTables(compiledTransactionMessage, rpc);
             expect(decompileTransactionMessage).toHaveBeenCalledWith(
                 expect.any(Object), // transaction
                 expect.objectContaining({
@@ -210,7 +214,9 @@ describe('decodeTransactionMessage', () => {
 
         it('should pass `lastValidBlockHeight` to `decompileTransactionMessage`', async () => {
             expect.assertions(1);
-            await decodeTransactionMessage(compiledTransactionMessage, rpc, { lastValidBlockHeight: 100n });
+            await decompileTransactionMessageFetchingLookupTables(compiledTransactionMessage, rpc, {
+                lastValidBlockHeight: 100n,
+            });
             expect(decompileTransactionMessage).toHaveBeenCalledWith(
                 expect.any(Object), // transaction
                 expect.objectContaining({
@@ -286,14 +292,14 @@ describe('decodeTransactionMessage', () => {
 
         it('should return the result of `decompileTransactionMessage`', async () => {
             expect.assertions(1);
-            await expect(decodeTransactionMessage(compiledTransactionMessage, rpc)).resolves.toStrictEqual(
-                transactionMessage,
-            );
+            await expect(
+                decompileTransactionMessageFetchingLookupTables(compiledTransactionMessage, rpc),
+            ).resolves.toStrictEqual(transactionMessage);
         });
 
         it('should call `fetchJsonParsedAccounts` with the lookup table addresses', async () => {
             expect.assertions(1);
-            await decodeTransactionMessage(compiledTransactionMessage, rpc);
+            await decompileTransactionMessageFetchingLookupTables(compiledTransactionMessage, rpc);
             expect(fetchJsonParsedAccounts).toHaveBeenCalledWith(rpc, [lookupTableAddress1, lookupTableAddress2], {});
         });
 
@@ -304,7 +310,7 @@ describe('decodeTransactionMessage', () => {
                 commitment: 'confirmed',
                 minContextSlot: 100n,
             };
-            await decodeTransactionMessage(compiledTransactionMessage, rpc, {
+            await decompileTransactionMessageFetchingLookupTables(compiledTransactionMessage, rpc, {
                 ...fetchAccountsConfig,
                 lastValidBlockHeight: 100n,
             });
@@ -317,7 +323,7 @@ describe('decodeTransactionMessage', () => {
 
         it('should call `decompileTransactionMessage` with the input transaction', async () => {
             expect.assertions(1);
-            await decodeTransactionMessage(compiledTransactionMessage, rpc);
+            await decompileTransactionMessageFetchingLookupTables(compiledTransactionMessage, rpc);
             expect(decompileTransactionMessage).toHaveBeenCalledWith(
                 compiledTransactionMessage,
                 expect.any(Object), // config
@@ -326,7 +332,7 @@ describe('decodeTransactionMessage', () => {
 
         it('should call `decompileTransactionMessage` with the addresses from the lookup tables', async () => {
             expect.assertions(1);
-            await decodeTransactionMessage(compiledTransactionMessage, rpc);
+            await decompileTransactionMessageFetchingLookupTables(compiledTransactionMessage, rpc);
             expect(decompileTransactionMessage).toHaveBeenCalledWith(
                 expect.any(Object), // transaction
                 expect.objectContaining({
@@ -340,7 +346,9 @@ describe('decodeTransactionMessage', () => {
 
         it('should pass `lastValidBlockHeight` to `decompileTransactionMessage`', async () => {
             expect.assertions(1);
-            await decodeTransactionMessage(compiledTransactionMessage, rpc, { lastValidBlockHeight: 100n });
+            await decompileTransactionMessageFetchingLookupTables(compiledTransactionMessage, rpc, {
+                lastValidBlockHeight: 100n,
+            });
             expect(decompileTransactionMessage).toHaveBeenCalledWith(
                 expect.any(Object), // transaction
                 expect.objectContaining({
