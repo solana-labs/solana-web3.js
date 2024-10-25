@@ -671,7 +671,7 @@ If your app needs access to [unstable RPC Subscriptions](https://docs.solana.com
 
 ```ts
 import {
-    createDefaultRpcSubscriptionsChannelCreator,
+    createDefaultSolanaRpcSubscriptionsChannelCreator,
     createDefaultRpcSubscriptionsTransport,
     createSolanaRpcSubscriptions_UNSTABLE,
     createSolanaRpcSubscriptionsFromTransport_UNSTABLE,
@@ -683,7 +683,7 @@ const rpcSubscriptions = createSolanaRpcSubscriptions_UNSTABLE('ws://127.0.0.1:8
 
 // Using a custom transport.
 const transport = createDefaultRpcSubscriptionsTransport({
-    createChannel: createDefaultRpcSubscriptionsChannelCreator({
+    createChannel: createDefaultSolanaRpcSubscriptionsChannelCreator({
         url: 'ws://127.0.0.1:8900',
     }),
 });
@@ -712,7 +712,7 @@ Alternatively, you may explicitly create the RPC Subscriptions API using the `cr
 
 ```ts
 import {
-    createDefaultRpcSubscriptionsChannelCreator,
+    createDefaultSolanaRpcSubscriptionsChannelCreator,
     createDefaultRpcSubscriptionsTransport,
     createSubscriptionRpc,
     createSolanaRpcSubscriptionsApi,
@@ -723,7 +723,7 @@ import {
 
 const api = createSolanaRpcSubscriptionsApi<AccountNotificationsApi & SlotNotificationsApi>(DEFAULT_RPC_CONFIG);
 const transport = createDefaultRpcSubscriptionsTransport({
-    createChannel: createDefaultRpcSubscriptionsChannelCreator({
+    createChannel: createDefaultSolanaRpcSubscriptionsChannelCreator({
         url: 'ws://127.0.0.1:8900',
     }),
 });

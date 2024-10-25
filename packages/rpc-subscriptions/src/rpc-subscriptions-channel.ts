@@ -1,10 +1,12 @@
 import { createWebSocketChannel } from '@solana/rpc-subscriptions-channel-websocket';
+import type { RpcSubscriptionsChannel } from '@solana/rpc-subscriptions-spec';
 import type { ClusterUrl } from '@solana/rpc-types';
 
 import { getRpcSubscriptionsChannelWithAutoping } from './rpc-subscriptions-autopinger';
 import { getChannelPoolingChannelCreator } from './rpc-subscriptions-channel-pool';
 import { RpcSubscriptionsChannelCreatorFromClusterUrl } from './rpc-subscriptions-clusters';
 import { getRpcSubscriptionsChannelWithJSONSerialization } from './rpc-subscriptions-json';
+import { getRpcSubscriptionsChannelWithBigIntJSONSerialization } from './rpc-subscriptions-json-bigint';
 
 export type DefaultRpcSubscriptionsChannelConfig<TClusterUrl extends ClusterUrl> = Readonly<{
     intervalMs?: number;
@@ -14,8 +16,28 @@ export type DefaultRpcSubscriptionsChannelConfig<TClusterUrl extends ClusterUrl>
     url: TClusterUrl;
 }>;
 
+export function createDefaultSolanaRpcSubscriptionsChannelCreator<TClusterUrl extends ClusterUrl>(
+    config: DefaultRpcSubscriptionsChannelConfig<TClusterUrl>,
+): RpcSubscriptionsChannelCreatorFromClusterUrl<TClusterUrl, unknown, unknown> {
+    return createDefaultRpcSubscriptionsChannelCreatorImpl({
+        ...config,
+        jsonSerializer: getRpcSubscriptionsChannelWithBigIntJSONSerialization,
+    });
+}
+
 export function createDefaultRpcSubscriptionsChannelCreator<TClusterUrl extends ClusterUrl>(
     config: DefaultRpcSubscriptionsChannelConfig<TClusterUrl>,
+): RpcSubscriptionsChannelCreatorFromClusterUrl<TClusterUrl, unknown, unknown> {
+    return createDefaultRpcSubscriptionsChannelCreatorImpl({
+        ...config,
+        jsonSerializer: getRpcSubscriptionsChannelWithJSONSerialization,
+    });
+}
+
+function createDefaultRpcSubscriptionsChannelCreatorImpl<TClusterUrl extends ClusterUrl>(
+    config: DefaultRpcSubscriptionsChannelConfig<TClusterUrl> & {
+        jsonSerializer: (channel: RpcSubscriptionsChannel<string, string>) => RpcSubscriptionsChannel<unknown, unknown>;
+    },
 ): RpcSubscriptionsChannelCreatorFromClusterUrl<TClusterUrl, unknown, unknown> {
     if (/^wss?:/i.test(config.url) === false) {
         const protocolMatch = config.url.match(/^([^:]+):/);
@@ -36,7 +58,7 @@ export function createDefaultRpcSubscriptionsChannelCreator<TClusterUrl extends 
                 131_072,
             signal: abortSignal,
         })
-            .then(getRpcSubscriptionsChannelWithJSONSerialization)
+            .then(config.jsonSerializer)
             .then(channel =>
                 getRpcSubscriptionsChannelWithAutoping({
                     abortSignal,

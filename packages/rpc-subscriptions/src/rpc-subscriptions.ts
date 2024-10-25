@@ -9,7 +9,7 @@ import { ClusterUrl } from '@solana/rpc-types';
 
 import { DEFAULT_RPC_SUBSCRIPTIONS_CONFIG } from './rpc-default-config';
 import {
-    createDefaultRpcSubscriptionsChannelCreator,
+    createDefaultSolanaRpcSubscriptionsChannelCreator,
     DefaultRpcSubscriptionsChannelConfig,
 } from './rpc-subscriptions-channel';
 import type { RpcSubscriptionsFromTransport } from './rpc-subscriptions-clusters';
@@ -23,7 +23,7 @@ function createSolanaRpcSubscriptionsImpl<TClusterUrl extends ClusterUrl, TApi e
     config?: Omit<DefaultRpcSubscriptionsConfig<TClusterUrl>, 'url'>,
 ) {
     const transport = createDefaultRpcSubscriptionsTransport({
-        createChannel: createDefaultRpcSubscriptionsChannelCreator({ ...config, url: clusterUrl }),
+        createChannel: createDefaultSolanaRpcSubscriptionsChannelCreator({ ...config, url: clusterUrl }),
     });
     return createSolanaRpcSubscriptionsFromTransport<typeof transport, TApi>(transport);
 }

@@ -22,6 +22,10 @@ This package contains types that implement RPC subscriptions as required by the 
 
 Creates a function that returns new subscription channels when called.
 
+### `createDefaultSolanaRpcSubscriptionsChannelCreator(config)`
+
+Similar to `createDefaultRpcSubscriptionsChannelCreator` with some Solana-specific defaults. For instance, it safely handles `BigInt` values in JSON messages since Solana RPC servers accept and return integers larger than `Number.MAX_SAFE_INTEGER`.
+
 #### Arguments
 
 A config object with the following properties:
