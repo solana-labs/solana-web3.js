@@ -56,22 +56,27 @@
         },
         "test:live-with-test-validator": {
             "dependsOn": ["^compile:js"],
-            "inputs": ["$TURBO_DEFAULT$", "src/**"]
+            "inputs": ["$TURBO_DEFAULT$", "src/**"],
+            "outputs": []
         },
         "test:prettier": {
-            "inputs": ["$TURBO_DEFAULT$", "*"]
+            "inputs": ["$TURBO_DEFAULT$", "*"],
+            "outputs": []
         },
         "test:typecheck": {
             "dependsOn": ["^compile:typedefs"],
-            "inputs": ["$TURBO_DEFAULT$", "tsconfig.*", "src/**"]
+            "inputs": ["$TURBO_DEFAULT$", "tsconfig.*", "src/**"],
+            "outputs": []
         },
         "test:unit:browser": {
             "dependsOn": ["^compile:js"],
-            "inputs": ["$TURBO_DEFAULT$", "../../.agave/**/version.yml", "src/**"]
+            "inputs": ["$TURBO_DEFAULT$", "../../.agave/**/version.yml", "src/**"],
+            "outputs": []
         },
         "test:unit:node": {
             "dependsOn": ["^compile:js"],
-            "inputs": ["$TURBO_DEFAULT$", "../../.agave/**/version.yml", "src/**"]
+            "inputs": ["$TURBO_DEFAULT$", "../../.agave/**/version.yml", "src/**"],
+            "outputs": []
         },
         "test:treeshakability:browser": {
             "dependsOn": ["compile:js"]
