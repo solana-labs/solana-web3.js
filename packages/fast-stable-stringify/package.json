@@ -61,7 +61,7 @@
         "test:unit:node": "TERM_OVERRIDE=\"${TURBO_HASH:+dumb}\" TERM=${TERM_OVERRIDE:-$TERM} jest -c ../../node_modules/@solana/test-config/jest-unit.config.node.ts --rootDir . --silent"
     },
     "devDependencies": {
-        "@types/json-stable-stringify": "^1.0.36",
+        "@types/json-stable-stringify": "^1.1.0",
         "json-stable-stringify": "^1.1.1"
     },
     "author": "Solana Labs Maintainers <maintainers@solanalabs.com>",
