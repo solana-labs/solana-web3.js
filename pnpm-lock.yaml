@@ -110,7 +110,7 @@ importers:
         version: 8.0.1
       '@types/express-serve-static-core':
         specifier: ^5.0.0
-        version: 5.0.0
+        version: 5.0.1
       '@types/mocha':
         specifier: ^10.0.6
         version: 10.0.9
@@ -289,10 +289,6 @@ packages:
 
   '@babel/helper-optimise-call-expression@7.25.9':
     resolution: {integrity: sha512-FIpuNaz5ow8VyrYcnXQTDRGvV6tTjkNtCK/RYNDXGSLlUD6cBuQTSw43CShGxjvfBTfcUA/r6UhUCbtYqkhcuQ==}
-    engines: {node: '>=6.9.0'}
-
-  '@babel/helper-plugin-utils@7.25.7':
-    resolution: {integrity: sha512-eaPZai0PiqCi09pPs3pAFfl/zYgGaE6IdXtYvmf0qlcDTd3WCtO7JWCcRd64e0EQrcYgiHibEZnOGsSY4QSgaw==}
     engines: {node: '>=6.9.0'}
 
   '@babel/helper-plugin-utils@7.25.9':
@@ -1435,8 +1431,8 @@ packages:
   '@types/estree@1.0.6':
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
 
-  '@types/express-serve-static-core@5.0.0':
-    resolution: {integrity: sha512-AbXMTZGt40T+KON9/Fdxx0B2WK5hsgxcfXJLr5bFpZ7b4JCex2WyQPTEKdXqfHiY5nKKBScZ7yCoO6Pvgxfvnw==}
+  '@types/express-serve-static-core@5.0.1':
+    resolution: {integrity: sha512-CRICJIl0N5cXDONAdlTv5ShATZ4HEwk6kDDIW2/w9qOWKg+NU/5F8wYRWCrONad0/UKkloNSmmyN/wX4rtpbVA==}
 
   '@types/hast@3.0.4':
     resolution: {integrity: sha512-WPs+bbQw5aCj+x6laNGWLH3wviHtoCv/P3+otBhbOhJgG8qtpdAMlTCxLtsTWA7LH1Oh/bFCHsBn0TPS5m30EQ==}
@@ -4686,8 +4682,6 @@ snapshots:
     dependencies:
       '@babel/types': 7.25.9
 
-  '@babel/helper-plugin-utils@7.25.7': {}
-
   '@babel/helper-plugin-utils@7.25.9': {}
 
   '@babel/helper-remap-async-to-generator@7.25.9(@babel/core@7.25.9)':
@@ -5979,7 +5973,7 @@ snapshots:
 
   '@types/estree@1.0.6': {}
 
-  '@types/express-serve-static-core@5.0.0':
+  '@types/express-serve-static-core@5.0.1':
     dependencies:
       '@types/node': 22.0.0
       '@types/qs': 6.9.7
