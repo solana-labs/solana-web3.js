@@ -6,19 +6,19 @@ import {
     SolanaError,
 } from '@solana/errors';
 
-import { lamports, LamportsUnsafeBeyond2Pow53Minus1 } from '../lamports';
+import { Lamports, lamports } from '../lamports';
 import { StringifiedBigInt, stringifiedBigInt } from '../stringified-bigint';
 import { StringifiedNumber, stringifiedNumber } from '../stringified-number';
-import { unixTimestamp, UnixTimestampUnsafeBeyond2Pow53Minus1 } from '../unix-timestamp';
+import { UnixTimestamp, unixTimestamp } from '../unix-timestamp';
 
 describe('coercions', () => {
     describe('lamports', () => {
-        it('can coerce to `LamportsUnsafeBeyond2Pow53Minus1`', () => {
-            const raw = 1234n as LamportsUnsafeBeyond2Pow53Minus1;
+        it('can coerce to `Lamports`', () => {
+            const raw = 1234n as Lamports;
             const coerced = lamports(1234n);
             expect(coerced).toBe(raw);
         });
-        it('throws on invalid `LamportsUnsafeBeyond2Pow53Minus1`', () => {
+        it('throws on invalid `Lamports`', () => {
             const thisThrows = () => lamports(-5n);
             expect(thisThrows).toThrow(new SolanaError(SOLANA_ERROR__LAMPORTS_OUT_OF_RANGE));
         });
@@ -54,12 +54,12 @@ describe('coercions', () => {
         });
     });
     describe('unixTimestamp', () => {
-        it('can coerce to `UnixTimestampUnsafeBeyond2Pow53Minus1`', () => {
-            const raw = 1234n as UnixTimestampUnsafeBeyond2Pow53Minus1;
+        it('can coerce to `UnixTimestamp`', () => {
+            const raw = 1234n as UnixTimestamp;
             const coerced = unixTimestamp(1234n);
             expect(coerced).toBe(raw);
         });
-        it('throws on an out-of-range `UnixTimestampUnsafeBeyond2Pow53Minus1`', () => {
+        it('throws on an out-of-range `UnixTimestamp`', () => {
             const thisThrows = () => unixTimestamp(BigInt(2n ** 63n));
             expect(thisThrows).toThrow(
                 new SolanaError(SOLANA_ERROR__TIMESTAMP_OUT_OF_RANGE, {

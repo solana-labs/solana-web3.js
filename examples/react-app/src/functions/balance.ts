@@ -1,11 +1,4 @@
-import {
-    AccountNotificationsApi,
-    Address,
-    GetBalanceApi,
-    LamportsUnsafeBeyond2Pow53Minus1,
-    Rpc,
-    RpcSubscriptions,
-} from '@solana/web3.js';
+import { AccountNotificationsApi, Address, GetBalanceApi, Lamports, Rpc, RpcSubscriptions } from '@solana/web3.js';
 import { SWRSubscription } from 'swr/subscription';
 
 const EXPLICIT_ABORT_TOKEN = Symbol();
@@ -24,7 +17,7 @@ const EXPLICIT_ABORT_TOKEN = Symbol();
 export function balanceSubscribe(
     rpc: Rpc<GetBalanceApi>,
     rpcSubscriptions: RpcSubscriptions<AccountNotificationsApi>,
-    ...subscriptionArgs: Parameters<SWRSubscription<{ address: Address }, LamportsUnsafeBeyond2Pow53Minus1>>
+    ...subscriptionArgs: Parameters<SWRSubscription<{ address: Address }, Lamports>>
 ) {
     const [{ address }, { next }] = subscriptionArgs;
     const abortController = new AbortController();

@@ -9,8 +9,8 @@ import type {
     TransactionForFullBase64,
     TransactionForFullJson,
     TransactionForFullJsonParsed,
-    U64UnsafeBeyond2Pow53Minus1,
-    UnixTimestampUnsafeBeyond2Pow53Minus1,
+    U64,
+    UnixTimestamp,
 } from '@solana/rpc-types';
 import type { TransactionVersion } from '@solana/transaction-messages';
 
@@ -18,9 +18,9 @@ import type { TransactionVersion } from '@solana/transaction-messages';
 
 type GetBlockApiResponseBase = Readonly<{
     /** The number of blocks beneath this block */
-    blockHeight: U64UnsafeBeyond2Pow53Minus1;
+    blockHeight: U64;
     /** Estimated production time, as Unix timestamp */
-    blockTime: UnixTimestampUnsafeBeyond2Pow53Minus1;
+    blockTime: UnixTimestamp;
     /** the blockhash of this block */
     blockhash: Blockhash;
     /** The slot index of this block's parent */

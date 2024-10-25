@@ -1,8 +1,8 @@
-import type { LamportsUnsafeBeyond2Pow53Minus1, Slot } from '@solana/rpc-types';
+import type { Lamports, Slot } from '@solana/rpc-types';
 
 type GetBlockCommitmentApiResponse = Readonly<{
-    commitment: LamportsUnsafeBeyond2Pow53Minus1[] | null;
-    totalStake: LamportsUnsafeBeyond2Pow53Minus1;
+    commitment: Lamports[] | null;
+    totalStake: Lamports;
 }>;
 
 export type GetBlockCommitmentApi = {

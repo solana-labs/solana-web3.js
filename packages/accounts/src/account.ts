@@ -1,6 +1,6 @@
 import type { Address } from '@solana/addresses';
 import { ReadonlyUint8Array } from '@solana/codecs-core';
-import type { LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
+import type { Lamports } from '@solana/rpc-types';
 
 /** The amount of bytes required to store the base account information without its data. */
 export const BASE_ACCOUNT_SIZE = 128;
@@ -8,7 +8,7 @@ export const BASE_ACCOUNT_SIZE = 128;
 /** Describe the generic account details applicable to every account. */
 export type BaseAccount = {
     readonly executable: boolean;
-    readonly lamports: LamportsUnsafeBeyond2Pow53Minus1;
+    readonly lamports: Lamports;
     readonly programAddress: Address;
 };
 

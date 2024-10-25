@@ -1,8 +1,8 @@
-import type { Slot, U64UnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
+import type { Slot, U64 } from '@solana/rpc-types';
 
 type SlotsUpdatesNotificationsApiNotificationBase = Readonly<{
     slot: Slot;
-    timestamp: U64UnsafeBeyond2Pow53Minus1;
+    timestamp: U64;
     type: 'completed' | 'firstShredReceived' | 'optimisticConfirmation' | 'root';
 }>;
 
@@ -20,10 +20,10 @@ type SlotsUpdatesNotificationsApiNotificationDead = Readonly<{
 
 type SlotsUpdatesNotificationsApiNotificationFrozen = Readonly<{
     stats: Readonly<{
-        maxTransactionsPerEntry: U64UnsafeBeyond2Pow53Minus1;
-        numFailedTransactions: U64UnsafeBeyond2Pow53Minus1;
-        numSuccessfulTransactions: U64UnsafeBeyond2Pow53Minus1;
-        numTransactionEntries: U64UnsafeBeyond2Pow53Minus1;
+        maxTransactionsPerEntry: U64;
+        numFailedTransactions: U64;
+        numSuccessfulTransactions: U64;
+        numTransactionEntries: U64;
     }>;
     type: 'frozen';
 }> &

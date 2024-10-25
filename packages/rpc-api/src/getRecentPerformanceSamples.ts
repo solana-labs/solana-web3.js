@@ -1,12 +1,12 @@
-import type { Slot, U64UnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
+import type { Slot, U64 } from '@solana/rpc-types';
 
 type PerformanceSample = Readonly<{
     /** Number of non-vote transactions in sample. */
-    numNonVoteTransactions: U64UnsafeBeyond2Pow53Minus1;
+    numNonVoteTransactions: U64;
     /** Number of slots in sample */
-    numSlots: U64UnsafeBeyond2Pow53Minus1;
+    numSlots: U64;
     /** Number of transactions in sample */
-    numTransactions: U64UnsafeBeyond2Pow53Minus1;
+    numTransactions: U64;
     /** Number of seconds in a sample window */
     samplePeriodSecs: number;
     /** Slot in which sample was taken at */

@@ -1,8 +1,8 @@
 import type { Address } from '@solana/addresses';
-import type { Commitment, Slot, SolanaRpcResponse, U64UnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
+import type { Commitment, Slot, SolanaRpcResponse, U64 } from '@solana/rpc-types';
 
-type NumberOfLeaderSlots = U64UnsafeBeyond2Pow53Minus1;
-type NumberOfBlocksProduced = U64UnsafeBeyond2Pow53Minus1;
+type NumberOfLeaderSlots = U64;
+type NumberOfBlocksProduced = U64;
 
 type SlotRange = Readonly<{
     firstSlot: Slot;

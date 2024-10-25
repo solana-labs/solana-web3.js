@@ -1,7 +1,7 @@
-import type { Slot, UnixTimestampUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
+import type { Slot, UnixTimestamp } from '@solana/rpc-types';
 
 /** Estimated production time, as Unix timestamp (seconds since the Unix epoch) */
-type GetBlockTimeApiResponse = UnixTimestampUnsafeBeyond2Pow53Minus1;
+type GetBlockTimeApiResponse = UnixTimestamp;
 
 export type GetBlockTimeApi = {
     /**

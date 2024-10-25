@@ -17,13 +17,13 @@ import {
     getBlockhashEncoder,
     getDefaultLamportsDecoder,
     getDefaultLamportsEncoder,
-    type LamportsUnsafeBeyond2Pow53Minus1,
+    type Lamports,
 } from '@solana/rpc-types';
 
 import { fetchEncodedSysvarAccount, SYSVAR_RECENT_BLOCKHASHES_ADDRESS } from './sysvar';
 
 type FeeCalculator = Readonly<{
-    lamportsPerSignature: LamportsUnsafeBeyond2Pow53Minus1;
+    lamportsPerSignature: Lamports;
 }>;
 type Entry = Readonly<{
     blockhash: Blockhash;

@@ -6,18 +6,18 @@ import type {
     Base64EncodedDataResponse,
     Base64EncodedZStdCompressedDataResponse,
 } from './encoded-bytes';
-import type { LamportsUnsafeBeyond2Pow53Minus1 } from './lamports';
-import type { U64UnsafeBeyond2Pow53Minus1 } from './typed-numbers';
+import type { Lamports } from './lamports';
+import type { U64 } from './typed-numbers';
 
 export type AccountInfoBase = Readonly<{
     /** indicates if the account contains a program (and is strictly read-only) */
     executable: boolean;
     /** number of lamports assigned to this account */
-    lamports: LamportsUnsafeBeyond2Pow53Minus1;
+    lamports: Lamports;
     /** pubkey of the program this account has been assigned to */
     owner: Address;
     /** the epoch at which this account will next owe rent */
-    rentEpoch: U64UnsafeBeyond2Pow53Minus1;
+    rentEpoch: U64;
 }>;
 
 /** @deprecated */
@@ -48,7 +48,7 @@ export type AccountInfoWithJsonData = Readonly<{
               };
               // Name of the program that owns this account.
               program: string;
-              space: U64UnsafeBeyond2Pow53Minus1;
+              space: U64;
           }>;
 }>;
 

@@ -1,5 +1,5 @@
 import { Address } from '@solana/addresses';
-import { StringifiedBigInt, UnixTimestampUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
+import { StringifiedBigInt, UnixTimestamp } from '@solana/rpc-types';
 
 import type { JsonParsedStakeProgramAccount } from '../stake-accounts';
 
@@ -15,7 +15,7 @@ import type { JsonParsedStakeProgramAccount } from '../stake-accounts';
                 lockup: {
                     custodian: '11111111111111111111111111111111' as Address,
                     epoch: 0n,
-                    unixTimestamp: 0n as UnixTimestampUnsafeBeyond2Pow53Minus1,
+                    unixTimestamp: 0n as UnixTimestamp,
                 },
                 rentExemptReserve: '2282880' as StringifiedBigInt,
             },
@@ -54,7 +54,7 @@ import type { JsonParsedStakeProgramAccount } from '../stake-accounts';
                 lockup: {
                     custodian: '11111111111111111111111111111111' as Address,
                     epoch: 0n,
-                    unixTimestamp: 0n as UnixTimestampUnsafeBeyond2Pow53Minus1,
+                    unixTimestamp: 0n as UnixTimestamp,
                 },
                 rentExemptReserve: '2282880' as StringifiedBigInt,
             },

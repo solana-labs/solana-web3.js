@@ -1,6 +1,6 @@
-import type { Commitment, LamportsUnsafeBeyond2Pow53Minus1, SolanaRpcResponse } from '@solana/rpc-types';
+import type { Commitment, Lamports, SolanaRpcResponse } from '@solana/rpc-types';
 
-type GetStakeMinimumDelegationApiResponse = LamportsUnsafeBeyond2Pow53Minus1;
+type GetStakeMinimumDelegationApiResponse = Lamports;
 
 export type GetStakeMinimumDelegationApi = {
     /**

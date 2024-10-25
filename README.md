@@ -1047,7 +1047,7 @@ Here’s an example of this in action:
 // {
 //     blockhash: Blockhash;
 //     blockHeight: bigint;
-//     blockTime: UnixTimestampUnsafeBeyond2Pow53Minus1;
+//     blockTime: UnixTimestamp;
 //     parentSlot: bigint;
 //     previousBlockhash: Blockhash;
 // }
@@ -1276,7 +1276,7 @@ const account = await fetchAddressLookupTableFromSeeds(rpc, {
 });
 
 account.address; // Address
-account.lamports; // LamportsUnsafeBeyond2Pow53Minus1
+account.lamports; // Lamports
 account.data.addresses; // Address[]
 account.data.authority; // Some<Address>
 account.data.deactivationSlot; // Slot

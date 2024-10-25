@@ -1,5 +1,5 @@
 import { Address } from '@solana/addresses';
-import { StringifiedBigInt, UnixTimestampUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
+import { StringifiedBigInt, UnixTimestamp } from '@solana/rpc-types';
 
 import { RpcParsedType } from './rpc-parsed-type';
 
@@ -12,7 +12,7 @@ type JsonParsedStakeAccount = Readonly<{
         lockup: Readonly<{
             custodian: Address;
             epoch: bigint;
-            unixTimestamp: UnixTimestampUnsafeBeyond2Pow53Minus1;
+            unixTimestamp: UnixTimestamp;
         }>;
         rentExemptReserve: StringifiedBigInt;
     }>;
