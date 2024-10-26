@@ -135,7 +135,7 @@ describe('getDefaultRequestTransformerForSolanaRpc', () => {
             'when the params already specify a commitment of `%s`',
             existingCommitment => {
                 describe.each(METHODS_SUBJECT_TO_COMMITMENT_DEFAULTING)('on calls to `%s`', methodName => {
-                    const optionsObjectPosition = OPTIONS_OBJECT_POSITION_BY_METHOD[methodName]!;
+                    const optionsObjectPosition = OPTIONS_OBJECT_POSITION_BY_METHOD[methodName];
                     it('removes the commitment property on calls to `%s` when there are other properties in the config object', () => {
                         expect.assertions(1);
                         const params = [
@@ -173,7 +173,7 @@ describe('getDefaultRequestTransformerForSolanaRpc', () => {
                 });
                 it('removes the preflight commitment property on calls to `%s` when there are other properties in the config object', () => {
                     expect.assertions(1);
-                    const optionsObjectPosition = OPTIONS_OBJECT_POSITION_BY_METHOD['sendTransaction']!;
+                    const optionsObjectPosition = OPTIONS_OBJECT_POSITION_BY_METHOD['sendTransaction'];
                     const params = [
                         ...new Array(optionsObjectPosition),
                         { other: 'property', preflightCommitment: existingCommitment },
@@ -186,7 +186,7 @@ describe('getDefaultRequestTransformerForSolanaRpc', () => {
                 });
                 it('deletes the preflight commitment on calls to `%s` when there are no other properties left and the config object is not the last param', () => {
                     expect.assertions(1);
-                    const optionsObjectPosition = OPTIONS_OBJECT_POSITION_BY_METHOD['sendTransaction']!;
+                    const optionsObjectPosition = OPTIONS_OBJECT_POSITION_BY_METHOD['sendTransaction'];
                     const params = [
                         ...new Array(optionsObjectPosition),
                         { preflightCommitment: existingCommitment },
@@ -201,7 +201,7 @@ describe('getDefaultRequestTransformerForSolanaRpc', () => {
                 });
                 it('truncates the params on calls to `%s` when there are no other properties left and the config object is the last param', () => {
                     expect.assertions(1);
-                    const optionsObjectPosition = OPTIONS_OBJECT_POSITION_BY_METHOD['sendTransaction']!;
+                    const optionsObjectPosition = OPTIONS_OBJECT_POSITION_BY_METHOD['sendTransaction'];
                     const params = [...new Array(optionsObjectPosition), { preflightCommitment: existingCommitment }];
                     const requestTransformer = getDefaultRequestTransformerForSolanaRpc();
                     expect(requestTransformer({ methodName: 'sendTransaction', params }).params).toStrictEqual([

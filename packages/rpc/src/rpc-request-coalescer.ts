@@ -4,7 +4,7 @@ import type { RpcResponse } from '@solana/rpc-spec-types';
 type CoalescedRequest = {
     readonly abortController: AbortController;
     numConsumers: number;
-    readonly responsePromise: Promise<RpcResponse | undefined>;
+    readonly responsePromise: Promise<RpcResponse>;
 };
 
 type GetDeduplicationKeyFn = (payload: unknown) => string | undefined;

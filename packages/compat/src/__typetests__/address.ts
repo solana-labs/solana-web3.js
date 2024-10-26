@@ -6,8 +6,7 @@ import { fromLegacyPublicKey } from '../address';
 {
     const publicKey = null as unknown as PublicKey;
     fromLegacyPublicKey(publicKey) satisfies Address;
-    const publicKeyBase58 = publicKey.toBase58();
-    fromLegacyPublicKey(publicKey) satisfies Address<typeof publicKeyBase58>;
+    fromLegacyPublicKey(publicKey) satisfies Address<ReturnType<typeof publicKey.toBase58>>;
 }
 
 {

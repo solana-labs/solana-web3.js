@@ -6,7 +6,7 @@ export function isStringifiedBigInt(putativeBigInt: string): putativeBigInt is S
     try {
         BigInt(putativeBigInt);
         return true;
-    } catch (_) {
+    } catch {
         return false;
     }
 }

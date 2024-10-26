@@ -26,6 +26,7 @@ export function getHumanReadableErrorMessage<TErrorCode extends SolanaErrorCode>
     function commitStateUpTo(endIndex?: number) {
         if (state[TYPE] === StateType.Variable) {
             const variableName = messageFormatString.slice(state[START_INDEX] + 1, endIndex);
+
             fragments.push(
                 variableName in context ? `${context[variableName as keyof typeof context]}` : `$${variableName}`,
             );
@@ -80,7 +81,10 @@ export function getHumanReadableErrorMessage<TErrorCode extends SolanaErrorCode>
     return fragments.join('');
 }
 
-export function getErrorMessage<TErrorCode extends SolanaErrorCode>(code: TErrorCode, context: object = {}): string {
+export function getErrorMessage<TErrorCode extends SolanaErrorCode>(
+    code: TErrorCode,
+    context: Record<string, unknown> = {},
+): string {
     if (__DEV__) {
         return getHumanReadableErrorMessage(code, context);
     } else {

@@ -1,4 +1,3 @@
-import { ReadonlyUint8Array } from '@solana/codecs-core';
 import {
     CompilableTransactionMessage,
     compileTransactionMessage,
@@ -31,9 +30,7 @@ export function compileTransaction(
     transactionMessage: CompilableTransactionMessage,
 ): Readonly<Transaction & TransactionWithLifetime> {
     const compiledMessage = compileTransactionMessage(transactionMessage);
-    const messageBytes = getCompiledTransactionMessageEncoder().encode(
-        compiledMessage,
-    ) as ReadonlyUint8Array as TransactionMessageBytes;
+    const messageBytes = getCompiledTransactionMessageEncoder().encode(compiledMessage) as TransactionMessageBytes;
 
     const transactionSigners = compiledMessage.staticAccounts.slice(0, compiledMessage.header.numSignerAccounts);
     const signatures: SignaturesMap = {};
@@ -56,7 +53,7 @@ export function compileTransaction(
 
     const transaction: Transaction & TransactionWithLifetime = {
         lifetimeConstraint,
-        messageBytes: messageBytes as TransactionMessageBytes,
+        messageBytes: messageBytes,
         signatures: Object.freeze(signatures),
     };
 

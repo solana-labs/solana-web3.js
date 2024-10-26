@@ -22,7 +22,7 @@ export const getBase64Encoder = (): VariableSizeEncoder<string> => {
             getSizeFromValue: (value: string) => {
                 try {
                     return (atob as Window['atob'])(value).length;
-                } catch (e) {
+                } catch {
                     throw new SolanaError(SOLANA_ERROR__CODECS__INVALID_STRING_FOR_BASE, {
                         alphabet,
                         base: 64,
@@ -37,7 +37,7 @@ export const getBase64Encoder = (): VariableSizeEncoder<string> => {
                         .map(c => c.charCodeAt(0));
                     bytes.set(bytesToAdd, offset);
                     return bytesToAdd.length + offset;
-                } catch (e) {
+                } catch {
                     throw new SolanaError(SOLANA_ERROR__CODECS__INVALID_STRING_FOR_BASE, {
                         alphabet,
                         base: 64,

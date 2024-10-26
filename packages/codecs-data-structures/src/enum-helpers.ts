@@ -31,9 +31,7 @@ export type GetEnumFrom<TEnum extends EnumLookupObject> = TEnum[keyof TEnum] | k
 export type GetEnumTo<TEnum extends EnumLookupObject> = TEnum[keyof TEnum];
 
 export function getEnumStats(constructor: EnumLookupObject) {
-    const numericalValues = [
-        ...new Set(Object.values(constructor).filter(v => typeof v === 'number') as number[]),
-    ].sort();
+    const numericalValues = [...new Set(Object.values(constructor).filter(v => typeof v === 'number'))].sort();
     const enumRecord = Object.fromEntries(Object.entries(constructor).slice(numericalValues.length)) as Record<
         string,
         number | string

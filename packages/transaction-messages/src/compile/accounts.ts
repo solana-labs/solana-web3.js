@@ -97,7 +97,7 @@ export function getAddressMapFromInstructions(feePayer: Address, instructions: r
                         case AddressMapEntryType.FEE_PAYER:
                             // The fee payer already has the highest rank -- it is by definition
                             // writable-signer. Return it, no matter how `account` is configured
-                            return entry as FeePayerAccountEntry;
+                            return entry;
                         case AddressMapEntryType.LOOKUP_TABLE: {
                             const nextRole = mergeRoles(entry.role, accountMeta.role);
                             if ('lookupTableAddress' in accountMeta) {
@@ -129,7 +129,7 @@ export function getAddressMapFromInstructions(feePayer: Address, instructions: r
                                     role: nextRole,
                                 } as LookupTableAccountEntry;
                             } else {
-                                return entry as LookupTableAccountEntry;
+                                return entry;
                             }
                         }
                         case AddressMapEntryType.STATIC: {
@@ -153,7 +153,7 @@ export function getAddressMapFromInstructions(feePayer: Address, instructions: r
                                         role: nextRole,
                                     } as StaticAccountEntry;
                                 } else {
-                                    return entry as StaticAccountEntry;
+                                    return entry;
                                 }
                             } else if (
                                 'lookupTableAddress' in accountMeta &&
@@ -174,7 +174,7 @@ export function getAddressMapFromInstructions(feePayer: Address, instructions: r
                                         role: nextRole,
                                     } as StaticAccountEntry;
                                 } else {
-                                    return entry as StaticAccountEntry;
+                                    return entry;
                                 }
                             }
                         }

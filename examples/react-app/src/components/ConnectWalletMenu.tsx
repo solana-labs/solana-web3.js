@@ -20,7 +20,7 @@ export function ConnectWalletMenu({ children }: Props) {
     const { current: NO_ERROR } = useRef(Symbol());
     const wallets = useWallets();
     const [selectedWalletAccount, setSelectedWalletAccount] = useContext(SelectedWalletAccountContext);
-    const [error, setError] = useState<unknown | typeof NO_ERROR>(NO_ERROR);
+    const [error, setError] = useState(NO_ERROR);
     const [forceClose, setForceClose] = useState(false);
     function renderItem(wallet: UiWallet) {
         return (

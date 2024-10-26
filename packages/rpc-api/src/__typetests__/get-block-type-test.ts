@@ -39,7 +39,7 @@ function assertBase(
     response.previousBlockhash satisfies string;
 }
 
-async () => {
+void (async () => {
     // First overload
     // Rewards set to `false`
     {
@@ -1056,7 +1056,7 @@ async () => {
             .send();
         if (response) {
             assertBase(response);
-            response.transactions[0].transaction;
+            void response.transactions[0].transaction;
             response.transactions satisfies readonly ExpectedTransactionForFullJsonParsedVersioned[];
             response.rewards satisfies readonly Reward[];
         }
@@ -1258,4 +1258,4 @@ async () => {
             response.rewards satisfies readonly Reward[];
         }
     }
-};
+});

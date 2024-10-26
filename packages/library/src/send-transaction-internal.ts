@@ -43,8 +43,10 @@ interface SendTransactionBaseConfig extends SendTransactionConfigWithoutEncoding
     transaction: FullySignedTransaction;
 }
 
-interface SendTransactionConfigWithoutEncoding
-    extends Omit<NonNullable<Parameters<SendTransactionApi['sendTransaction']>[1]>, 'encoding'> {}
+type SendTransactionConfigWithoutEncoding = Omit<
+    NonNullable<Parameters<SendTransactionApi['sendTransaction']>[1]>,
+    'encoding'
+>;
 
 function getSendTransactionConfigWithAdjustedPreflightCommitment(
     commitment: Commitment,

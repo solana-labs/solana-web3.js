@@ -10,8 +10,7 @@ async function getTestContext() {
         f: Symbol('hi'),
         g: { foo: 'bar' },
         h: new URL('http://anza.xyz'),
-        i: ((await crypto.subtle.generateKey('Ed25519', false /* extractable */, ['sign', 'verify'])) as CryptoKeyPair)
-            .privateKey,
+        i: (await crypto.subtle.generateKey('Ed25519', false /* extractable */, ['sign', 'verify'])).privateKey,
         j: Object.create(null),
         k: null,
         l: undefined,

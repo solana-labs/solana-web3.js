@@ -1,4 +1,4 @@
-import { Codec, createCodec, FixedSizeCodec } from '../codec';
+import { Codec, createCodec, FixedSizeCodec, Offset } from '../codec';
 
 export const b = (s: string) => base16.encode(s);
 
@@ -24,7 +24,7 @@ type GetMockCodecConfig = {
 };
 
 type GetMockCodecReturnType = Codec<unknown> & {
-    readonly getSizeFromValue: jest.Mock;
+    readonly getSizeFromValue: jest.Mock<number>;
     readonly read: jest.Mock;
     readonly write: jest.Mock;
 };
@@ -37,8 +37,8 @@ export function getMockCodec(config: GetMockCodecConfig = {}): GetMockCodecRetur
     const innerSize = config.innerSize ?? config.size ?? 0;
     return createCodec({
         ...(config.size != null ? { fixedSize: config.size } : { getSizeFromValue: jest.fn().mockReturnValue(0) }),
-        read: jest.fn().mockImplementation((_bytes, offset) => [config.defaultValue ?? '', offset + innerSize]),
-        write: jest.fn().mockImplementation((_value, _bytes, offset) => offset + innerSize),
+        read: jest.fn().mockImplementation((_bytes, offset: Offset) => [config.defaultValue ?? '', offset + innerSize]),
+        write: jest.fn().mockImplementation((_value, _bytes, offset: Offset) => offset + innerSize),
     }) as GetMockCodecReturnType;
 }
 
@@ -51,7 +51,7 @@ export function expectNewPreOffset(
     const bytes = new Uint8Array(Array.from({ length: codec.fixedSize }, () => 0));
     codec.write(null, bytes, preOffset);
     expect(mockCodec.write).toHaveBeenCalledWith(null, bytes, expectedNewPreOffset);
-    codec.read(bytes, preOffset)[1];
+    void codec.read(bytes, preOffset)[1];
     expect(mockCodec.read).toHaveBeenCalledWith(bytes, expectedNewPreOffset);
 }
 

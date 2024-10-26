@@ -5,7 +5,7 @@ import type { GetSupplyApi } from '../getSupply';
 
 const rpc = null as unknown as Rpc<GetSupplyApi>;
 
-async () => {
+void (async () => {
     {
         const result = await rpc.getSupply({ excludeNonCirculatingAccountsList: true }).send();
         result satisfies Readonly<{
@@ -44,4 +44,4 @@ async () => {
             }>;
         }>;
     }
-};
+});

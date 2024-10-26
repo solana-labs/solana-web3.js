@@ -113,7 +113,7 @@ describe('useSignIn', () => {
         let signIn: ReturnType<typeof useSignIn>;
         beforeEach(() => {
             const { result } = renderHook(() => useSignIn(mockUiWallet));
-            // eslint-disable-next-line jest/no-conditional-in-test
+
             if (result.__type === 'error' || !result.current) {
                 throw result.current;
             } else {
@@ -126,9 +126,9 @@ describe('useSignIn', () => {
                 signIn({ statement: 'You will really like being signed in' }).catch(() => {});
                 await jest.runAllTimersAsync();
                 signIn({ statement: 'You will really like being signed in' }).catch(() => {});
-                // eslint-disable-next-line jest/no-conditional-expect
+
                 expect(mockSignIn).toHaveBeenCalledTimes(2);
-                // eslint-disable-next-line jest/no-conditional-expect
+
                 expect(mockSignIn).toHaveBeenCalledWith({
                     statement: 'You will really like being signed in',
                 });
@@ -143,7 +143,7 @@ describe('useSignIn', () => {
         }>;
         beforeEach(() => {
             const { result } = renderHook(() => useSignIn(mockUiWalletAccount));
-            // eslint-disable-next-line jest/no-conditional-in-test
+
             if (result.__type === 'error' || !result.current) {
                 throw result.current;
             } else {
@@ -156,9 +156,9 @@ describe('useSignIn', () => {
                 signIn({ statement: 'You will really like being signed in' }).catch(() => {});
                 await jest.runAllTimersAsync();
                 signIn({ statement: 'You will really like being signed in' }).catch(() => {});
-                // eslint-disable-next-line jest/no-conditional-expect
+
                 expect(mockSignIn).toHaveBeenCalledTimes(2);
-                // eslint-disable-next-line jest/no-conditional-expect
+
                 expect(mockSignIn).toHaveBeenCalledWith({
                     address: 'abc',
                     statement: 'You will really like being signed in',
@@ -169,7 +169,7 @@ describe('useSignIn', () => {
                     // @ts-expect-error Not allowed by TypeScript, but what if supplied anyway?
                     address: '123',
                 }).catch(() => {});
-                // eslint-disable-next-line jest/no-conditional-expect
+
                 expect(mockSignIn).toHaveBeenCalledWith({ address: 'abc' });
             });
         });

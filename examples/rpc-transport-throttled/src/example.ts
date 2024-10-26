@@ -32,7 +32,7 @@ type QueuedRequest<TClusterUrl extends ClusterUrl> = Readonly<{
     config: Parameters<RpcTransportFromClusterUrl<TClusterUrl>>[0];
     reject: (reason?: unknown) => void;
     requestNumber: number;
-    resolve: (value: PromiseLike<unknown> | unknown) => void;
+    resolve: (value: unknown) => void;
 }>;
 function getThrottledTransport<TClusterUrl extends ClusterUrl>(
     originalTransport: RpcTransportFromClusterUrl<TClusterUrl>,
