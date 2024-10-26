@@ -8,7 +8,7 @@ const rpc = null as unknown as Rpc<GetLeaderScheduleApi>;
 const slot = 0n as Slot;
 const identity = 'Joe11111111111111111111111111111' as Address<'Joe11111111111111111111111111111'>;
 
-async () => {
+void (async () => {
     {
         const result = await rpc.getLeaderSchedule(slot).send();
         // Can be null if the slot corresponds to an epoch that does not exist
@@ -32,4 +32,4 @@ async () => {
         // Won't be null
         result satisfies Readonly<{ [key: Address]: Slot[] | undefined }>;
     }
-};
+});

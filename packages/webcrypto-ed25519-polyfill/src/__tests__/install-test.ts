@@ -514,15 +514,11 @@ describe('importKey() polyfill', () => {
             expect.assertions(1);
             await globalThis.crypto.subtle.importKey('raw', MOCK_PUBLIC_KEY_BYTES, 'Ed25519', /* extractable */ false, [
                 'verify',
-            ]),
-                await globalThis.crypto.subtle.importKey(
-                    'raw',
-                    MOCK_PUBLIC_KEY_BYTES,
-                    'Ed25519',
-                    /* extractable */ false,
-                    ['verify'],
-                ),
-                expect(originalImportKey).toHaveBeenCalledTimes(1);
+            ]);
+            await globalThis.crypto.subtle.importKey('raw', MOCK_PUBLIC_KEY_BYTES, 'Ed25519', /* extractable */ false, [
+                'verify',
+            ]);
+            expect(originalImportKey).toHaveBeenCalledTimes(1);
         });
         it('delegates Ed25519 `generateKey` calls to the polyfill', async () => {
             expect.assertions(1);

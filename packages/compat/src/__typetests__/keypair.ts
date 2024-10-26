@@ -1,10 +1,9 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import { Keypair } from '@solana/web3.js';
 
 import { fromLegacyKeypair } from '../keypair';
 
-async () => {
-    {
-        const keypair = null as unknown as Keypair;
-        (await fromLegacyKeypair(keypair)) satisfies CryptoKeyPair;
-    }
-};
+{
+    const keypair = null as unknown as Keypair;
+    fromLegacyKeypair(keypair) satisfies Promise<CryptoKeyPair>;
+}

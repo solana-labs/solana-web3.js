@@ -148,12 +148,12 @@ describe('RPC request coalescer', () => {
                 const transportAbortSignal = mockTransport.mock.lastCall![0].signal!;
                 expect(transportAbortSignal.aborted).toBe(true);
             });
-            it('does not abort the transport if fewer than every request aborts', async () => {
+            it('does not abort the transport if fewer than every request aborts', () => {
                 expect.assertions(1);
                 abortControllerA.abort('o no A');
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 const transportAbortSignal = mockTransport.mock.lastCall![0].signal!;
-                await expect(transportAbortSignal.aborted).toBe(false);
+                expect(transportAbortSignal.aborted).toBe(false);
             });
             it('delivers responses to all but the aborted requests', async () => {
                 expect.assertions(2);

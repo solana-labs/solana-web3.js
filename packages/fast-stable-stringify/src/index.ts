@@ -71,7 +71,7 @@ function stringify(val: unknown, isArrayProp: boolean) {
 
 export default function (
     val:
-        | Function // eslint-disable-line @typescript-eslint/ban-types
+        | Function // eslint-disable-line @typescript-eslint/no-unsafe-function-type
         | undefined,
 ): undefined;
 export default function (val: unknown): string;

@@ -41,7 +41,7 @@ function getCompiledMessageVersionedEncoder(): VariableSizeEncoder<CompiledTrans
                 addressTableLookups: value.addressTableLookups ?? [],
             } as Exclude<CompiledTransactionMessage, { readonly version: 'legacy' }>;
         },
-    ) as VariableSizeEncoder<CompiledTransactionMessage>;
+    );
 }
 
 function getPreludeStructEncoderTuple() {

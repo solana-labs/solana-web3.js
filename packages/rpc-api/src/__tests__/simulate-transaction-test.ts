@@ -433,10 +433,7 @@ describe('simulateTransaction', () => {
         expect.assertions(1);
         const [[secretKey, publicKeyBytes], { value: latestBlockhash }] = await Promise.all([
             (async () => {
-                const keyPair = (await crypto.subtle.generateKey('Ed25519', /* extractable */ false, [
-                    'sign',
-                    'verify',
-                ])) as CryptoKeyPair;
+                const keyPair = await crypto.subtle.generateKey('Ed25519', /* extractable */ false, ['sign', 'verify']);
                 return [keyPair.privateKey, new Uint8Array(await crypto.subtle.exportKey('raw', keyPair.publicKey))];
             })(),
             rpc.getLatestBlockhash({ commitment: 'processed' }).send(),

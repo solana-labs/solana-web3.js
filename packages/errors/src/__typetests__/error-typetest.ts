@@ -23,7 +23,7 @@ const transactionMissingSignaturesError = new SolanaError(SOLANA_ERROR__TRANSACT
 
 transactionMissingSignaturesError.context satisfies SolanaErrorContext[typeof SOLANA_ERROR__TRANSACTION__SIGNATURES_MISSING];
 // @ts-expect-error Non existent context property.
-transactionMissingSignaturesError.context.feePayer;
+void transactionMissingSignaturesError.context.feePayer;
 
 new SolanaError(SOLANA_ERROR__TRANSACTION__FEE_PAYER_SIGNATURE_MISSING);
 // @ts-expect-error Missing context property (`addresses`)

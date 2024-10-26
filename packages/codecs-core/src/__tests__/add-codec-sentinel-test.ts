@@ -5,13 +5,14 @@ import {
 } from '@solana/errors';
 
 import { addCodecSentinel } from '../add-codec-sentinel';
+import { Offset } from '../codec';
 import { b, getMockCodec } from './__setup__';
 
 describe('addCodecSentinel', () => {
     it('encodes the sentinel after the main content', () => {
         const mockCodec = getMockCodec();
         mockCodec.getSizeFromValue.mockReturnValue(10);
-        mockCodec.write.mockImplementation((_, bytes, offset) => {
+        mockCodec.write.mockImplementation((_, bytes: Uint8Array, offset: Offset) => {
             bytes.set(b('68656c6c6f776f726c64'), offset);
             return offset + 10;
         });
@@ -33,7 +34,7 @@ describe('addCodecSentinel', () => {
     it('fails if the encoded bytes contain the sentinel', () => {
         const mockCodec = getMockCodec();
         mockCodec.getSizeFromValue.mockReturnValue(10);
-        mockCodec.write.mockImplementation((_, bytes, offset) => {
+        mockCodec.write.mockImplementation((_, bytes: Uint8Array, offset: Offset) => {
             bytes.set(b('68656c6c6f776f726cff'), offset);
             return offset + 10;
         });

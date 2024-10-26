@@ -13,9 +13,9 @@ describe('unwrapOption', () => {
 
     it('can unwrap an Option using a fallback callback', () => {
         const fallbackA = () => 42 as const;
-        expect(unwrapOption(some(1), fallbackA)).toBe(<number | 42>1);
-        expect(unwrapOption(some('A'), fallbackA)).toBe(<string | 42>'A');
-        expect(unwrapOption(none(), fallbackA)).toBe(<unknown | 42>42);
+        expect(unwrapOption(some(1), fallbackA)).toBe(1 satisfies number);
+        expect(unwrapOption(some('A'), fallbackA)).toBe('A' satisfies string | 42);
+        expect(unwrapOption(none(), fallbackA)).toBe(42 satisfies unknown);
 
         const fallbackB = () => {
             throw new Error('Fallback Error');

@@ -5,7 +5,7 @@ import { GetTokenAccountsByDelegateApi } from '..';
 
 const rpc = {} as unknown as Rpc<GetTokenAccountsByDelegateApi>;
 
-async () => {
+void (async () => {
     const tokenAccountsByDelegate = await rpc
         .getTokenAccountsByDelegate(
             'delegate' as Address,
@@ -19,4 +19,4 @@ async () => {
     firstAccount.account.data.program satisfies Address;
     firstAccount.account.data.parsed.type satisfies 'account';
     firstAccount.account.data.parsed.info.mint satisfies Address;
-};
+});

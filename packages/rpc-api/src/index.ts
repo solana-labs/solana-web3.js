@@ -179,6 +179,7 @@ export type {
 type Config = RequestTransformerConfig;
 
 export function createSolanaRpcApi<
+    // eslint-disable-next-line @typescript-eslint/no-duplicate-type-constituents
     TRpcMethods extends SolanaRpcApi | SolanaRpcApiDevnet | SolanaRpcApiMainnet | SolanaRpcApiTestnet = SolanaRpcApi,
 >(config?: Config): RpcApi<TRpcMethods> {
     return createJsonRpcApi<TRpcMethods>({

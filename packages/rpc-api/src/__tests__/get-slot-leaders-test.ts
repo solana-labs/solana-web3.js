@@ -40,7 +40,7 @@ describe('getSlotLeaders', () => {
         // This will always be the local validator
         it('returns the node public keys', async () => {
             expect.assertions(2);
-            const minimumLedgerSlot = (await rpc.minimumLedgerSlot().send()) as bigint;
+            const minimumLedgerSlot = await rpc.minimumLedgerSlot().send();
 
             const result = await rpc.getSlotLeaders(minimumLedgerSlot, 3).send();
             expect(Array.isArray(result)).toBe(true);
@@ -68,7 +68,7 @@ describe('getSlotLeaders', () => {
     describe('when called with a `limit` greater than 5000', () => {
         it('throws an error', async () => {
             expect.assertions(1);
-            const minimumLedgerSlot = (await rpc.minimumLedgerSlot().send()) as bigint;
+            const minimumLedgerSlot = await rpc.minimumLedgerSlot().send();
 
             const sendPromise = rpc.getSlotLeaders(minimumLedgerSlot, 5001).send();
             await expect(sendPromise).rejects.toThrow(

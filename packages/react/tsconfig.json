@@ -6,5 +6,5 @@
     },
     "display": "@solana/react",
     "extends": "../tsconfig/base.json",
-    "include": ["src"]
+    "include": ["./eslint.config.mjs", "src"]
 }

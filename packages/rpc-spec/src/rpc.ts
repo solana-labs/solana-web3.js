@@ -36,7 +36,7 @@ type PendingRpcRequestReturnTypeMapper<TMethodImplementation> =
 export function createRpc<TRpcMethods, TRpcTransport extends RpcTransport>(
     rpcConfig: RpcConfig<TRpcMethods, TRpcTransport>,
 ): Rpc<TRpcMethods> {
-    return makeProxy(rpcConfig) as Rpc<TRpcMethods>;
+    return makeProxy(rpcConfig);
 }
 
 function makeProxy<TRpcMethods, TRpcTransport extends RpcTransport>(

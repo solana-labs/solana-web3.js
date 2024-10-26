@@ -112,17 +112,17 @@ describe('unwrapOptionRecursively', () => {
 
         // Some.
         expect(unwrapOptionRecursively(some(null), fallback)).toBeNull();
-        expect(unwrapOptionRecursively(some(100), fallback)).toBe(<number | 42>100);
-        expect(unwrapOptionRecursively(some('hello'), fallback)).toBe(<string | 42>'hello');
+        expect(unwrapOptionRecursively(some(100), fallback)).toBe(100 satisfies number);
+        expect(unwrapOptionRecursively(some('hello'), fallback)).toBe('hello' satisfies string | 42);
 
         // None.
-        expect(unwrapOptionRecursively(none(), fallback)).toBe(<unknown | 42>42);
-        expect(unwrapOptionRecursively(none<number>(), fallback)).toBe(<number | 42>42);
-        expect(unwrapOptionRecursively(none<string>(), fallback)).toBe(<string | 42>42);
+        expect(unwrapOptionRecursively(none(), fallback)).toBe(42 satisfies unknown);
+        expect(unwrapOptionRecursively(none<number>(), fallback)).toBe(42 satisfies number);
+        expect(unwrapOptionRecursively(none<string>(), fallback)).toBe(42 satisfies string | 42);
 
         // Nested Some and None.
-        expect(unwrapOptionRecursively(some(some(some(false))), fallback)).toBe(<boolean | 42>false);
-        expect(unwrapOptionRecursively(some(some(none<100>())), fallback)).toBe(<42 | 100>42);
+        expect(unwrapOptionRecursively(some(some(some(false))), fallback)).toBe(false satisfies boolean | 42);
+        expect(unwrapOptionRecursively(some(some(none<100>())), fallback)).toBe(42 satisfies 42 | 100);
 
         // Combination.
         const person = {
@@ -158,7 +158,7 @@ describe('unwrapOptionRecursively', () => {
             interests: Array<{ category: string | 42; name: string }>;
             name: string;
         };
-        expect(unwrappedPerson).toStrictEqual(<ExpectedUnwrappedPerson>{
+        expect(unwrappedPerson).toStrictEqual({
             address: {
                 city: 'Edmonton',
                 country: 'Canada',
@@ -175,6 +175,6 @@ describe('unwrapOptionRecursively', () => {
                 { category: 42, name: 'Popping bubble wrap' },
             ],
             name: 'Roo',
-        });
+        } satisfies ExpectedUnwrappedPerson);
     });
 });

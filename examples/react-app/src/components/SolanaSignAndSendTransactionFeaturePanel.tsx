@@ -42,7 +42,7 @@ export function SolanaSignAndSendTransactionFeaturePanel({ account }: Props) {
     const { rpc } = useContext(RpcContext);
     const wallets = useWallets();
     const [isSendingTransaction, setIsSendingTransaction] = useState(false);
-    const [error, setError] = useState<unknown | typeof NO_ERROR>(NO_ERROR);
+    const [error, setError] = useState(NO_ERROR);
     const [lastSignature, setLastSignature] = useState<Uint8Array | undefined>();
     const [solQuantityString, setSolQuantityString] = useState<string>('');
     const [recipientAccountStorageKey, setRecipientAccountStorageKey] = useState<string | undefined>();

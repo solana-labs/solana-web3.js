@@ -166,10 +166,10 @@ function getLifetimeConstraint(
         };
     } else {
         // We know these accounts are defined because we checked `isAdvanceNonceAccountInstruction`
-        const nonceAccountAddress = firstInstruction.accounts![0].address;
+        const nonceAccountAddress = firstInstruction.accounts[0].address;
         assertIsAddress(nonceAccountAddress);
 
-        const nonceAuthorityAddress = firstInstruction.accounts![2].address;
+        const nonceAuthorityAddress = firstInstruction.accounts[2].address;
         assertIsAddress(nonceAuthorityAddress);
 
         return {

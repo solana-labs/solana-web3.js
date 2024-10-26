@@ -1,1 +1,3 @@
-{}
+{
+    "include": ["eslint.config.mjs"]
+}

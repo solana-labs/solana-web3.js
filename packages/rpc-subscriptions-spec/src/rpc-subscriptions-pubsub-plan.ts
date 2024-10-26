@@ -34,7 +34,7 @@ type RpcSubscriptionNotificationEvents<TNotification> = Omit<RpcSubscriptionChan
     notification: TNotification;
 };
 
-const subscriberCountBySubscriptionIdByChannel = new WeakMap();
+const subscriberCountBySubscriptionIdByChannel = new WeakMap<WeakKey, Record<number, number>>();
 function decrementSubscriberCountAndReturnNewCount(channel: WeakKey, subscriptionId?: number): number | undefined {
     return augmentSubscriberCountAndReturnNewCount(-1, channel, subscriptionId);
 }
@@ -56,7 +56,7 @@ function augmentSubscriberCountAndReturnNewCount(
             (subscriberCountBySubscriptionId = { [subscriptionId]: 0 }),
         );
     }
-    if (subscriberCountBySubscriptionId[subscriptionId] !== undefined) {
+    if (subscriberCountBySubscriptionId?.[subscriptionId] !== undefined) {
         return (subscriberCountBySubscriptionId[subscriptionId] =
             amount + subscriberCountBySubscriptionId[subscriptionId]);
     }

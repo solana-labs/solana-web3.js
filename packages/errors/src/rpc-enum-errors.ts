@@ -33,7 +33,7 @@ type Config = Readonly<{
 
 export function getSolanaErrorFromRpcError(
     { errorCodeBaseOffset, getErrorContext, orderedErrorNames, rpcEnumError }: Config,
-    // eslint-disable-next-line @typescript-eslint/ban-types
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
     constructorOpt: Function,
 ): SolanaError {
     let rpcErrorName;

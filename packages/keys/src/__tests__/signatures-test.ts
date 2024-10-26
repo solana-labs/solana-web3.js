@@ -152,9 +152,7 @@ describe('sign', () => {
     });
     it('produces signatures 64 bytes in length', async () => {
         expect.assertions(1);
-        const { privateKey } = (await crypto.subtle.generateKey('Ed25519', /* extractable */ false, [
-            'sign',
-        ])) as CryptoKeyPair;
+        const { privateKey } = await crypto.subtle.generateKey('Ed25519', /* extractable */ false, ['sign']);
         const signature = await signBytes(privateKey, MOCK_DATA);
         expect(signature).toHaveLength(64);
     });

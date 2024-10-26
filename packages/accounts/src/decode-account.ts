@@ -27,7 +27,7 @@ export function decodeAccount<TData extends object, TAddress extends string = st
             return encodedAccount;
         }
         return Object.freeze({ ...encodedAccount, data: decoder.decode(encodedAccount.data) });
-    } catch (e) {
+    } catch {
         throw new SolanaError(SOLANA_ERROR__ACCOUNTS__FAILED_TO_DECODE_ACCOUNT, {
             address: encodedAccount.address,
         });

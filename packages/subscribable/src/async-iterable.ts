@@ -83,7 +83,7 @@ export function createAsyncIterableFromDataPublisher<TData>({
         publishErrorToAllIterators((EXPLICIT_ABORT_TOKEN ||= createExplicitAbortToken()));
     });
     const options = { signal: abortController.signal } as const;
-    let firstError: unknown | typeof UNINITIALIZED = UNINITIALIZED;
+    let firstError: unknown = UNINITIALIZED;
     dataPublisher.on(
         errorChannelName,
         err => {

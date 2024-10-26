@@ -76,7 +76,7 @@ export function assertIsBlockhash(putativeBlockhash: string): asserts putativeBl
 
 export function blockhash(putativeBlockhash: string): Blockhash {
     assertIsBlockhash(putativeBlockhash);
-    return putativeBlockhash as Blockhash;
+    return putativeBlockhash;
 }
 
 export function getBlockhashEncoder(): FixedSizeEncoder<Blockhash, 32> {

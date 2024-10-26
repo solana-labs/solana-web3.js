@@ -5,7 +5,7 @@ import { GetTokenAccountsByOwnerApi } from '..';
 
 const rpc = {} as unknown as Rpc<GetTokenAccountsByOwnerApi>;
 
-async () => {
+void (async () => {
     const tokenAccountsByOwner = await rpc
         .getTokenAccountsByOwner('owner' as Address, { programId: 'program' as Address }, { encoding: 'jsonParsed' })
         .send();
@@ -15,4 +15,4 @@ async () => {
     firstAccount.account.data.program satisfies Address;
     firstAccount.account.data.parsed.type satisfies 'account';
     firstAccount.account.data.parsed.info.mint satisfies Address;
-};
+});
