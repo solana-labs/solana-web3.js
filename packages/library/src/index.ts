@@ -10,7 +10,6 @@ export * from '@solana/rpc';
 export * from '@solana/rpc-parsed-types';
 export * from '@solana/rpc-subscriptions';
 export * from '@solana/rpc-types';
-export * from '@solana/rpc-spec-types';
 export * from '@solana/signers';
 export * from '@solana/transaction-messages';
 export * from '@solana/transactions';
@@ -20,3 +19,12 @@ export * from './decode-transaction-message';
 export * from './send-and-confirm-durable-nonce-transaction';
 export * from './send-and-confirm-transaction';
 export * from './send-transaction-without-confirming';
+
+export type {
+    RpcRequest,
+    RpcRequestTransformer,
+    RpcResponse,
+    RpcResponseData,
+    RpcResponseTransformer,
+} from '@solana/rpc-spec-types';
+export { createRpcMessage } from '@solana/rpc-spec-types';
