@@ -5,7 +5,7 @@ import type { Base58EncodedBytes, Base58EncodedDataResponse, Base64EncodedDataRe
 import type { Lamports } from './lamports';
 import type { TokenBalance } from './token-balance';
 import type { TransactionError } from './transaction-error';
-import type { SignedLamports, U64 } from './typed-numbers';
+import type { SignedLamports } from './typed-numbers';
 
 type TransactionVersion = 'legacy' | 0;
 
@@ -118,7 +118,7 @@ export type TransactionForAccounts<TMaxSupportedTransactionVersion extends Trans
 
 type TransactionForFullMetaBase = Readonly<{
     /** number of compute units consumed by the transaction */
-    computeUnitsConsumed?: U64;
+    computeUnitsConsumed?: bigint;
     /** Error if transaction failed, null if transaction succeeded. */
     err: TransactionError | null;
     /** fee this transaction was charged */

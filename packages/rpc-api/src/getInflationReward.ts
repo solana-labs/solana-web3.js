@@ -1,12 +1,12 @@
 import type { Address } from '@solana/addresses';
-import type { Commitment, Lamports, Slot, U64 } from '@solana/rpc-types';
+import type { Commitment, Lamports, Slot } from '@solana/rpc-types';
 
 type GetInflationRewardApiConfig = Readonly<{
     // Defaults to `finalized`
     commitment?: Commitment;
     // An epoch for which the reward occurs.
     // If omitted, the previous epoch will be used
-    epoch?: U64;
+    epoch?: bigint;
     // The minimum slot that the request can be evaluated at
     minContextSlot?: Slot;
 }>;
@@ -19,7 +19,7 @@ type InflationReward = Readonly<{
     // The slot in which the rewards are effective
     effectiveSlot: Slot;
     // Epoch for which reward occurred
-    epoch: U64;
+    epoch: bigint;
     // Post balance of the account in lamports
     postBalance: Lamports;
 }>;

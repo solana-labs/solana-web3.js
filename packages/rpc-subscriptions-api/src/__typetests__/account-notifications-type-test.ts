@@ -8,7 +8,6 @@ import type {
     Base64EncodedZStdCompressedDataResponse,
     Lamports,
     SolanaRpcResponse,
-    U64,
 } from '@solana/rpc-types';
 
 import type { AccountNotificationsApi } from '../account-notifications';
@@ -24,7 +23,7 @@ type TNotificationBase = Readonly<{
     executable: boolean;
     lamports: Lamports;
     owner: Address;
-    rentEpoch: U64;
+    rentEpoch: bigint;
 }>;
 
 // No optional configs
@@ -131,7 +130,7 @@ rpcSubscriptions.accountNotifications(pubkey, { encoding: 'jsonParsed' }) satisf
                 | Readonly<{
                       parsed: unknown;
                       program: string;
-                      space: U64;
+                      space: bigint;
                   }>;
         }
     >
@@ -147,7 +146,7 @@ rpcSubscriptions
                     | Readonly<{
                           parsed: unknown;
                           program: string;
-                          space: U64;
+                          space: bigint;
                       }>;
             }
         >

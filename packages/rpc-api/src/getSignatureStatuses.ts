@@ -1,5 +1,5 @@
 import type { Signature } from '@solana/keys';
-import type { Commitment, Slot, SolanaRpcResponse, TransactionError, U64 } from '@solana/rpc-types';
+import type { Commitment, Slot, SolanaRpcResponse, TransactionError } from '@solana/rpc-types';
 
 /** @deprecated */
 type TransactionStatusOk = Readonly<{
@@ -21,7 +21,7 @@ type SignatureStatusResult = Readonly<{
      * Number of blocks since signature confirmation, null if rooted,
      * as well as finalized by a supermajority of the cluster
      */
-    confirmations: U64 | null;
+    confirmations: bigint | null;
     /** Error if transaction failed, null if transaction succeeded */
     err: TransactionError | null;
     /** The slot the transaction was processed */

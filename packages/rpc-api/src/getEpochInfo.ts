@@ -1,18 +1,18 @@
-import type { Commitment, Slot, U64 } from '@solana/rpc-types';
+import type { Commitment, Slot } from '@solana/rpc-types';
 
 type GetEpochInfoApiResponse = Readonly<{
     /** the current slot */
     absoluteSlot: Slot;
     /** the current block height */
-    blockHeight: U64;
+    blockHeight: bigint;
     /** the current epoch */
-    epoch: U64;
+    epoch: bigint;
     /** the current slot relative to the start of the current epoch */
-    slotIndex: U64;
+    slotIndex: bigint;
     /** the number of slots in this epoch */
-    slotsInEpoch: U64;
+    slotsInEpoch: bigint;
     /** total number of transactions processed without error since genesis */
-    transactionCount: U64 | null;
+    transactionCount: bigint | null;
 }>;
 
 export type GetEpochInfoApi = {

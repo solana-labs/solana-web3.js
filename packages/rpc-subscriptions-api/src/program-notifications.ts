@@ -10,22 +10,21 @@ import type {
     Base64EncodedBytes,
     Commitment,
     SolanaRpcResponse,
-    U64,
 } from '@solana/rpc-types';
 
 type ProgramNotificationsMemcmpFilterBase58 = Readonly<{
     bytes: Base58EncodedBytes;
     encoding: 'base58';
-    offset: U64;
+    offset: bigint;
 }>;
 
 type ProgramNotificationsMemcmpFilterBase64 = Readonly<{
     bytes: Base64EncodedBytes;
     encoding: 'base64';
-    offset: U64;
+    offset: bigint;
 }>;
 
-type ProgramNotificationsDatasizeFilter = U64;
+type ProgramNotificationsDatasizeFilter = bigint;
 
 type ProgramNotificationsApiNotificationBase<TData> = SolanaRpcResponse<
     Readonly<{

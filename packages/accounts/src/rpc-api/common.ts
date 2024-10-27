@@ -1,5 +1,3 @@
-import type { U64 } from '@solana/rpc-types';
-
 export type JsonParsedDataResponse<TData = object> = Readonly<{
     parsed: {
         info?: TData;
@@ -7,5 +5,5 @@ export type JsonParsedDataResponse<TData = object> = Readonly<{
     };
     // Name of the program that owns this account.
     program: string;
-    space: U64;
+    space: bigint;
 }>;

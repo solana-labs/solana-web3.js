@@ -12,7 +12,6 @@ import type {
     TokenBalance,
     TransactionError,
     TransactionStatus,
-    U64,
     UnixTimestamp,
 } from '@solana/rpc-types';
 import type { TransactionVersion } from '@solana/transaction-messages';
@@ -26,7 +25,7 @@ type ReturnData = {
 
 type TransactionMetaBase = Readonly<{
     /** number of compute units consumed by the transaction */
-    computeUnitsConsumed?: U64;
+    computeUnitsConsumed?: bigint;
     /** Error if transaction failed, null if transaction succeeded. */
     err: TransactionError | null;
     /** fee this transaction was charged */

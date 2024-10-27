@@ -7,7 +7,6 @@ import type {
     Base64EncodedZStdCompressedDataResponse,
 } from './encoded-bytes';
 import type { Lamports } from './lamports';
-import type { U64 } from './typed-numbers';
 
 export type AccountInfoBase = Readonly<{
     /** indicates if the account contains a program (and is strictly read-only) */
@@ -17,7 +16,7 @@ export type AccountInfoBase = Readonly<{
     /** pubkey of the program this account has been assigned to */
     owner: Address;
     /** the epoch at which this account will next owe rent */
-    rentEpoch: U64;
+    rentEpoch: bigint;
 }>;
 
 /** @deprecated */
@@ -48,7 +47,7 @@ export type AccountInfoWithJsonData = Readonly<{
               };
               // Name of the program that owns this account.
               program: string;
-              space: U64;
+              space: bigint;
           }>;
 }>;
 

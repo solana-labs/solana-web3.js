@@ -9,7 +9,6 @@ import type {
     Base64EncodedZStdCompressedDataResponse,
     Lamports,
     SolanaRpcResponse,
-    U64,
 } from '@solana/rpc-types';
 
 import type { ProgramNotificationsApi } from '../program-notifications';
@@ -25,7 +24,7 @@ type TNotificationBase = Readonly<{
         executable: boolean;
         lamports: Lamports;
         owner: Address;
-        rentEpoch: U64;
+        rentEpoch: bigint;
     }>;
     pubkey: Address;
 }>;
@@ -161,7 +160,7 @@ rpcSubscriptions.programNotifications(programId, {
                     | Readonly<{
                           parsed: unknown;
                           program: string;
-                          space: U64;
+                          space: bigint;
                       }>;
             };
         }
@@ -179,7 +178,7 @@ rpcSubscriptions
                         | Readonly<{
                               parsed: unknown;
                               program: string;
-                              space: U64;
+                              space: bigint;
                           }>;
                 };
             }
@@ -194,7 +193,7 @@ rpcSubscriptions
             memcmp: {
                 bytes: 'bytes' as Base58EncodedBytes,
                 encoding: 'base58',
-                offset: 0n as U64,
+                offset: 0n,
             },
         },
     ],
@@ -207,7 +206,7 @@ rpcSubscriptions
             memcmp: {
                 bytes: 'bytes' as Base58EncodedBytes,
                 encoding: 'base64',
-                offset: 0n as U64,
+                offset: 0n,
             },
         },
     ],
@@ -218,7 +217,7 @@ rpcSubscriptions
             memcmp: {
                 bytes: 'bytes' as Base64EncodedBytes,
                 encoding: 'base64',
-                offset: 0n as U64,
+                offset: 0n,
             },
         },
     ],
@@ -231,7 +230,7 @@ rpcSubscriptions
             memcmp: {
                 bytes: 'bytes' as Base64EncodedBytes,
                 encoding: 'base58',
-                offset: 0n as U64,
+                offset: 0n,
             },
         },
     ],

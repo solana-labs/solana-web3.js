@@ -1,8 +1,8 @@
-import type { Slot, U64 } from '@solana/rpc-types';
+import type { Slot } from '@solana/rpc-types';
 
 type SlotsUpdatesNotificationsApiNotificationBase = Readonly<{
     slot: Slot;
-    timestamp: U64;
+    timestamp: bigint;
     type: 'completed' | 'firstShredReceived' | 'optimisticConfirmation' | 'root';
 }>;
 
@@ -20,10 +20,10 @@ type SlotsUpdatesNotificationsApiNotificationDead = Readonly<{
 
 type SlotsUpdatesNotificationsApiNotificationFrozen = Readonly<{
     stats: Readonly<{
-        maxTransactionsPerEntry: U64;
-        numFailedTransactions: U64;
-        numSuccessfulTransactions: U64;
-        numTransactionEntries: U64;
+        maxTransactionsPerEntry: bigint;
+        numFailedTransactions: bigint;
+        numSuccessfulTransactions: bigint;
+        numTransactionEntries: bigint;
     }>;
     type: 'frozen';
 }> &

@@ -1,12 +1,9 @@
-export type U64 = bigint;
-export type I64 = bigint;
-
-export type Slot = U64;
-export type Epoch = U64;
+export type Slot = bigint;
+export type Epoch = bigint;
 
 // Specifically being used to denote micro-lamports, which are 0.000001 lamports.
-export type MicroLamports = U64 & { readonly __brand: unique symbol };
-export type SignedLamports = I64;
+export type MicroLamports = bigint & { readonly __brand: unique symbol };
+export type SignedLamports = bigint;
 
 // FIXME(solana-labs/solana/issues/30341)
 // <https://stackoverflow.com/questions/45929493/node-js-maximum-safe-floating-point-number/57225494#57225494>

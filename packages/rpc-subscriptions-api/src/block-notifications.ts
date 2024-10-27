@@ -10,7 +10,6 @@ import type {
     TransactionForFullBase64,
     TransactionForFullJson,
     TransactionForFullJsonParsed,
-    U64,
     UnixTimestamp,
 } from '@solana/rpc-types';
 import type { TransactionVersion } from '@solana/transaction-messages';
@@ -30,7 +29,7 @@ type BlockNotificationsNotificationBase = Readonly<{
 
 type BlockNotificationsNotificationBlock = Readonly<{
     /** The number of blocks beneath this block */
-    blockHeight: U64;
+    blockHeight: bigint;
     /** Estimated production time, as Unix timestamp */
     blockTime: UnixTimestamp;
     /** the blockhash of this block */
