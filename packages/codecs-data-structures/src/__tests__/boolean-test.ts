@@ -9,9 +9,7 @@ describe('getBooleanCodec', () => {
     // and the max shortU16 value for `true`.
     const mappedShortU16 = transformCodec(
         getShortU16Codec(),
-        // eslint-disable-next-line jest/no-conditional-in-test
         v => (v === 0 ? 0 : 0xffff),
-        // eslint-disable-next-line jest/no-conditional-in-test
         v => (v === 0 ? 0 : 1),
     );
 

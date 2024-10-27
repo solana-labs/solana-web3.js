@@ -66,7 +66,6 @@ export function mapJsonParsedInnerInstructions(
 ): { index: number; instructions: InstructionResult[] }[] {
     return innerInstructions.map(({ index, instructions }) => ({
         index,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         instructions: mapJsonParsedInstructions(instructions),
     }));
 }
