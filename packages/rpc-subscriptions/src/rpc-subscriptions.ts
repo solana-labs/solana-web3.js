@@ -13,14 +13,10 @@ import {
     DefaultRpcSubscriptionsChannelConfig,
 } from './rpc-subscriptions-channel';
 import type { RpcSubscriptionsFromTransport } from './rpc-subscriptions-clusters';
-import {
-    createDefaultRpcSubscriptionsTransport,
-    DefaultRpcSubscriptionsTransportConfig,
-} from './rpc-subscriptions-transport';
+import { createDefaultRpcSubscriptionsTransport } from './rpc-subscriptions-transport';
 
 interface DefaultRpcSubscriptionsConfig<TClusterUrl extends ClusterUrl>
-    extends DefaultRpcSubscriptionsTransportConfig<TClusterUrl>,
-        DefaultRpcSubscriptionsChannelConfig<TClusterUrl> {}
+    extends DefaultRpcSubscriptionsChannelConfig<TClusterUrl> {}
 
 function createSolanaRpcSubscriptionsImpl<TClusterUrl extends ClusterUrl, TApi extends RpcSubscriptionsApiMethods>(
     clusterUrl: TClusterUrl,
@@ -41,7 +37,7 @@ export function createSolanaRpcSubscriptions<TClusterUrl extends ClusterUrl>(
 
 export function createSolanaRpcSubscriptions_UNSTABLE<TClusterUrl extends ClusterUrl>(
     clusterUrl: TClusterUrl,
-    config?: Omit<DefaultRpcSubscriptionsTransportConfig<TClusterUrl>, 'url'>,
+    config?: Omit<DefaultRpcSubscriptionsConfig<TClusterUrl>, 'url'>,
 ) {
     return createSolanaRpcSubscriptionsImpl<TClusterUrl, SolanaRpcSubscriptionsApi & SolanaRpcSubscriptionsApiUnstable>(
         clusterUrl,
