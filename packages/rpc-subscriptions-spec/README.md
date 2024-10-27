@@ -66,3 +66,23 @@ Given a channel, this function executes the particular subscription plan require
 2. Waits for a response containing the subscription id
 3. Returns a `DataPublisher` that publishes notifications related to that subscriptions id, filtering out all others
 4. Calls the `unsubscribeMethodName` on the remote RPC when the abort signal is fired.
+
+### `transformChannelInboundMessages(channel, transform)`
+
+Given a channel with inbound messages of type `T` and a function of type `T => U`, returns a new channel with inbound messages of type `U`. Note that this only affects messages of type `"message"` and thus, does not affect incoming error messages.
+
+For instance, it can be used to parse incoming JSON messages:
+
+```ts
+const transformedChannel = transformChannelInboundMessages(channel, JSON.parse);
+```
+
+### `transformChannelOutboundMessages(channel, transform)`
+
+Given a channel with outbound messages of type `T` and a function of type `U => T`, returns a new channel with outbound messages of type `U`.
+
+For instance, it can be used to stringify JSON messages before sending them over the wire:
+
+```ts
+const transformedChannel = transformChannelOutboundMessages(channel, JSON.stringify);
+```

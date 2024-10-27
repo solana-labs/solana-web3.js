@@ -26,3 +26,36 @@ export type RpcSubscriptionsChannelCreator<TOutboundMessage, TInboundMessage> = 
         abortSignal: AbortSignal;
     }>,
 ) => Promise<RpcSubscriptionsChannel<TOutboundMessage, TInboundMessage>>;
+
+export function transformChannelInboundMessages<TOutboundMessage, TNewInboundMessage, TInboundMessage>(
+    channel: RpcSubscriptionsChannel<TOutboundMessage, TInboundMessage>,
+    transform: (message: TInboundMessage) => TNewInboundMessage,
+): RpcSubscriptionsChannel<TOutboundMessage, TNewInboundMessage> {
+    return Object.freeze<RpcSubscriptionsChannel<TOutboundMessage, TNewInboundMessage>>({
+        ...channel,
+        on(type, subscriber, options) {
+            if (type !== 'message') {
+                return channel.on(
+                    type,
+                    subscriber as (data: RpcSubscriptionChannelEvents<TInboundMessage>[typeof type]) => void,
+                    options,
+                );
+            }
+            return channel.on(
+                'message',
+                message => (subscriber as (data: TNewInboundMessage) => void)(transform(message)),
+                options,
+            );
+        },
+    });
+}
+
+export function transformChannelOutboundMessages<TNewOutboundMessage, TOutboundMessage, TInboundMessage>(
+    channel: RpcSubscriptionsChannel<TOutboundMessage, TInboundMessage>,
+    transform: (message: TNewOutboundMessage) => TOutboundMessage,
+): RpcSubscriptionsChannel<TNewOutboundMessage, TInboundMessage> {
+    return Object.freeze<RpcSubscriptionsChannel<TNewOutboundMessage, TInboundMessage>>({
+        ...channel,
+        send: message => channel.send(transform(message)),
+    });
+}
