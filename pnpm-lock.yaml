@@ -990,9 +990,6 @@ importers:
       '@solana/rpc-spec-types':
         specifier: workspace:*
         version: link:../rpc-spec-types
-      '@solana/rpc-subscriptions-spec':
-        specifier: workspace:*
-        version: link:../rpc-subscriptions-spec
       '@solana/rpc-types':
         specifier: workspace:*
         version: link:../rpc-types
