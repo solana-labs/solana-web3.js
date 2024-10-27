@@ -1,7 +1,7 @@
 import type { Address } from '@solana/addresses';
 import type { Signature } from '@solana/keys';
 import type { RequestAirdropApi, Rpc } from '@solana/rpc';
-import type { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
+import type { Commitment, Lamports } from '@solana/rpc-types';
 import { waitForRecentTransactionConfirmationUntilTimeout } from '@solana/transaction-confirmation';
 
 type RequestAndConfirmAirdropConfig = Readonly<{
@@ -13,7 +13,7 @@ type RequestAndConfirmAirdropConfig = Readonly<{
             'getRecentSignatureConfirmationPromise' | 'getTimeoutPromise'
         >,
     ) => Promise<void>;
-    lamports: LamportsUnsafeBeyond2Pow53Minus1;
+    lamports: Lamports;
     recipientAddress: Address;
     rpc: Rpc<RequestAirdropApi>;
 }>;

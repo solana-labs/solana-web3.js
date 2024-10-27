@@ -11,7 +11,7 @@ import type {
     DataSlice,
     Slot,
     SolanaRpcResponse,
-    U64UnsafeBeyond2Pow53Minus1,
+    U64,
 } from '@solana/rpc-types';
 
 type TokenAccountInfoWithJsonData = Readonly<{
@@ -22,7 +22,7 @@ type TokenAccountInfoWithJsonData = Readonly<{
         };
         /** Name of the program that owns this account. */
         program: Address;
-        space: U64UnsafeBeyond2Pow53Minus1;
+        space: U64;
     }>;
 }>;
 

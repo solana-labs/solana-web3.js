@@ -1,5 +1,5 @@
 import type { Address } from '@solana/addresses';
-import type { MicroLamportsUnsafeBeyond2Pow53Minus1, Slot } from '@solana/rpc-types';
+import type { MicroLamports, Slot } from '@solana/rpc-types';
 
 type RecentPrioritizationFee = Readonly<{
     /**
@@ -7,7 +7,7 @@ type RecentPrioritizationFee = Readonly<{
      * landed transaction, specified in increments of
      * micro-lamports (0.000001 lamports).
      */
-    prioritizationFee: MicroLamportsUnsafeBeyond2Pow53Minus1;
+    prioritizationFee: MicroLamports;
     /** Slot in which the fee was observed */
     slot: Slot;
 }>;

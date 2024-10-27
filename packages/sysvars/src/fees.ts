@@ -9,16 +9,12 @@ import {
 } from '@solana/codecs';
 import type { GetAccountInfoApi } from '@solana/rpc-api';
 import type { Rpc } from '@solana/rpc-spec';
-import {
-    getDefaultLamportsDecoder,
-    getDefaultLamportsEncoder,
-    LamportsUnsafeBeyond2Pow53Minus1,
-} from '@solana/rpc-types';
+import { getDefaultLamportsDecoder, getDefaultLamportsEncoder, Lamports } from '@solana/rpc-types';
 
 import { fetchEncodedSysvarAccount, SYSVAR_FEES_ADDRESS } from './sysvar';
 
 type FeeCalculator = Readonly<{
-    lamportsPerSignature: LamportsUnsafeBeyond2Pow53Minus1;
+    lamportsPerSignature: Lamports;
 }>;
 
 type SysvarFeesSize = 8;

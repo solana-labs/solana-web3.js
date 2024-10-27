@@ -1,5 +1,5 @@
 import { Address } from '@solana/addresses';
-import { Epoch, Slot, StringifiedBigInt, UnixTimestampUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
+import { Epoch, Slot, StringifiedBigInt, UnixTimestamp } from '@solana/rpc-types';
 
 import { RpcParsedInfo } from './rpc-parsed-type';
 
@@ -17,7 +17,7 @@ export type JsonParsedVoteAccount = RpcParsedInfo<{
     }>[];
     lastTimestamp: Readonly<{
         slot: Slot;
-        timestamp: UnixTimestampUnsafeBeyond2Pow53Minus1;
+        timestamp: UnixTimestamp;
     }>;
     nodePubkey: Address;
     priorVoters: Readonly<{

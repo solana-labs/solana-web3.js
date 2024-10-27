@@ -1,7 +1,7 @@
 import type { Address } from '@solana/addresses';
-import type { Commitment, LamportsUnsafeBeyond2Pow53Minus1, Slot, SolanaRpcResponse } from '@solana/rpc-types';
+import type { Commitment, Lamports, Slot, SolanaRpcResponse } from '@solana/rpc-types';
 
-type GetBalanceApiResponse = SolanaRpcResponse<LamportsUnsafeBeyond2Pow53Minus1>;
+type GetBalanceApiResponse = SolanaRpcResponse<Lamports>;
 
 export type GetBalanceApi = {
     /**

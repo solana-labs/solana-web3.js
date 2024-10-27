@@ -1,7 +1,7 @@
 import { FetchAccountsConfig, fetchJsonParsedAccounts } from '@solana/accounts';
 import type { Address } from '@solana/addresses';
 import type { GetMultipleAccountsApi, Rpc } from '@solana/rpc';
-import type { Blockhash, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
+import type { Blockhash, Lamports } from '@solana/rpc-types';
 import {
     CompiledTransactionMessage,
     decompileTransactionMessage,
@@ -261,7 +261,7 @@ describe('decodeTransactionMessage', () => {
                 },
                 executable: false,
                 exists: true,
-                lamports: 0n as LamportsUnsafeBeyond2Pow53Minus1,
+                lamports: 0n as Lamports,
                 programAddress: 'program' as Address,
             },
             {
@@ -271,7 +271,7 @@ describe('decodeTransactionMessage', () => {
                 },
                 executable: false,
                 exists: true,
-                lamports: 0n as LamportsUnsafeBeyond2Pow53Minus1,
+                lamports: 0n as Lamports,
                 programAddress: 'program' as Address,
             },
         ];

@@ -1,11 +1,11 @@
 import type { Address } from '@solana/addresses';
-import type { Commitment, LamportsUnsafeBeyond2Pow53Minus1, SolanaRpcResponse } from '@solana/rpc-types';
+import type { Commitment, Lamports, SolanaRpcResponse } from '@solana/rpc-types';
 
 type GetLargestAccountsResponseItem = Readonly<{
     /** Base-58 encoded address of the account */
     address: Address;
     /** Number of lamports in the account */
-    lamports: LamportsUnsafeBeyond2Pow53Minus1;
+    lamports: Lamports;
 }>;
 
 type GetLargestAccountsApiResponse = readonly GetLargestAccountsResponseItem[];

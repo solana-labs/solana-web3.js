@@ -11,18 +11,14 @@ import {
 } from '@solana/codecs';
 import type { GetAccountInfoApi } from '@solana/rpc-api';
 import type { Rpc } from '@solana/rpc-spec';
-import {
-    getDefaultLamportsDecoder,
-    getDefaultLamportsEncoder,
-    type LamportsUnsafeBeyond2Pow53Minus1,
-} from '@solana/rpc-types';
+import { getDefaultLamportsDecoder, getDefaultLamportsEncoder, type Lamports } from '@solana/rpc-types';
 
 import { fetchEncodedSysvarAccount, SYSVAR_STAKE_HISTORY_ADDRESS } from './sysvar';
 
 type Entry = Readonly<{
-    activating: LamportsUnsafeBeyond2Pow53Minus1;
-    deactivating: LamportsUnsafeBeyond2Pow53Minus1;
-    effective: LamportsUnsafeBeyond2Pow53Minus1;
+    activating: Lamports;
+    deactivating: Lamports;
+    effective: Lamports;
 }>;
 
 /**

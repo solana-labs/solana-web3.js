@@ -7,9 +7,9 @@ import type {
     Base58EncodedDataResponse,
     Base64EncodedDataResponse,
     Base64EncodedZStdCompressedDataResponse,
-    LamportsUnsafeBeyond2Pow53Minus1,
+    Lamports,
     SolanaRpcResponse,
-    U64UnsafeBeyond2Pow53Minus1,
+    U64,
 } from '@solana/rpc-types';
 
 import type { AccountNotificationsApi } from '../account-notifications';
@@ -23,9 +23,9 @@ const pubkey =
 
 type TNotificationBase = Readonly<{
     executable: boolean;
-    lamports: LamportsUnsafeBeyond2Pow53Minus1;
+    lamports: Lamports;
     owner: Address;
-    rentEpoch: U64UnsafeBeyond2Pow53Minus1;
+    rentEpoch: U64;
 }>;
 
 // No optional configs
@@ -132,7 +132,7 @@ rpcSubscriptions.accountNotifications(pubkey, { encoding: 'jsonParsed' }) satisf
                 | Readonly<{
                       parsed: unknown;
                       program: string;
-                      space: U64UnsafeBeyond2Pow53Minus1;
+                      space: U64;
                   }>;
         }
     >
@@ -148,7 +148,7 @@ rpcSubscriptions
                     | Readonly<{
                           parsed: unknown;
                           program: string;
-                          space: U64UnsafeBeyond2Pow53Minus1;
+                          space: U64;
                       }>;
             }
         >

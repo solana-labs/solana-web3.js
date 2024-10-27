@@ -1,6 +1,6 @@
 import type { Address } from '@solana/addresses';
 import type { Signature } from '@solana/keys';
-import type { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
+import type { Commitment, Lamports } from '@solana/rpc-types';
 
 type RequestAirdropConfig = Readonly<{
     commitment?: Commitment;
@@ -14,7 +14,7 @@ export type RequestAirdropApi = {
      */
     requestAirdrop(
         recipientAccount: Address,
-        lamports: LamportsUnsafeBeyond2Pow53Minus1,
+        lamports: Lamports,
         config?: RequestAirdropConfig,
     ): RequestAirdropResponse;
 };

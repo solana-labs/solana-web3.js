@@ -1,5 +1,5 @@
 import type { Address } from '@solana/addresses';
-import type { Commitment, LamportsUnsafeBeyond2Pow53Minus1, SolanaRpcResponse } from '@solana/rpc-types';
+import type { Commitment, Lamports, SolanaRpcResponse } from '@solana/rpc-types';
 
 type GetSupplyConfig = Readonly<{
     commitment?: Commitment;
@@ -7,11 +7,11 @@ type GetSupplyConfig = Readonly<{
 
 type GetSupplyApiResponseBase = Readonly<{
     /** Circulating supply in lamports */
-    circulating: LamportsUnsafeBeyond2Pow53Minus1;
+    circulating: Lamports;
     /** Non-circulating supply in lamports */
-    nonCirculating: LamportsUnsafeBeyond2Pow53Minus1;
+    nonCirculating: Lamports;
     /** Total supply in lamports */
-    total: LamportsUnsafeBeyond2Pow53Minus1;
+    total: Lamports;
 }>;
 
 type GetSupplyApiResponseWithNonCirculatingAccounts = GetSupplyApiResponseBase &

@@ -22,11 +22,9 @@ This package defines types for values used in the [Solana JSON-RPC](https://docs
 
 A type that enumerates the possible commitment statuses &ndash; each a measure of the network confirmation and stake levels on a particular block. Read more about the statuses themselves, [here](https://docs.solana.com/cluster/commitments).
 
-### `LamportsUnsafeBeyond2Pow53Minus1`
+### `Lamports`
 
-This type represents an integer value denominated in Lamports (ie. $1 \times 10^{-9}$ &#x25CE;).
-
-**Note**: Despite the fact that this type is represented as a `bigint` in client code and a `u64` in server code, the JSON-RPC implementation represents Lamports as an IEEE 754 floating point number. This means that you can only safely send or receive values up to $2^{53} - 1$ between the client and the RPC server. See https://github.com/solana-labs/solana/issues/30741 for more detail.
+This type represents an integer value denominated in Lamports (ie. $1 \times 10^{-9}$ &#x25CE;). It is represented as a `bigint` in client code and an `u64` in server code.
 
 ### `StringifiedBigInt`
 
@@ -36,17 +34,15 @@ This type represents a `bigint` which has been encoded as a string for transit o
 
 This type represents a number which has been encoded as a string for transit over a transport where loss of precision when using the native number type is a concern. The JSON-RPC is such a transport.
 
-### `UnixTimestampUnsafeBeyond2Pow53Minus1`
+### `UnixTimestamp`
 
-This type represents a Unix timestamp in _seconds_.
-
-**Note**: Despite the fact that this type is represented as a `bigint` in client code and an `i64` in server code, the JSON-RPC implementation represents a Unix timestamp as an IEEE 754 floating point number. This means that you can only safely send or receive values up to $2^{53} - 1$ between the client and the RPC server. See https://github.com/solana-labs/solana/issues/30741 for more detail.
+This type represents a Unix timestamp in _seconds_. It is represented as a `bigint` in client code and an `i64` in server code.
 
 ## Functions
 
 ### `assertIsLamports()`
 
-Lamport values returned from the RPC API conform to the type `LamportsUnsafeBeyond2Pow53Minus1`. You can use a value of that type wherever a quantity of Lamports is expected.
+Lamport values returned from the RPC API conform to the type `Lamports`. You can use a value of that type wherever a quantity of Lamports is expected.
 
 From time to time you might acquire a number that you expect to be a quantity of Lamports, from an untrusted network API or user input. To assert that such an arbitrary number is usable as a quantity of Lamports, use the `assertIsLamports` function.
 
@@ -59,9 +55,9 @@ function handleSubmit() {
     const lamports: number = parseInt(quantityInput.value, 10);
     try {
         // If this type assertion function doesn't throw, then
-        // Typescript will upcast `lamports` to `LamportsUnsafeBeyond2Pow53Minus1`.
+        // Typescript will upcast `lamports` to `Lamports`.
         assertIsLamports(lamports);
-        // At this point, `lamports` is a `LamportsUnsafeBeyond2Pow53Minus1` that can be used anywhere Lamports are expected.
+        // At this point, `lamports` is a `Lamports` that can be used anywhere Lamports are expected.
         await transfer(fromAddress, toAddress, lamports);
     } catch (e) {
         // `lamports` turned out not to validate as a quantity of Lamports.
@@ -87,9 +83,9 @@ See [`assertIsLamports()`](#assertislamports) for an example of how to use an as
 
 ### `assertIsUnixTimestamp()`
 
-Timestamps returned from the RPC API conform to the type `UnixTimestampUnsafeBeyond2Pow53Minus1`.
+Timestamps returned from the RPC API conform to the type `UnixTimestamp`.
 
-From time to time you might acquire a number that you suspect might validate as a `UnixTimestampUnsafeBeyond2Pow53Minus1`, from an untrusted network API or user input. To assert that such an arbitrary number is usable as a `UnixTimestampUnsafeBeyond2Pow53Minus1`, use the `assertIsUnixTimestamp` function.
+From time to time you might acquire a number that you suspect might validate as a `UnixTimestamp`, from an untrusted network API or user input. To assert that such an arbitrary number is usable as a `UnixTimestamp`, use the `assertIsUnixTimestamp` function.
 
 See [`assertIsLamports()`](#assertislamports) for an example of how to use an assertion function.
 
@@ -105,14 +101,14 @@ transactions.sort((a, b) => commitmentComparator(a.confirmationStatus, b.confirm
 
 ### `isLamports()`
 
-This is a type guard that accepts a `bigint` as input. It will both return `true` if the integer conforms to the `LamportsUnsafeBeyond2Pow53Minus1` type and will refine the type for use in your program.
+This is a type guard that accepts a `bigint` as input. It will both return `true` if the integer conforms to the `Lamports` type and will refine the type for use in your program.
 
 ```ts
 import { isLamports } from '@solana/rpc-types';
 
 if (isLamports(lamports)) {
     // At this point, `lamports` has been refined to a
-    // `LamportsUnsafeBeyond2Pow53Minus1` that can be used anywhere Lamports are expected.
+    // `Lamports` that can be used anywhere Lamports are expected.
     await transfer(fromAddress, toAddress, lamports);
 } else {
     setError(`${ownerAddress} is not an address`);
@@ -139,7 +135,7 @@ See [`isLamports()`](#islamports) for an example of how to use a type guard.
 
 ### `lamports()`
 
-This helper combines _asserting_ that a number is a possible number of Lamports with _coercing_ it to the `LamportsUnsafeBeyond2Pow53Minus1` type. It's best used with untrusted input.
+This helper combines _asserting_ that a number is a possible number of Lamports with _coercing_ it to the `Lamports` type. It's best used with untrusted input.
 
 ```ts
 import { lamports } from '@solana/rpc-types';
@@ -157,4 +153,4 @@ This helper combines _asserting_ that a string parses as a JavaScript `Number` w
 
 ### `unixTimestamp()`
 
-This helper combines _asserting_ that a number is in the Unix timestamp range with _coercing_ it to the `UnixTimestampUnsafeBeyond2Pow53Minus1` type. It's best used with untrusted input.
+This helper combines _asserting_ that a number is in the Unix timestamp range with _coercing_ it to the `UnixTimestamp` type. It's best used with untrusted input.

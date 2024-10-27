@@ -1,7 +1,7 @@
 import type { Address } from '@solana/addresses';
 import { getBase58Decoder } from '@solana/codecs-strings';
 import type { Rpc } from '@solana/rpc-spec';
-import type { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
+import type { Commitment, Lamports } from '@solana/rpc-types';
 
 import { RequestAirdropApi } from '../index';
 import { createLocalhostSolanaRpc } from './__setup__';
@@ -19,7 +19,7 @@ describe('requestAirdrop', () => {
                 crypto.getRandomValues(randomBytes);
                 const publicKeyAddress = getBase58Decoder().decode(randomBytes);
                 const resultPromise = rpc
-                    .requestAirdrop(publicKeyAddress as Address, 5000000n as LamportsUnsafeBeyond2Pow53Minus1, {
+                    .requestAirdrop(publicKeyAddress as Address, 5000000n as Lamports, {
                         commitment,
                     })
                     .send();

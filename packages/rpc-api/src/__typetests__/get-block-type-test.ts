@@ -5,12 +5,12 @@ import type {
     Base58EncodedDataResponse,
     Base64EncodedDataResponse,
     Blockhash,
-    LamportsUnsafeBeyond2Pow53Minus1,
+    Lamports,
     Reward,
     TokenBalance,
     TransactionError,
     TransactionStatus,
-    U64UnsafeBeyond2Pow53Minus1,
+    U64,
 } from '@solana/rpc-types';
 import { TransactionVersion } from '@solana/transaction-messages';
 
@@ -260,10 +260,10 @@ void (async () => {
 
     type ExpectedMetaForAccountsBase = {
         err: TransactionError | null;
-        fee: LamportsUnsafeBeyond2Pow53Minus1;
-        postBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
+        fee: Lamports;
+        postBalances: readonly Lamports[];
         postTokenBalances?: readonly TokenBalance[];
-        preBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
+        preBalances: readonly Lamports[];
         preTokenBalances?: readonly TokenBalance[];
         status: TransactionStatus;
     };
@@ -503,9 +503,9 @@ void (async () => {
     }
 
     type ExpectedMetaForFullBase58 = {
-        computeUnitsConsumed?: U64UnsafeBeyond2Pow53Minus1;
+        computeUnitsConsumed?: U64;
         err: TransactionError | null;
-        fee: LamportsUnsafeBeyond2Pow53Minus1;
+        fee: Lamports;
         innerInstructions: readonly Readonly<{
             index: number;
             instructions: readonly Readonly<{
@@ -516,9 +516,9 @@ void (async () => {
             }>[];
         }>[];
         logMessages: readonly string[] | null;
-        postBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
+        postBalances: readonly Lamports[];
         postTokenBalances?: readonly TokenBalance[];
-        preBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
+        preBalances: readonly Lamports[];
         preTokenBalances?: readonly TokenBalance[];
         returnData?: Readonly<{
             data: Base64EncodedDataResponse;
@@ -728,9 +728,9 @@ void (async () => {
     }
 
     type ExpectedMetaForFullBase64 = {
-        computeUnitsConsumed?: U64UnsafeBeyond2Pow53Minus1;
+        computeUnitsConsumed?: U64;
         err: TransactionError | null;
-        fee: LamportsUnsafeBeyond2Pow53Minus1;
+        fee: Lamports;
         innerInstructions: readonly Readonly<{
             index: number;
             instructions: readonly Readonly<{
@@ -741,9 +741,9 @@ void (async () => {
             }>[];
         }>[];
         logMessages: readonly string[] | null;
-        postBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
+        postBalances: readonly Lamports[];
         postTokenBalances?: readonly TokenBalance[];
-        preBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
+        preBalances: readonly Lamports[];
         preTokenBalances?: readonly TokenBalance[];
         returnData?: Readonly<{
             data: Base64EncodedDataResponse;
@@ -927,17 +927,17 @@ void (async () => {
         | ExpectedPartiallyDecodedTransactionInstruction;
 
     type ExpectedMetaForFullJsonParsedBase = {
-        computeUnitsConsumed?: U64UnsafeBeyond2Pow53Minus1;
+        computeUnitsConsumed?: U64;
         err: TransactionError | null;
-        fee: LamportsUnsafeBeyond2Pow53Minus1;
+        fee: Lamports;
         innerInstructions: readonly Readonly<{
             index: number;
             instructions: readonly ExpectedTransactionInstructionForFullJsonParsed[];
         }>[];
         logMessages: readonly string[] | null;
-        postBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
+        postBalances: readonly Lamports[];
         postTokenBalances?: readonly TokenBalance[];
-        preBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
+        preBalances: readonly Lamports[];
         preTokenBalances?: readonly TokenBalance[];
         returnData?: Readonly<{
             data: Base64EncodedDataResponse;
@@ -1092,17 +1092,17 @@ void (async () => {
     };
 
     type ExpectedMetaForFullJsonBase = {
-        computeUnitsConsumed?: U64UnsafeBeyond2Pow53Minus1;
+        computeUnitsConsumed?: U64;
         err: TransactionError | null;
-        fee: LamportsUnsafeBeyond2Pow53Minus1;
+        fee: Lamports;
         innerInstructions: readonly Readonly<{
             index: number;
             instructions: readonly ExpectedTransactionInstructionForFullJson[];
         }>[];
         logMessages: readonly string[] | null;
-        postBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
+        postBalances: readonly Lamports[];
         postTokenBalances?: readonly TokenBalance[];
-        preBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
+        preBalances: readonly Lamports[];
         preTokenBalances?: readonly TokenBalance[];
         returnData?: Readonly<{
             data: Base64EncodedDataResponse;
