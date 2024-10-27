@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
 export const transactionTypeDefs = /* GraphQL */ `
     type TransactionStatusOk {
         Ok: String

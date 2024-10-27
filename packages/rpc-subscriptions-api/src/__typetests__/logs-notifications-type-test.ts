@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import type { Address } from '@solana/addresses';
 import type { Signature } from '@solana/keys';

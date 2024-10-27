@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-
 import type { RpcSubscriptions } from '@solana/rpc-subscriptions-spec';
 import type { Slot } from '@solana/rpc-types';
 
