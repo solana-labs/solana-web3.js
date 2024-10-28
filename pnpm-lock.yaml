@@ -51,7 +51,7 @@ importers:
         version: link:packages/build-scripts
       '@solana/eslint-config-solana':
         specifier: ^4.0.0
-        version: 4.0.0(wrtwkvjfdkdkylvt74ynyyja4y)
+        version: 4.0.0(@eslint/js@9.13.0)(@types/eslint__js@8.42.3)(eslint-plugin-jest@28.8.3(@typescript-eslint/eslint-plugin@8.11.0(@typescript-eslint/parser@8.11.0(eslint@9.13.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.13.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.13.0(jiti@1.21.0))(jest@30.0.0-alpha.6(@types/node@22.7.9)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.7.9)(typescript@5.6.3)))(typescript@5.6.3))(eslint-plugin-react-hooks@5.0.0(eslint@9.13.0(jiti@1.21.0)))(eslint-plugin-simple-import-sort@12.1.1(eslint@9.13.0(jiti@1.21.0)))(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@3.3.0(@typescript-eslint/parser@8.11.0(eslint@9.13.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.13.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.13.0(jiti@1.21.0))(globals@15.11.0)(jest@30.0.0-alpha.6(@types/node@22.7.9)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.7.9)(typescript@5.6.3)))(typescript-eslint@8.11.0(eslint@9.13.0(jiti@1.21.0))(typescript@5.6.3))(typescript@5.6.3)
       '@solana/prettier-config-solana':
         specifier: 0.0.5
         version: 0.0.5(prettier@3.3.3)
@@ -129,7 +129,7 @@ importers:
         version: 10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.7.9)(typescript@5.6.3)
       tsup:
         specifier: ^8.3.4
-        version: 8.3.4(@swc/core@1.7.26(@swc/helpers@0.5.11))(jiti@1.21.0)(postcss@8.4.45)(tsx@4.19.1)(typescript@5.6.3)(yaml@2.4.5)
+        version: 8.3.4(@swc/core@1.7.26(@swc/helpers@0.5.11))(jiti@1.21.0)(postcss@8.4.45)(tsx@4.19.2)(typescript@5.6.3)(yaml@2.4.5)
       turbo:
         specifier: ^2.2.3
         version: 2.2.3
@@ -156,8 +156,8 @@ importers:
         specifier: ^2.0.8
         version: 2.0.8
       tsx:
-        specifier: ^4.19.1
-        version: 4.19.1
+        specifier: ^4.19.2
+        version: 4.19.2
 
   examples/react-app:
     dependencies:
@@ -230,8 +230,8 @@ importers:
         version: link:../../packages/library
     devDependencies:
       tsx:
-        specifier: ^4.19.1
-        version: 4.19.1
+        specifier: ^4.19.2
+        version: 4.19.2
 
   examples/rpc-transport-throttled:
     dependencies:
@@ -246,8 +246,8 @@ importers:
         specifier: ^2.0.8
         version: 2.0.8
       tsx:
-        specifier: ^4.19.1
-        version: 4.19.1
+        specifier: ^4.19.2
+        version: 4.19.2
 
   examples/signers:
     dependencies:
@@ -265,8 +265,8 @@ importers:
         specifier: ^2.0.8
         version: 2.0.8
       tsx:
-        specifier: ^4.19.1
-        version: 4.19.1
+        specifier: ^4.19.2
+        version: 4.19.2
 
   examples/transfer-lamports:
     dependencies:
@@ -284,8 +284,8 @@ importers:
         specifier: ^2.0.8
         version: 2.0.8
       tsx:
-        specifier: ^4.19.1
-        version: 4.19.1
+        specifier: ^4.19.2
+        version: 4.19.2
 
   examples/utils:
     dependencies:
@@ -6486,8 +6486,8 @@ packages:
     peerDependencies:
       typescript: '>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta'
 
-  tsx@4.19.1:
-    resolution: {integrity: sha512-0flMz1lh74BR4wOvBjuh9olbnwqCPc35OOlfyzHba0Dc+QNUeWX/Gq2YTbnwcWPO3BMd8fkzRVrHcsR+a7z7rA==}
+  tsx@4.19.2:
+    resolution: {integrity: sha512-pOUl6Vo2LUq/bSa8S5q7b91cgNSjctn9ugq/+Mvow99qW6x/UZYwzxy/3NmqoT66eHYfCVvFvACC58UBPFf28g==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -9402,8 +9402,8 @@ snapshots:
     dependencies:
       buffer: 6.0.3
 
-  '@solana/eslint-config-solana@4.0.0(wrtwkvjfdkdkylvt74ynyyja4y)':
-    dependencies:
+  ? '@solana/eslint-config-solana@4.0.0(@eslint/js@9.13.0)(@types/eslint__js@8.42.3)(eslint-plugin-jest@28.8.3(@typescript-eslint/eslint-plugin@8.11.0(@typescript-eslint/parser@8.11.0(eslint@9.13.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.13.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.13.0(jiti@1.21.0))(jest@30.0.0-alpha.6(@types/node@22.7.9)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.7.9)(typescript@5.6.3)))(typescript@5.6.3))(eslint-plugin-react-hooks@5.0.0(eslint@9.13.0(jiti@1.21.0)))(eslint-plugin-simple-import-sort@12.1.1(eslint@9.13.0(jiti@1.21.0)))(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@3.3.0(@typescript-eslint/parser@8.11.0(eslint@9.13.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.13.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.13.0(jiti@1.21.0))(globals@15.11.0)(jest@30.0.0-alpha.6(@types/node@22.7.9)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.7.9)(typescript@5.6.3)))(typescript-eslint@8.11.0(eslint@9.13.0(jiti@1.21.0))(typescript@5.6.3))(typescript@5.6.3)'
+  : dependencies:
       '@eslint/js': 9.13.0
       '@types/eslint__js': 8.42.3
       eslint: 9.13.0(jiti@1.21.0)
@@ -12292,13 +12292,13 @@ snapshots:
     dependencies:
       find-up: 4.1.0
 
-  postcss-load-config@6.0.1(jiti@1.21.0)(postcss@8.4.45)(tsx@4.19.1)(yaml@2.4.5):
+  postcss-load-config@6.0.1(jiti@1.21.0)(postcss@8.4.45)(tsx@4.19.2)(yaml@2.4.5):
     dependencies:
       lilconfig: 3.1.2
     optionalDependencies:
       jiti: 1.21.0
       postcss: 8.4.45
-      tsx: 4.19.1
+      tsx: 4.19.2
       yaml: 2.4.5
 
   postcss@8.4.45:
@@ -12891,7 +12891,7 @@ snapshots:
 
   tslib@2.6.3: {}
 
-  tsup@8.3.4(@swc/core@1.7.26(@swc/helpers@0.5.11))(jiti@1.21.0)(postcss@8.4.45)(tsx@4.19.1)(typescript@5.6.3)(yaml@2.4.5):
+  tsup@8.3.4(@swc/core@1.7.26(@swc/helpers@0.5.11))(jiti@1.21.0)(postcss@8.4.45)(tsx@4.19.2)(typescript@5.6.3)(yaml@2.4.5):
     dependencies:
       bundle-require: 5.0.0(esbuild@0.24.0)
       cac: 6.7.14
@@ -12901,7 +12901,7 @@ snapshots:
       esbuild: 0.24.0
       joycon: 3.1.1
       picocolors: 1.1.1
-      postcss-load-config: 6.0.1(jiti@1.21.0)(postcss@8.4.45)(tsx@4.19.1)(yaml@2.4.5)
+      postcss-load-config: 6.0.1(jiti@1.21.0)(postcss@8.4.45)(tsx@4.19.2)(yaml@2.4.5)
       resolve-from: 5.0.0
       rollup: 4.24.0
       source-map: 0.8.0-beta.0
@@ -12924,7 +12924,7 @@ snapshots:
       tslib: 1.14.1
       typescript: 5.6.3
 
-  tsx@4.19.1:
+  tsx@4.19.2:
     dependencies:
       esbuild: 0.23.0
       get-tsconfig: 4.7.5
