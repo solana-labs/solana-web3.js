@@ -35,7 +35,7 @@ describe('decompileTransactionMessage', () => {
             const transaction = decompileTransactionMessage(compiledTransaction);
 
             expect(transaction.version).toBe(0);
-            expect(transaction.feePayer).toEqual(feePayer);
+            expect(transaction.feePayer.address).toEqual(feePayer);
             expect(transaction.lifetimeConstraint).toEqual({
                 blockhash,
                 lastValidBlockHeight: U64_MAX,
@@ -357,7 +357,7 @@ describe('decompileTransactionMessage', () => {
             };
 
             expect(transaction.instructions).toStrictEqual([expectedInstruction]);
-            expect(transaction.feePayer).toStrictEqual(nonceAuthorityAddress);
+            expect(transaction.feePayer.address).toStrictEqual(nonceAuthorityAddress);
             expect(transaction.lifetimeConstraint).toStrictEqual({ nonce });
         });
 

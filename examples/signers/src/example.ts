@@ -104,7 +104,7 @@ async function signTransaction(signer: TransactionPartialSigner, transactionMess
  */
 async function signTransactionWithSigners(transactionMessage: CompilableTransactionMessage) {
     const signedTransaction = await partiallySignTransactionMessageWithSigners(transactionMessage);
-    const signature = signedTransaction.signatures[transactionMessage.feePayer];
+    const signature = signedTransaction.signatures[transactionMessage.feePayer.address];
     log.info(
         { signature: signature ? getBase58Decoder().decode(signature) : null },
         '>>  Signing a transfer SOL transaction using its registered signers',

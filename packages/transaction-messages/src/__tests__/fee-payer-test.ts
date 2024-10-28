@@ -20,23 +20,43 @@ describe('setTransactionMessageFeePayer', () => {
     });
     it('sets the fee payer on the transaction', () => {
         const txWithFeePayerA = setTransactionMessageFeePayer(EXAMPLE_FEE_PAYER_A, baseTx);
-        expect(txWithFeePayerA).toHaveProperty('feePayer', EXAMPLE_FEE_PAYER_A);
+        expect(txWithFeePayerA).toHaveProperty('feePayer', { address: EXAMPLE_FEE_PAYER_A });
     });
     describe('given a transaction with a fee payer already set', () => {
         let txWithFeePayerA: BaseTransactionMessage & ITransactionMessageWithFeePayer;
         beforeEach(() => {
             txWithFeePayerA = {
                 ...baseTx,
-                feePayer: EXAMPLE_FEE_PAYER_A,
+                feePayer: { address: EXAMPLE_FEE_PAYER_A },
             };
         });
         it('sets the new fee payer on the transaction when it differs from the existing one', () => {
             const txWithFeePayerB = setTransactionMessageFeePayer(EXAMPLE_FEE_PAYER_B, txWithFeePayerA);
-            expect(txWithFeePayerB).toHaveProperty('feePayer', EXAMPLE_FEE_PAYER_B);
+            expect(txWithFeePayerB).toHaveProperty('feePayer', { address: EXAMPLE_FEE_PAYER_B });
         });
         it('returns the original transaction when trying to set the same fee payer again', () => {
             const txWithSameFeePayer = setTransactionMessageFeePayer(EXAMPLE_FEE_PAYER_A, txWithFeePayerA);
             expect(txWithFeePayerA).toBe(txWithSameFeePayer);
+        });
+    });
+    describe('given a transaction with a fee payer with extra properties set', () => {
+        let txWithFeePayerA: BaseTransactionMessage & {
+            readonly feePayer: Readonly<{ address: Address; extra: 'extra' }>;
+        };
+        beforeEach(() => {
+            txWithFeePayerA = {
+                ...baseTx,
+                feePayer: { address: EXAMPLE_FEE_PAYER_A, extra: 'extra' },
+            };
+        });
+        it('sets the new fee payer on the transaction when it differs from the existing one', () => {
+            const txWithFeePayerB = setTransactionMessageFeePayer(EXAMPLE_FEE_PAYER_B, txWithFeePayerA);
+            expect(txWithFeePayerB).toHaveProperty('feePayer', { address: EXAMPLE_FEE_PAYER_B });
+        });
+        it('sets the new fee payer on the transaction even when it is the same as the existing one', () => {
+            const txWithSameFeePayer = setTransactionMessageFeePayer(EXAMPLE_FEE_PAYER_A, txWithFeePayerA);
+            expect(txWithSameFeePayer).toHaveProperty('feePayer', { address: EXAMPLE_FEE_PAYER_A });
+            expect(txWithSameFeePayer).not.toBe(txWithFeePayerA);
         });
     });
     it('freezes the object', () => {
