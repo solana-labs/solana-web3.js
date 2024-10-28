@@ -290,8 +290,8 @@ importers:
   examples/utils:
     dependencies:
       '@inquirer/core':
-        specifier: ^10.0.0
-        version: 10.0.0(@types/node@22.7.9)
+        specifier: ^10.0.1
+        version: 10.0.1(@types/node@22.7.9)
       pino:
         specifier: ^9.5.0
         version: 9.5.0
@@ -2542,8 +2542,8 @@ packages:
     resolution: {integrity: sha512-JBxkERygn7Bv/GbN5Rv8Ul6LVknS+5Bp6RgDC/O8gEBU/yeH5Ui5C/OlWrTb6qct7LjjfT6Re2NxB0ln0yYybA==}
     engines: {node: '>=18.18'}
 
-  '@inquirer/core@10.0.0':
-    resolution: {integrity: sha512-7dwoKCGvgZGHWTZfOj2KLmbIAIdiXP9NTrwGaTO/XDfKMEmyBahZpnombiG6JDHmiOrmK3GLEJRXrWExXCDLmQ==}
+  '@inquirer/core@10.0.1':
+    resolution: {integrity: sha512-KKTgjViBQUi3AAssqjUFMnMO3CM3qwCHvePV9EW+zTKGKafFGFF01sc1yOIYjLJ7QU52G/FbzKc+c01WLzXmVQ==}
     engines: {node: '>=18'}
 
   '@inquirer/figures@1.0.7':
@@ -8256,7 +8256,7 @@ snapshots:
 
   '@humanwhocodes/retry@0.3.1': {}
 
-  '@inquirer/core@10.0.0(@types/node@22.7.9)':
+  '@inquirer/core@10.0.1(@types/node@22.7.9)':
     dependencies:
       '@inquirer/figures': 1.0.7
       '@inquirer/type': 3.0.0(@types/node@22.7.9)
