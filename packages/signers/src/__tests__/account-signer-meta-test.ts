@@ -59,18 +59,15 @@ describe('getSignersFromTransactionMessage', () => {
 
     it('extracts the fee payer signer of the provided transaction', () => {
         // Given a transaction with a signer fee payer.
-        const feePayerSigner = createMockTransactionPartialSigner('1111' as Address);
-        const transaction = setTransactionMessageFeePayerSigner(
-            feePayerSigner,
-            createTransactionMessage({ version: 0 }),
-        );
+        const feePayer = createMockTransactionPartialSigner('1111' as Address);
+        const transaction = setTransactionMessageFeePayerSigner(feePayer, createTransactionMessage({ version: 0 }));
 
         // When we extract the signers from the transaction.
         const extractedSigners = getSignersFromTransactionMessage(transaction);
 
         // Then we expect the extracted signers to contain the fee payer signer.
         expect(extractedSigners).toHaveLength(1);
-        expect(extractedSigners[0]).toBe(feePayerSigner);
+        expect(extractedSigners[0]).toBe(feePayer);
     });
 
     it('removes duplicated signers', () => {

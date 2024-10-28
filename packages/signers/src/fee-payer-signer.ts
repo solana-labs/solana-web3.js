@@ -1,14 +1,12 @@
-import { Address } from '@solana/addresses';
 import { BaseTransactionMessage, ITransactionMessageWithFeePayer } from '@solana/transaction-messages';
 
-import { TransactionSigner } from './transaction-signer';
+import { isTransactionSigner, TransactionSigner } from './transaction-signer';
 
 export interface ITransactionMessageWithFeePayerSigner<
     TAddress extends string = string,
     TSigner extends TransactionSigner<TAddress> = TransactionSigner<TAddress>,
 > {
-    readonly feePayer: { address: Address<TAddress> };
-    readonly feePayerSigner: TSigner;
+    readonly feePayer: TSigner;
 }
 
 export function setTransactionMessageFeePayerSigner<
@@ -16,23 +14,19 @@ export function setTransactionMessageFeePayerSigner<
     TTransactionMessage extends BaseTransactionMessage &
         Partial<ITransactionMessageWithFeePayer | ITransactionMessageWithFeePayerSigner>,
 >(
-    feePayerSigner: TransactionSigner<TFeePayerAddress>,
+    feePayer: TransactionSigner<TFeePayerAddress>,
     transactionMessage: TTransactionMessage,
-): ITransactionMessageWithFeePayerSigner<TFeePayerAddress> & Omit<TTransactionMessage, 'feePayer' | 'feePayerSigner'> {
-    if ('feePayer' in transactionMessage && feePayerSigner.address === transactionMessage.feePayer?.address) {
-        if ('feePayerSigner' in transactionMessage)
-            return transactionMessage as unknown as ITransactionMessageWithFeePayerSigner<TFeePayerAddress> &
-                Omit<TTransactionMessage, 'feePayer' | 'feePayerSigner'>;
-        const out = { ...transactionMessage, feePayerSigner };
-        Object.freeze(out);
-        return out as unknown as ITransactionMessageWithFeePayerSigner<TFeePayerAddress> &
-            Omit<TTransactionMessage, 'feePayer' | 'feePayerSigner'>;
+): ITransactionMessageWithFeePayerSigner<TFeePayerAddress> & Omit<TTransactionMessage, 'feePayer'> {
+    if (
+        'feePayer' in transactionMessage &&
+        feePayer.address === transactionMessage.feePayer?.address &&
+        isTransactionSigner(transactionMessage.feePayer)
+    ) {
+        return transactionMessage as unknown as ITransactionMessageWithFeePayerSigner<TFeePayerAddress> &
+            Omit<TTransactionMessage, 'feePayer'>;
     }
-    const out = {
-        ...transactionMessage,
-        feePayer: Object.freeze({ address: feePayerSigner.address }),
-        feePayerSigner,
-    };
+    Object.freeze(feePayer);
+    const out = { ...transactionMessage, feePayer };
     Object.freeze(out);
     return out;
 }
