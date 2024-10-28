@@ -29,9 +29,10 @@ describe('setTransactionMessageFeePayerSigner', () => {
             const txWithFeePayerB = setTransactionMessageFeePayerSigner(feePayerB, txWithFeePayerA);
             expect(txWithFeePayerB).toHaveProperty('feePayer', feePayerB);
         });
-        it('returns the original transaction when trying to set the same fee payer again', () => {
+        it('overrides the fee payer signer even when the existing fee payer address is the same', () => {
             const txWithSameFeePayer = setTransactionMessageFeePayerSigner(feePayerA, txWithFeePayerA);
-            expect(txWithFeePayerA).toBe(txWithSameFeePayer);
+            expect(txWithSameFeePayer).toHaveProperty('feePayer', feePayerA);
+            expect(txWithSameFeePayer).not.toBe(txWithFeePayerA);
         });
     });
     describe('given a transaction with a non-signer fee payer already set', () => {
