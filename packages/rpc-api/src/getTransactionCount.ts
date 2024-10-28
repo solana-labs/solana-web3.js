@@ -1,6 +1,6 @@
-import type { Commitment, Slot, U64 } from '@solana/rpc-types';
+import type { Commitment, Slot } from '@solana/rpc-types';
 
-type GetTransactionCountApiResponse = U64;
+type GetTransactionCountApiResponse = bigint;
 
 export type GetTransactionCountApi = {
     /**

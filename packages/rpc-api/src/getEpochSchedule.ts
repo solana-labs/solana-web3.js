@@ -1,14 +1,12 @@
-import type { U64 } from '@solana/rpc-types';
-
 type GetEpochScheduleApiResponse = Readonly<{
     /** first normal-length epoch, log2(slotsPerEpoch) - log2(MINIMUM_SLOTS_PER_EPOCH) */
-    firstNormalEpoch: U64;
+    firstNormalEpoch: bigint;
     /** MINIMUM_SLOTS_PER_EPOCH * (2^(firstNormalEpoch) - 1) */
-    firstNormalSlot: U64;
+    firstNormalSlot: bigint;
     /** the number of slots before beginning of an epoch to calculate a leader schedule for that epoch */
-    leaderScheduleSlotOffset: U64;
+    leaderScheduleSlotOffset: bigint;
     /** the maximum number of slots in each epoch */
-    slotsPerEpoch: U64;
+    slotsPerEpoch: bigint;
     /** whether epochs start short and grow */
     warmup: boolean;
 }>;

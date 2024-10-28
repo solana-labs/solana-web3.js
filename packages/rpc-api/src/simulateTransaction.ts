@@ -13,7 +13,6 @@ import type {
     TransactionError,
     TransactionForFullMetaInnerInstructionsParsed,
     TransactionForFullMetaInnerInstructionsUnparsed,
-    U64,
 } from '@solana/rpc-types';
 import type { Base64EncodedWireTransaction } from '@solana/transactions';
 
@@ -104,7 +103,7 @@ type SimulateTransactionApiResponseBase = Readonly<{
         programId: Address;
     }> | null;
     /** The number of compute budget units consumed during the processing of this transaction */
-    unitsConsumed?: U64;
+    unitsConsumed?: bigint;
 }>;
 
 type SimulateTransactionApiResponseWithAccounts<T extends AccountInfoBase> = Readonly<{

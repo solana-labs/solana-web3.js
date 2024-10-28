@@ -1,10 +1,10 @@
-import type { Blockhash, Commitment, Slot, SolanaRpcResponse, U64 } from '@solana/rpc-types';
+import type { Blockhash, Commitment, Slot, SolanaRpcResponse } from '@solana/rpc-types';
 
 type GetLatestBlockhashApiResponse = Readonly<{
     /** a Hash as base-58 encoded string */
     blockhash: Blockhash;
     /** last block height at which the blockhash will be valid */
-    lastValidBlockHeight: U64;
+    lastValidBlockHeight: bigint;
 }>;
 
 export type GetLatestBlockhashApi = {

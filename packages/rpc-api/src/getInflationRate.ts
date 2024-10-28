@@ -1,8 +1,8 @@
-import type { F64UnsafeSeeDocumentation, U64 } from '@solana/rpc-types';
+import type { F64UnsafeSeeDocumentation } from '@solana/rpc-types';
 
 type GetInflationRateApiResponse = Readonly<{
     /** Epoch for which these values are valid */
-    epoch: U64;
+    epoch: bigint;
     /** Inflation allocated to the foundation */
     foundation: F64UnsafeSeeDocumentation;
     /** Total inflation */

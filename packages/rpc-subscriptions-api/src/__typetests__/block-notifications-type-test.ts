@@ -13,7 +13,6 @@ import type {
     TokenBalance,
     TransactionError,
     TransactionStatus,
-    U64,
 } from '@solana/rpc-types';
 import type { TransactionVersion } from '@solana/transaction-messages';
 
@@ -716,7 +715,7 @@ rpcSubscriptions
 >;
 
 type ExpectedMetaForFullBase58 = {
-    computeUnitsConsumed?: U64;
+    computeUnitsConsumed?: bigint;
     err: TransactionError | null;
     fee: Lamports;
     innerInstructions: readonly Readonly<{
@@ -983,7 +982,7 @@ rpcSubscriptions
 >;
 
 type ExpectedMetaForFullBase64 = {
-    computeUnitsConsumed?: U64;
+    computeUnitsConsumed?: bigint;
     err: TransactionError | null;
     fee: Lamports;
     innerInstructions: readonly Readonly<{
@@ -1213,7 +1212,7 @@ type ExpectedTransactionInstructionForFullJsonParsed =
     | ExpectedPartiallyDecodedTransactionInstruction;
 
 type ExpectedMetaForFullJsonParsedBase = {
-    computeUnitsConsumed?: U64;
+    computeUnitsConsumed?: bigint;
     err: TransactionError | null;
     fee: Lamports;
     innerInstructions: readonly Readonly<{
@@ -1397,7 +1396,7 @@ type ExpectedTransactionInstructionForFullJson = {
 };
 
 type ExpectedMetaForFullJsonBase = {
-    computeUnitsConsumed?: U64;
+    computeUnitsConsumed?: bigint;
     err: TransactionError | null;
     fee: Lamports;
     innerInstructions: readonly Readonly<{

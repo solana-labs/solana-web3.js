@@ -1,6 +1,6 @@
-import type { Commitment, Slot, U64 } from '@solana/rpc-types';
+import type { Commitment, Slot } from '@solana/rpc-types';
 
-type GetBlockHeightApiResponse = U64;
+type GetBlockHeightApiResponse = bigint;
 
 export type GetBlockHeightApi = {
     /**
