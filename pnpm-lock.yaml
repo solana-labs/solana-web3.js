@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@babel/runtime':
         specifier: ^7.25.0
-        version: 7.25.9
+        version: 7.26.0
       '@noble/curves':
         specifier: ^1.4.2
         version: 1.6.0
@@ -737,8 +737,8 @@ packages:
     peerDependencies:
       '@babel/core': ^7.0.0-0
 
-  '@babel/runtime@7.25.9':
-    resolution: {integrity: sha512-4zpTHZ9Cm6L9L+uIqghQX8ZXg8HKFcjYO3qHoO8zTmRm6HQUJ8SSJ+KRvbMBZn0EGVlT4DRYeQ/6hjlyXBh+Kg==}
+  '@babel/runtime@7.26.0':
+    resolution: {integrity: sha512-FDSOghenHTiToteC/QRlv2q3DhPZ/oOXTBoirfWNx1Cx3TMVcGWQtMMmQcSvb/JjpNeGzx8Pq/b4fKEJuWm1sw==}
     engines: {node: '>=6.9.0'}
 
   '@babel/template@7.25.9':
@@ -5251,7 +5251,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/runtime@7.25.9':
+  '@babel/runtime@7.26.0':
     dependencies:
       regenerator-runtime: 0.14.0
 
@@ -8489,7 +8489,7 @@ snapshots:
 
   regenerator-transform@0.15.2:
     dependencies:
-      '@babel/runtime': 7.25.9
+      '@babel/runtime': 7.26.0
 
   regexp.prototype.flags@1.5.2:
     dependencies:
