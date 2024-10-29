@@ -8,60 +8,49 @@ import { TransactionSigner } from '../transaction-signer';
 import { createMockTransactionPartialSigner } from './__setup__';
 
 describe('setTransactionMessageFeePayerSigner', () => {
-    let feePayerSignerA: TransactionSigner;
-    let feePayerSignerB: TransactionSigner;
+    let feePayerA: TransactionSigner;
+    let feePayerB: TransactionSigner;
     let baseTx: BaseTransactionMessage;
     beforeEach(() => {
         baseTx = { instructions: [], version: 0 };
-        feePayerSignerA = createMockTransactionPartialSigner('1111' as Address);
-        feePayerSignerB = createMockTransactionPartialSigner('2222' as Address);
+        feePayerA = createMockTransactionPartialSigner('1111' as Address);
+        feePayerB = createMockTransactionPartialSigner('2222' as Address);
     });
     it('sets the fee payer signer on the transaction', () => {
-        const txWithFeePayerA = setTransactionMessageFeePayerSigner(feePayerSignerA, baseTx);
-        expect(txWithFeePayerA).toHaveProperty('feePayer', { address: feePayerSignerA.address });
-        expect(txWithFeePayerA).toHaveProperty('feePayerSigner', feePayerSignerA);
+        const txWithFeePayerA = setTransactionMessageFeePayerSigner(feePayerA, baseTx);
+        expect(txWithFeePayerA).toHaveProperty('feePayer', feePayerA);
     });
     describe('given a transaction with a fee payer signer already set', () => {
         let txWithFeePayerA: BaseTransactionMessage & ITransactionMessageWithFeePayerSigner;
         beforeEach(() => {
-            txWithFeePayerA = {
-                ...baseTx,
-                feePayer: { address: feePayerSignerA.address },
-                feePayerSigner: feePayerSignerA,
-            };
+            txWithFeePayerA = { ...baseTx, feePayer: feePayerA };
         });
-        it('sets the new fee payer on the transaction when it differs from the existing one', () => {
-            const txWithFeePayerB = setTransactionMessageFeePayerSigner(feePayerSignerB, txWithFeePayerA);
-            expect(txWithFeePayerB).toHaveProperty('feePayer', { address: feePayerSignerB.address });
-            expect(txWithFeePayerB).toHaveProperty('feePayerSigner', feePayerSignerB);
+        it('overrides the fee payer signer when it differs from the existing one', () => {
+            const txWithFeePayerB = setTransactionMessageFeePayerSigner(feePayerB, txWithFeePayerA);
+            expect(txWithFeePayerB).toHaveProperty('feePayer', feePayerB);
         });
         it('returns the original transaction when trying to set the same fee payer again', () => {
-            const txWithSameFeePayer = setTransactionMessageFeePayerSigner(feePayerSignerA, txWithFeePayerA);
+            const txWithSameFeePayer = setTransactionMessageFeePayerSigner(feePayerA, txWithFeePayerA);
             expect(txWithFeePayerA).toBe(txWithSameFeePayer);
         });
     });
     describe('given a transaction with a non-signer fee payer already set', () => {
         let txWithFeePayerA: BaseTransactionMessage & ITransactionMessageWithFeePayer;
         beforeEach(() => {
-            txWithFeePayerA = {
-                ...baseTx,
-                feePayer: { address: feePayerSignerA.address },
-            };
+            txWithFeePayerA = { ...baseTx, feePayer: { address: feePayerA.address } };
         });
-        it('sets the new fee payer on the transaction when it differs from the existing one', () => {
-            const txWithFeePayerB = setTransactionMessageFeePayerSigner(feePayerSignerB, txWithFeePayerA);
-            expect(txWithFeePayerB).toHaveProperty('feePayer', { address: feePayerSignerB.address });
-            expect(txWithFeePayerB).toHaveProperty('feePayerSigner', feePayerSignerB);
+        it('overrides the fee payer when it differs from the existing one', () => {
+            const txWithFeePayerB = setTransactionMessageFeePayerSigner(feePayerB, txWithFeePayerA);
+            expect(txWithFeePayerB).toHaveProperty('feePayer', feePayerB);
         });
-        it('returns a new transaction instance when setting the same fee payer but as a signer this time', () => {
-            const txWithSameFeePayer = setTransactionMessageFeePayerSigner(feePayerSignerA, txWithFeePayerA);
-            expect(txWithSameFeePayer).toHaveProperty('feePayer', { address: feePayerSignerA.address });
-            expect(txWithSameFeePayer).toHaveProperty('feePayerSigner', feePayerSignerA);
+        it('overrides the fee payer even when the existing fee payer address is the same', () => {
+            const txWithSameFeePayer = setTransactionMessageFeePayerSigner(feePayerA, txWithFeePayerA);
+            expect(txWithSameFeePayer).toHaveProperty('feePayer', feePayerA);
             expect(txWithFeePayerA).not.toBe(txWithSameFeePayer);
         });
     });
     it('freezes the object', () => {
-        const txWithFeePayer = setTransactionMessageFeePayerSigner(feePayerSignerA, baseTx);
+        const txWithFeePayer = setTransactionMessageFeePayerSigner(feePayerA, baseTx);
         expect(txWithFeePayer).toBeFrozenObject();
     });
 });

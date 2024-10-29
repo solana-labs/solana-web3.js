@@ -1,8 +1,13 @@
 import { AccountRole, IAccountLookupMeta, IAccountMeta, IInstruction } from '@solana/instructions';
-import { BaseTransactionMessage, TransactionVersion } from '@solana/transaction-messages';
+import {
+    BaseTransactionMessage,
+    ITransactionMessageWithFeePayer,
+    TransactionVersion,
+} from '@solana/transaction-messages';
 
 import { deduplicateSigners } from './deduplicate-signers';
-import { TransactionSigner } from './transaction-signer';
+import { ITransactionMessageWithFeePayerSigner } from './fee-payer-signer';
+import { isTransactionSigner, TransactionSigner } from './transaction-signer';
 
 /** An extension of the IAccountMeta type that keeps track of its transaction signer. */
 export interface IAccountSignerMeta<
@@ -26,12 +31,14 @@ export type IInstructionWithSigners<
 
 /** A variation of the transaction message type that allows IAccountSignerMeta in its account metas. */
 export type ITransactionMessageWithSigners<
-    TSigner extends TransactionSigner = TransactionSigner,
+    TAddress extends string = string,
+    TSigner extends TransactionSigner<TAddress> = TransactionSigner<TAddress>,
     TAccounts extends readonly IAccountMetaWithSigner<TSigner>[] = readonly IAccountMetaWithSigner<TSigner>[],
-> = Pick<
-    BaseTransactionMessage<TransactionVersion, IInstruction & IInstructionWithSigners<TSigner, TAccounts>>,
-    'instructions'
-> & { feePayerSigner?: TSigner };
+> = Partial<ITransactionMessageWithFeePayer<TAddress> | ITransactionMessageWithFeePayerSigner<TAddress, TSigner>> &
+    Pick<
+        BaseTransactionMessage<TransactionVersion, IInstruction & IInstructionWithSigners<TSigner, TAccounts>>,
+        'instructions'
+    >;
 
 /** Extract all signers from an instruction that may contain IAccountSignerMeta accounts. */
 export function getSignersFromInstruction<TSigner extends TransactionSigner = TransactionSigner>(
@@ -44,11 +51,15 @@ export function getSignersFromInstruction<TSigner extends TransactionSigner = Tr
 
 /** Extract all signers from a transaction message that may contain IAccountSignerMeta accounts. */
 export function getSignersFromTransactionMessage<
-    TSigner extends TransactionSigner = TransactionSigner,
-    TTransactionMessage extends ITransactionMessageWithSigners<TSigner> = ITransactionMessageWithSigners<TSigner>,
+    TAddress extends string = string,
+    TSigner extends TransactionSigner<TAddress> = TransactionSigner<TAddress>,
+    TTransactionMessage extends ITransactionMessageWithSigners<TAddress, TSigner> = ITransactionMessageWithSigners<
+        TAddress,
+        TSigner
+    >,
 >(transaction: TTransactionMessage): readonly TSigner[] {
     return deduplicateSigners([
-        ...(transaction.feePayerSigner ? [transaction.feePayerSigner] : []),
+        ...(transaction.feePayer && isTransactionSigner(transaction.feePayer) ? [transaction.feePayer as TSigner] : []),
         ...transaction.instructions.flatMap(getSignersFromInstruction),
     ]);
 }
