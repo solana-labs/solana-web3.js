@@ -22,7 +22,7 @@ describe('compileTransactionMessage', () => {
     let baseTx: CompilableTransactionMessage;
     beforeEach(() => {
         baseTx = {
-            feePayer: 'abc' as Address<'abc'>,
+            feePayer: { address: 'abc' as Address<'abc'> },
             instructions: [],
             lifetimeConstraint: MOCK_LIFETIME_CONSTRAINT,
             version: 0,

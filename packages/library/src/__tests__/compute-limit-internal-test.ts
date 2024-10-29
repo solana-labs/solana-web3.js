@@ -28,7 +28,7 @@ describe('getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_DO_NOT_EXPOR
     let simulateTransaction: jest.Mock;
     beforeEach(() => {
         mockTransactionMessage = {
-            feePayer: '7U8VWgTUucttJPt5Bbkt48WknWqRGBfstBt8qqLHnfPT' as Address,
+            feePayer: { address: '7U8VWgTUucttJPt5Bbkt48WknWqRGBfstBt8qqLHnfPT' as Address },
             instructions: [],
             version: 0,
         };

@@ -33,7 +33,7 @@ export function compileTransactionMessage(
     transaction: CompilableTransactionMessage,
 ): VersionedCompiledTransactionMessage;
 export function compileTransactionMessage(transaction: CompilableTransactionMessage): CompiledTransactionMessage {
-    const addressMap = getAddressMapFromInstructions(transaction.feePayer, transaction.instructions);
+    const addressMap = getAddressMapFromInstructions(transaction.feePayer.address, transaction.instructions);
     const orderedAccounts = getOrderedAccountsFromAddressMap(addressMap);
     return {
         ...(transaction.version !== 'legacy'
