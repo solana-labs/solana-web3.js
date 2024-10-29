@@ -19,7 +19,7 @@ import {
     createKeyPairSignerFromBytes,
     createSolanaRpc,
     createTransactionMessage,
-    decodeTransactionMessage,
+    decompileTransactionMessageFetchingLookupTables,
     fetchJsonParsedAccount,
     getAddressEncoder,
     getBase64EncodedWireTransaction,
@@ -294,22 +294,26 @@ log.info(
  * ```
  *
  * But let's pretend that we don't already have that data fetched, we've just received the
- * transaction and need to decode it. We will use `decodeTransactionMessage` instead
+ * transaction and need to decompile it. We will use `decompileTransactionMessageFetchingLookupTables`
+ * instead
  *
  * This will use the RPC to fetch the address lookup table data for us, and then use it to
  * decompile the transaction message.
  */
 
-const decodedTransactionMessage = await decodeTransactionMessage(compiledTransactionMessage, rpc);
+const decompiledTransactionMessage = await decompileTransactionMessageFetchingLookupTables(
+    compiledTransactionMessage,
+    rpc,
+);
 
 // This is our `TransactionMessage` structure, which is much easier to understand and parse
 // This is the same data structure that was created before we first signed the transaction
 
 // We can see the fee payer:
-log.info(`[step 3] The transaction fee payer is ${decodedTransactionMessage.feePayer}`);
+log.info(`[step 3] The transaction fee payer is ${decompiledTransactionMessage.feePayer}`);
 
 // And the lifetime constraint:
-log.info(decodedTransactionMessage.lifetimeConstraint, '[step 3] The transaction lifetime constraint');
+log.info(decompiledTransactionMessage.lifetimeConstraint, '[step 3] The transaction lifetime constraint');
 
 /**
  * Here we can see that the lifetime constraint is actually a blockhash
@@ -317,19 +321,19 @@ log.info(decodedTransactionMessage.lifetimeConstraint, '[step 3] The transaction
  * between blockhash and nonce for us
  * We can also narrow this type with typescript
  */
-if ('blockhash' in decodedTransactionMessage.lifetimeConstraint) {
-    log.info(`[step 3] The transaction blockhash is ${decodedTransactionMessage.lifetimeConstraint.blockhash}`);
+if ('blockhash' in decompiledTransactionMessage.lifetimeConstraint) {
+    log.info(`[step 3] The transaction blockhash is ${decompiledTransactionMessage.lifetimeConstraint.blockhash}`);
 }
 
 /**
  * Note that the `lastValidBlockHeight` won't necessarily match that used when the transaction
  * was first created. This is not encoded into the transaction, so we can't decode it back out
- * By default `decodeTransactionMessage` and `decompileTransactionMessage` will fetch the current
- * `lastValidBlockHeight` and use that
- * But if you know the correct value, you can pass it like so:
+ * By default `decompileTransactionMessageFetchingLookupTables` and `decompileTransactionMessage`
+ * will set it to U64 MAX. But if you know the correct value,
+ * you can pass it like so:
  *
  * ```ts
- * const decodedTransactionMessage = await decodeTransactionMessage(compiledTransactionMessage, rpc, {
+ * const decompiledTransactionMessage = await decompileTransactionMessageFetchingLookupTables(compiledTransactionMessage, rpc, {
  *   lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
  * })
  * ```
@@ -337,7 +341,7 @@ if ('blockhash' in decodedTransactionMessage.lifetimeConstraint) {
 
 // We can also view the decompiled instructions here
 log.info(
-    { ...decodedTransactionMessage.instructions[0], data: '(removed for brevity)' },
+    { ...decompiledTransactionMessage.instructions[0], data: '(removed for brevity)' },
     '[step 3] The first decoded instruction',
 );
 
@@ -351,7 +355,7 @@ log.info(
  */
 
 // We removed the data array for brevity when we logged the instructions, but let's take a look at it now
-log.info(decodedTransactionMessage.instructions[0].data, '[step 3] The data bytes of the first instruction');
+log.info(decompiledTransactionMessage.instructions[0].data, '[step 3] The data bytes of the first instruction');
 
 // This is opaque, it's just a byte array, but it encodes exactly what the instruction is actually doing
 // Let's look next at how we can make sense of it
@@ -367,7 +371,7 @@ log.info(decodedTransactionMessage.instructions[0].data, '[step 3] The data byte
  * See https://github.com/kinobi-so/kinobi for more information on Kinobi
  */
 
-const firstInstruction = decodedTransactionMessage.instructions[0];
+const firstInstruction = decompiledTransactionMessage.instructions[0];
 // Narrow the type, the `identifySystemInstruction` requires data to identify an instruction
 assertIsInstructionWithData(firstInstruction);
 const identifiedInstruction = identifySystemInstruction(firstInstruction);
@@ -389,7 +393,7 @@ if (identifiedInstruction === SystemInstruction.TransferSol) {
 }
 
 // Now let's do the same with the second instruction
-const secondInstruction = decodedTransactionMessage.instructions[1];
+const secondInstruction = decompiledTransactionMessage.instructions[1];
 log.info(`[step 4] The second instruction calls the ${secondInstruction.programAddress} program`);
 
 // We know that the second instruction is to the memo program, but we can also programmatically check this

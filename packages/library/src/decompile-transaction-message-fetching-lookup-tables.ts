@@ -38,14 +38,14 @@ async function fetchLookupTables(
     }, {});
 }
 
-type DecodeTransactionMessageConfig = FetchAccountsConfig & {
+type DecompileTransactionMessageFetchingLookupTablesConfig = FetchAccountsConfig & {
     lastValidBlockHeight?: bigint;
 };
 
-export async function decodeTransactionMessage(
+export async function decompileTransactionMessageFetchingLookupTables(
     compiledTransactionMessage: CompiledTransactionMessage,
     rpc: Rpc<GetMultipleAccountsApi>,
-    config?: DecodeTransactionMessageConfig,
+    config?: DecompileTransactionMessageFetchingLookupTablesConfig,
 ): Promise<CompilableTransactionMessage> {
     const lookupTables =
         'addressTableLookups' in compiledTransactionMessage &&

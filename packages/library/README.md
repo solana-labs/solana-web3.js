@@ -48,7 +48,7 @@ await airdrop({
 
 > [!NOTE] This only works on test clusters.
 
-### `decodeTransactionMessage(compiledTransactionMessage, rpc, config)`
+### `decompileTransactionMessageFetchingLookupTables(compiledTransactionMessage, rpc, config)`
 
 Returns a `TransactionMessage` from a `CompiledTransactionMessage`. If any of the accounts in the compiled message require an address lookup table to find their address, this function will use the supplied RPC instance to fetch the contents of the address lookup table from the network.
 
