@@ -1,6 +1,6 @@
 import { BaseTransactionMessage, ITransactionMessageWithFeePayer } from '@solana/transaction-messages';
 
-import { isTransactionSigner, TransactionSigner } from './transaction-signer';
+import { TransactionSigner } from './transaction-signer';
 
 export interface ITransactionMessageWithFeePayerSigner<
     TAddress extends string = string,
@@ -17,14 +17,6 @@ export function setTransactionMessageFeePayerSigner<
     feePayer: TransactionSigner<TFeePayerAddress>,
     transactionMessage: TTransactionMessage,
 ): ITransactionMessageWithFeePayerSigner<TFeePayerAddress> & Omit<TTransactionMessage, 'feePayer'> {
-    if (
-        'feePayer' in transactionMessage &&
-        feePayer.address === transactionMessage.feePayer?.address &&
-        isTransactionSigner(transactionMessage.feePayer)
-    ) {
-        return transactionMessage as unknown as ITransactionMessageWithFeePayerSigner<TFeePayerAddress> &
-            Omit<TTransactionMessage, 'feePayer'>;
-    }
     Object.freeze(feePayer);
     const out = { ...transactionMessage, feePayer };
     Object.freeze(out);
