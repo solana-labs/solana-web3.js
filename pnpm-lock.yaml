@@ -128,8 +128,8 @@ importers:
         specifier: ^10.9.2
         version: 10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.8.2)(typescript@5.6.3)
       tsup:
-        specifier: ^8.3.4
-        version: 8.3.4(@swc/core@1.7.26(@swc/helpers@0.5.11))(jiti@1.21.0)(postcss@8.4.45)(tsx@4.19.2)(typescript@5.6.3)(yaml@2.4.5)
+        specifier: ^8.3.5
+        version: 8.3.5(@swc/core@1.7.26(@swc/helpers@0.5.11))(jiti@1.21.0)(postcss@8.4.45)(tsx@4.19.2)(typescript@5.6.3)(yaml@2.4.5)
       turbo:
         specifier: ^2.2.3
         version: 2.2.3
@@ -6628,8 +6628,8 @@ packages:
   tslib@2.6.3:
     resolution: {integrity: sha512-xNvxJEOUiWPGhUuUdQgAJPKOOJfGnIyKySOc09XkKsgdUV/3E2zvwZYdejjmRgPCgcym1juLH3226yA7sEFJKQ==}
 
-  tsup@8.3.4:
-    resolution: {integrity: sha512-0uCsxLADTFwGsEfSMx5fBFtXNw1mZJBAU6ZJe6xMeGfLT6o/12JDigvBIrQJEZlK01YBsocRxU3i+YY6QduShQ==}
+  tsup@8.3.5:
+    resolution: {integrity: sha512-Tunf6r6m6tnZsG9GYWndg0z8dEV7fD733VBFzFJ5Vcm1FtlXB8xBD/rtrBi2a3YKEV7hHtxiZtW5EAVADoe1pA==}
     engines: {node: '>=18'}
     hasBin: true
     peerDependencies:
@@ -7038,7 +7038,7 @@ snapshots:
   '@babel/code-frame@7.24.7':
     dependencies:
       '@babel/highlight': 7.24.7
-      picocolors: 1.1.0
+      picocolors: 1.1.1
 
   '@babel/compat-data@7.25.0': {}
 
@@ -7225,7 +7225,7 @@ snapshots:
       '@babel/helper-validator-identifier': 7.24.7
       chalk: 2.4.2
       js-tokens: 4.0.0
-      picocolors: 1.1.0
+      picocolors: 1.1.1
 
   '@babel/parser@7.25.0':
     dependencies:
@@ -8027,7 +8027,7 @@ snapshots:
     dependencies:
       '@changesets/types': 6.0.0
       '@manypkg/get-packages': 1.1.3
-      picocolors: 1.1.0
+      picocolors: 1.1.1
       semver: 7.6.0
 
   '@changesets/get-github-info@0.6.0':
@@ -8058,7 +8058,7 @@ snapshots:
 
   '@changesets/logger@0.1.1':
     dependencies:
-      picocolors: 1.1.0
+      picocolors: 1.1.1
 
   '@changesets/parse@0.4.0':
     dependencies:
@@ -8080,7 +8080,7 @@ snapshots:
       '@changesets/types': 6.0.0
       fs-extra: 7.0.1
       p-filter: 2.1.0
-      picocolors: 1.1.0
+      picocolors: 1.1.1
 
   '@changesets/should-skip-package@0.1.1':
     dependencies:
@@ -12663,7 +12663,7 @@ snapshots:
   postcss@8.4.45:
     dependencies:
       nanoid: 3.3.7
-      picocolors: 1.1.0
+      picocolors: 1.1.1
       source-map-js: 1.2.0
 
   prelude-ls@1.2.1: {}
@@ -13261,7 +13261,7 @@ snapshots:
 
   tslib@2.6.3: {}
 
-  tsup@8.3.4(@swc/core@1.7.26(@swc/helpers@0.5.11))(jiti@1.21.0)(postcss@8.4.45)(tsx@4.19.2)(typescript@5.6.3)(yaml@2.4.5):
+  tsup@8.3.5(@swc/core@1.7.26(@swc/helpers@0.5.11))(jiti@1.21.0)(postcss@8.4.45)(tsx@4.19.2)(typescript@5.6.3)(yaml@2.4.5):
     dependencies:
       bundle-require: 5.0.0(esbuild@0.24.0)
       cac: 6.7.14
@@ -13390,7 +13390,7 @@ snapshots:
     dependencies:
       browserslist: 4.23.2
       escalade: 3.1.2
-      picocolors: 1.1.0
+      picocolors: 1.1.1
 
   uri-js@4.4.1:
     dependencies:
