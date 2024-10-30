@@ -367,8 +367,8 @@ log.info(decompiledTransactionMessage.instructions[0].data, '[step 3] The data b
  * from the @solana/web3.js instruction data structure for the System program
  * We know from the program address (11111111111111111111111111111111) that the first instruction
  * is to the system program
- * You can generate such a client for any Solana program using Kinobi
- * See https://github.com/kinobi-so/kinobi for more information on Kinobi
+ * You can generate such a client for any Solana program using Codama
+ * See https://github.com/codama-idl/codama for more information on Codama
  */
 
 const firstInstruction = decompiledTransactionMessage.instructions[0];
