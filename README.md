@@ -23,7 +23,7 @@ Use this to interact with accounts and programs on the Solana network through th
 ### For use in Node.js or a web application
 
 ```
-$ npm install --save @solana/web3.js
+$ npm install --save @solana/web3.js@1
 ```
 
 ### For use in a browser, without a build system
