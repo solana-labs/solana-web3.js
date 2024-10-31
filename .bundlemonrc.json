@@ -7,6 +7,10 @@
         },
         {
             "path": "**/dist/index.*.mjs"
+        },
+        {
+            "subProject": "@solana/keys",
+            "path": "keys/dist/index.*.mjs"
         }
     ],
     "includeCommitMessage": true,
