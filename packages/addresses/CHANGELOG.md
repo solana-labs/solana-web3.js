@@ -1,5 +1,19 @@
 # @solana/addresses
 
+## 2.0.0-rc.2
+
+### Patch Changes
+
+-   [`292487d`](https://github.com/solana-labs/solana-web3.js/commit/292487da00ee57350e8faf49ccf961203aed6403) Thanks [@steveluscher](https://github.com/steveluscher)! - `isAddress()` no longer throws despite that the input might be unparseable as a base-58 string. Now, it correctly, simply, returns `false`.
+
+-   [#3137](https://github.com/solana-labs/solana-web3.js/pull/3137) [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a) Thanks [@mcintyre94](https://github.com/mcintyre94)! - The build is now compatible with the Vercel Edge runtime and Cloudflare Workers through the addition of `edge-light` and `workerd` to the package exports.
+
+-   Updated dependencies [[`441fa3a`](https://github.com/solana-labs/solana-web3.js/commit/441fa3a6c7c104961f935e65e259f40c10e82f8a), [`38faba0`](https://github.com/solana-labs/solana-web3.js/commit/38faba05fab479ddbd95d0e211744d203f8aa823), [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a)]:
+    -   @solana/assertions@2.0.0-rc.2
+    -   @solana/errors@2.0.0-rc.2
+    -   @solana/codecs-strings@2.0.0-rc.2
+    -   @solana/codecs-core@2.0.0-rc.2
+
 ## 2.0.0-rc.1
 
 ### Patch Changes

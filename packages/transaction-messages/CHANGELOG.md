@@ -1,5 +1,23 @@
 # @solana/transaction-messages
 
+## 2.0.0-rc.2
+
+### Patch Changes
+
+-   [#3480](https://github.com/solana-labs/solana-web3.js/pull/3480) [`231a030`](https://github.com/solana-labs/solana-web3.js/commit/231a0303ae5960e783719a8ff1d17a50ff26ad78) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Change `feePayer` type of transaction messages from `Address` to `{ address: Address }`
+
+-   [#3137](https://github.com/solana-labs/solana-web3.js/pull/3137) [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a) Thanks [@mcintyre94](https://github.com/mcintyre94)! - The build is now compatible with the Vercel Edge runtime and Cloudflare Workers through the addition of `edge-light` and `workerd` to the package exports.
+
+-   Updated dependencies [[`292487d`](https://github.com/solana-labs/solana-web3.js/commit/292487da00ee57350e8faf49ccf961203aed6403), [`3834d82`](https://github.com/solana-labs/solana-web3.js/commit/3834d82eb1dd150f261612d742c3105194689c13), [`0245265`](https://github.com/solana-labs/solana-web3.js/commit/024526554fa0145e31e62a0d47f1eea556a30e71), [`38faba0`](https://github.com/solana-labs/solana-web3.js/commit/38faba05fab479ddbd95d0e211744d203f8aa823), [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a)]:
+    -   @solana/addresses@2.0.0-rc.2
+    -   @solana/rpc-types@2.0.0-rc.2
+    -   @solana/errors@2.0.0-rc.2
+    -   @solana/codecs-data-structures@2.0.0-rc.2
+    -   @solana/codecs-numbers@2.0.0-rc.2
+    -   @solana/instructions@2.0.0-rc.2
+    -   @solana/codecs-core@2.0.0-rc.2
+    -   @solana/functional@2.0.0-rc.2
+
 ## 2.0.0-rc.1
 
 ### Patch Changes
