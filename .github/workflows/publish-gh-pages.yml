@@ -38,8 +38,8 @@ jobs:
 
       - name: Assemble Deploy Directory
         run: |
-          mkdir -p .ghpages-deploy
-          mv ./doc/* .ghpages-deploy
+          mkdir -p .ghpages-deploy/v1.x
+          mv ./doc/* .ghpages-deploy/v1.x
 
       - uses: actions/upload-artifact@v4
         with:
@@ -66,6 +66,7 @@ jobs:
         run: |
           mkdir -p .ghpages-deploy
           mv ./examples/react-app/dist/ .ghpages-deploy/example/
+          mv ./docs/* .ghpages-deploy/
 
       - uses: actions/upload-artifact@v4
         with:

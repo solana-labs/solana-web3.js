@@ -16,6 +16,9 @@
 
 This is the JavaScript SDK for building Solana apps for Node, web, and React Native.
 
+> [!NOTE]
+> The code for the 1.x line of this library can be found [here](https://github.com/solana-labs/solana-web3.js/tree/maintenance/v1.x) and the documentation [here](https://solana-labs.github.io/solana-web3.js/v1.x).
+
 # Installation
 
 For use in a Node.js or web application:
