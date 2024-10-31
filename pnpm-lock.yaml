@@ -897,6 +897,10 @@ importers:
       typescript:
         specifier: '>=5'
         version: 5.5.2
+    devDependencies:
+      '@solana/addresses':
+        specifier: workspace:*
+        version: link:../addresses
 
   packages/rpc-subscriptions-api:
     dependencies:
