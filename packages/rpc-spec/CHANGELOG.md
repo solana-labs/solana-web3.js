@@ -1,5 +1,15 @@
 # @solana/rpc-spec
 
+## 2.0.0-rc.3
+
+### Patch Changes
+
+-   [#3507](https://github.com/solana-labs/solana-web3.js/pull/3507) [`45df702`](https://github.com/solana-labs/solana-web3.js/commit/45df7028d872e65759dad86b97cd9d4a9a3a545e) Thanks [@mcintyre94](https://github.com/mcintyre94)! - Fixed a bug where the subcription server's response would not be detected, because of a mismatch in the format of the `id`. Now all RPC message ids are strings, for avoidance of doubt.
+
+-   Updated dependencies [[`45df702`](https://github.com/solana-labs/solana-web3.js/commit/45df7028d872e65759dad86b97cd9d4a9a3a545e)]:
+    -   @solana/rpc-spec-types@2.0.0-rc.3
+    -   @solana/errors@2.0.0-rc.3
+
 ## 2.0.0-rc.2
 
 ### Patch Changes
