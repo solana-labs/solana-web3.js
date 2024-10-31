@@ -1,0 +1,22 @@
+{
+    "$schema": "https://typedoc.org/schema.json",
+    "entryPoints": ["packages/**"],
+    "entryPointStrategy": "packages",
+    "exclude": [
+        "packages/build-scripts",
+        "packages/crypto-impl",
+        "packages/fetch-impl",
+        "packages/rpc-graphql",
+        "packages/test-config",
+        "packages/test-matchers",
+        "packages/text-encoding-impl",
+        "packages/tsconfig",
+        "packages/ws-impl"
+    ],
+    "name": "Solana JavaScript SDK",
+    "navigation": {
+        "includeFolders": false
+    },
+    "out": "docs/",
+    "plugin": ["typedoc-plugin-missing-exports"]
+}
