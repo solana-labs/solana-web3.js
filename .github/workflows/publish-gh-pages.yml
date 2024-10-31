@@ -58,7 +58,7 @@ jobs:
         uses: ./.github/workflows/actions/install-dependencies
 
       - name: Compile
-        run: pnpm turbo run compile:ghpages --concurrency=${TURBO_CONCURRENCY:-1}
+        run: pnpm turbo run compile:typedefs compile:ghpages --concurrency=${TURBO_CONCURRENCY:-1}
         env:
           REACT_EXAMPLE_APP_BASE_PATH: /solana-web3.js/example/
 

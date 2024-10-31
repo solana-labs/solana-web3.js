@@ -49,7 +49,7 @@ jobs:
         run: pnpm build # Don't add --concurrency here; it's already baked in
 
       - name: Build GitHub Pages
-        run: pnpm turbo run compile:ghpages --concurrency=${TURBO_CONCURRENCY:-1}
+        run: pnpm turbo run compile:typedefs compile:ghpages --concurrency=${TURBO_CONCURRENCY:-1}
 
       - name: Stop Test Validator
         if: always() && steps.start-test-validator.outcome == 'success'
