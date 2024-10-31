@@ -7,6 +7,7 @@
     "scripts": {
         "build": "turbo run --concurrency=${TURBO_CONCURRENCY:-95.84%} build",
         "compile": "turbo run --concurrency=${TURBO_CONCURRENCY:-95.84%} compile:js compile:typedefs",
+        "compile:ghpages": "typedoc && vitepress build site",
         "lint": "turbo run --concurrency=${TURBO_CONCURRENCY:-95.84%} test:lint",
         "style:fix": "turbo  run --concurrency=${TURBO_CONCURRENCY:-95.84%} style:fix && pnpm prettier --log-level warn --ignore-unknown --write '{.,!packages}/*'",
         "test": "turbo run --concurrency=${TURBO_CONCURRENCY:-95.84%} test:unit:browser test:unit:node",
@@ -47,7 +48,12 @@
         "ts-node": "^10.9.2",
         "tsup": "^8.3.5",
         "turbo": "^2.2.3",
-        "typescript": "^5.6.3"
+        "typedoc": "^0.26.10",
+        "typedoc-plugin-markdown": "^4.2.9",
+        "typedoc-plugin-missing-exports": "^3.0.0",
+        "typedoc-vitepress-theme": "^1.0.2",
+        "typescript": "^5.6.3",
+        "vitepress": "^1.4.2"
     },
     "engineStrict": true,
     "engines": {

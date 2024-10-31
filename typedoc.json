@@ -1,0 +1,33 @@
+{
+    "$schema": "https://typedoc.org/schema.json",
+    "docsRoot": "site/",
+    "entryPoints": ["packages/**"],
+    "entryPointStrategy": "packages",
+    "exclude": [
+        "packages/build-scripts",
+        "packages/crypto-impl",
+        "packages/fetch-impl",
+        "packages/rpc-graphql",
+        "packages/test-config",
+        "packages/test-matchers",
+        "packages/text-encoding-impl",
+        "packages/tsconfig",
+        "packages/ws-impl"
+    ],
+    "expandObjects": true,
+    "hostedBaseUrl": "https://solana-labs.github.io/solana-web3.js",
+    "name": "Solana JavaScript SDK",
+    "navigation": {
+        "includeFolders": false
+    },
+    "out": "site/api/",
+    "plugin": ["typedoc-plugin-missing-exports", "typedoc-plugin-markdown", "typedoc-vitepress-theme"],
+    "sanitizeComments": true,
+    "useCodeBlocks": true,
+    "parametersFormat": "table",
+    "interfacePropertiesFormat": "table",
+    "classPropertiesFormat": "table",
+    "enumMembersFormat": "table",
+    "typeDeclarationFormat": "table",
+    "propertyMembersFormat": "table"
+}

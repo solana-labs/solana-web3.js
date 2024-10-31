@@ -94,7 +94,8 @@
             "outputs": ["dist/**"]
         },
         "//#compile:ghpages": {
-            "dependsOn": ["@solana/example-react-app#compile:js"]
+            "dependsOn": ["^compile:typedefs", "@solana/example-react-app#compile:js"],
+            "outputs": ["./site/.vitepress/dist", "examples/react-app/dist"]
         }
     },
     "ui": "stream"

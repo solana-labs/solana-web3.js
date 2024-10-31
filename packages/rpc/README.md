@@ -1,7 +1,7 @@
 [![npm][npm-image]][npm-url]
 [![npm-downloads][npm-downloads-image]][npm-url]
 [![semantic-release][semantic-release-image]][semantic-release-url]
-<br />
+\<br /\>
 [![code-style-prettier][code-style-prettier-image]][code-style-prettier-url]
 
 [code-style-prettier-image]: https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square
@@ -28,21 +28,21 @@ For instance, a `RpcTransportDevnet` is understood to communicate with a RPC ser
 
 This is useful in cases where you need to make assertions about what capabilities a RPC offers. For example, RPC methods like `requestAirdrop` are not available on mainnet. You can use the ability to assert on the type of RPC transport at compile time to prevent calling unimplemented methods or presuming the existence of unavailable capabilities.
 
-### `RpcTransportFromClusterUrl<TClusterUrl extends ClusterUrl>`
+### `RpcTransportFromClusterUrl\<TClusterUrl extends ClusterUrl\>`
 
 Given a `ClusterUrl`, this utility type will resolve to as specific a `RpcTransport` as possible.
 
 ```ts
-function createCustomTransport<TClusterUrl extends ClusterUrl>(
+function createCustomTransport\<TClusterUrl extends ClusterUrl\>(
     clusterUrl: TClusterUrl,
-): RpcTransportFromClusterUrl<TClusterUrl> {
+): RpcTransportFromClusterUrl\<TClusterUrl\> {
     /* ... */
 }
 const transport = createCustomTransport(testnet('http://api.testnet.solana.com'));
 transport satisfies RpcTransportTestnet; // OK
 ```
 
-### `Rpc{Devnet|Testnet|Mainnet}<TRpcMethods>`
+### `Rpc{Devnet|Testnet|Mainnet}\<TRpcMethods\>`
 
 These types refine the base `Rpc` type. Each describes a RPC that is specific in some way to a particular Solana cluster and a corpus of RPC methods.
 
@@ -50,37 +50,37 @@ This is useful in cases where you need to make assertions about the suitability 
 
 ```ts
 async function getSpecialAccountInfo(
-    address: Address<'ReAL1111111111111111111111111111'>,
+    address: Address\<'ReAL1111111111111111111111111111'\>,
     rpc: RpcMainnet,
-): Promise<SpecialAccountInfo>;
+): Promise\<SpecialAccountInfo\>;
 async function getSpecialAccountInfo(
-    address: Address<'TeST1111111111111111111111111111'>,
+    address: Address\<'TeST1111111111111111111111111111'\>,
     rpc: RpcDevnet | RpcTestnet,
-): Promise<SpecialAccountInfo>;
-async function getSpecialAccountInfo(address: Address, rpc: Rpc): Promise<SpecialAccountInfo> {
+): Promise\<SpecialAccountInfo\>;
+async function getSpecialAccountInfo(address: Address, rpc: Rpc): Promise\<SpecialAccountInfo\> {
     /* ... */
 }
 const rpc = createSolanaRpc(devnet('https://api.devnet.solana.com'));
 await getSpecialAccountInfo(address('ReAL1111111111111111111111111111'), rpc); // ERROR
 ```
 
-### `RpcFromTransport<TRpcMethods, TRpcTransport extends RpcTransport>`
+### `RpcFromTransport\<TRpcMethods, TRpcTransport extends RpcTransport\>`
 
 Given a `RpcTransport`, this utility type will resolve to as specific a `Rpc` as possible.
 
 ```ts
-function createCustomRpc<TRpcTransport extends RpcTransport>(
+function createCustomRpc\<TRpcTransport extends RpcTransport\>(
     transport: TRpcTransport,
-): RpcFromTransport<MyCustomRpcMethods, TRpcTransport> {
+): RpcFromTransport\<MyCustomRpcMethods, TRpcTransport\> {
     /* ... */
 }
 const transport = createDefaultRpcTransport({ url: mainnet('http://rpc.company') });
 transport satisfies RpcTransportMainnet; // OK
 const rpc = createCustomRpc(transport);
-rpc satisfies RpcMainnet<MyCustomRpcMethods>; // OK
+rpc satisfies RpcMainnet\<MyCustomRpcMethods\>; // OK
 ```
 
-### SolanaRpcApiFromTransport<TTransport extends RpcTransport>
+### SolanaRpcApiFromTransport\<TTransport extends RpcTransport\>
 
 ## Constants
 

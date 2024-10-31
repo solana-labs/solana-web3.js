@@ -27,3 +27,10 @@ test-ledger/
 
 # GitHub Pages deploy directory
 .ghpages-deploy
+
+# Site build artifacts
+site/.vitepress/dist
+site/.vitepress/cache
+
+# Codegenerated TypeDoc API
+site/api/

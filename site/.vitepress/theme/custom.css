@@ -1,0 +1,8 @@
+:root {
+    --vp-home-hero-name-color: transparent;
+    --vp-home-hero-name-background: linear-gradient(to right, #9945ff, #14f195);
+}
+
+.VPHero .name {
+    white-space: nowrap;
+}
