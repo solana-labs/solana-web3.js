@@ -1,10 +1,10 @@
 import { RpcRequest } from './rpc-request';
 
-let _nextMessageId = 0;
-function getNextMessageId() {
+let _nextMessageId = 0n;
+function getNextMessageId(): string {
     const id = _nextMessageId;
-    _nextMessageId = (_nextMessageId + 1) % Number.MAX_SAFE_INTEGER;
-    return id;
+    _nextMessageId++;
+    return id.toString();
 }
 
 export function createRpcMessage<TParams>(request: RpcRequest<TParams>) {
