@@ -1,5 +1,16 @@
 # @solana/assertions
 
+## 2.0.0-rc.2
+
+### Patch Changes
+
+-   [#3361](https://github.com/solana-labs/solana-web3.js/pull/3361) [`441fa3a`](https://github.com/solana-labs/solana-web3.js/commit/441fa3a6c7c104961f935e65e259f40c10e82f8a) Thanks [@steveluscher](https://github.com/steveluscher)! - Fixed a bug where calls to `isEd25519CurveSupported()` might have resulted in uncaught rejections bubbling up through the app, in cases where Ed25519 is not supported
+
+-   [#3137](https://github.com/solana-labs/solana-web3.js/pull/3137) [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a) Thanks [@mcintyre94](https://github.com/mcintyre94)! - The build is now compatible with the Vercel Edge runtime and Cloudflare Workers through the addition of `edge-light` and `workerd` to the package exports.
+
+-   Updated dependencies [[`38faba0`](https://github.com/solana-labs/solana-web3.js/commit/38faba05fab479ddbd95d0e211744d203f8aa823), [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a)]:
+    -   @solana/errors@2.0.0-rc.2
+
 ## 2.0.0-rc.1
 
 ### Patch Changes

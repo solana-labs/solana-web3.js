@@ -1,5 +1,21 @@
 # @solana/rpc-graphql
 
+## 2.0.0-rc.2
+
+### Minor Changes
+
+-   [#3098](https://github.com/solana-labs/solana-web3.js/pull/3098) [`2f541b6`](https://github.com/solana-labs/solana-web3.js/commit/2f541b6c7e87002cf26e911d31df4779d4da674c) Thanks [@buffalojoec](https://github.com/buffalojoec)! - Update program accounts filters for `programAccounts` query
+
+### Patch Changes
+
+-   [#3213](https://github.com/solana-labs/solana-web3.js/pull/3213) [`3fc388f`](https://github.com/solana-labs/solana-web3.js/commit/3fc388f0b40243436a3ecbcd2af27ea8efa683e4) Thanks [@mcintyre94](https://github.com/mcintyre94)! - Clean up SolanaRpcApi: no longer extend RpcApiMethods + remove export
+
+-   [#3137](https://github.com/solana-labs/solana-web3.js/pull/3137) [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a) Thanks [@mcintyre94](https://github.com/mcintyre94)! - The build is now compatible with the Vercel Edge runtime and Cloudflare Workers through the addition of `edge-light` and `workerd` to the package exports.
+
+-   Updated dependencies [[`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a)]:
+    -   @solana/fast-stable-stringify@2.0.0-rc.2
+    -   @solana/codecs-strings@2.0.0-rc.2
+
 ## 2.0.0-rc.1
 
 ### Patch Changes

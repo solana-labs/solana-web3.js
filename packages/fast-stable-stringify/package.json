@@ -1,6 +1,6 @@
 {
     "name": "@solana/fast-stable-stringify",
-    "version": "2.0.0-rc.1",
+    "version": "2.0.0-rc.2",
     "description": "Deterministic stringification for when performance and bundle size matters",
     "exports": {
         "edge-light": {

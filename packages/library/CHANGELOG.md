@@ -1,5 +1,47 @@
 # @solana/web3.js
 
+## 2.0.0-rc.2
+
+### Patch Changes
+
+-   [#3407](https://github.com/solana-labs/solana-web3.js/pull/3407) [`10b08ac`](https://github.com/solana-labs/solana-web3.js/commit/10b08ac8cdb61aa1412475426cfcaf0eefe32722) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Use `RpcRequest`, `RpcResponse` and their transformers in RPC Subscriptions packages
+
+    This change makes the RPC and RPC Subscriptions architecture more consistent by using the same `RpcRequest` and `RpcResponse` types and transformers as the basis for handling user requests (RPC calls or subscriptions) and returning responses to them.
+
+    See the following PRs for more details:
+
+    -   [PR #3393](https://github.com/solana-labs/solana-web3.js/pull/3393)
+    -   [PR #3394](https://github.com/solana-labs/solana-web3.js/pull/3394)
+    -   [PR #3403](https://github.com/solana-labs/solana-web3.js/pull/3403)
+    -   [PR #3404](https://github.com/solana-labs/solana-web3.js/pull/3404)
+    -   [PR #3405](https://github.com/solana-labs/solana-web3.js/pull/3405)
+
+-   [#3453](https://github.com/solana-labs/solana-web3.js/pull/3453) [`bafefed`](https://github.com/solana-labs/solana-web3.js/commit/bafefed88574009ba5a983023e439d91b65fada2) Thanks [@mcintyre94](https://github.com/mcintyre94)! - Rename decodeTransactionMessage to decompileTransactionMessageFetchingLookupTables
+
+-   [#3290](https://github.com/solana-labs/solana-web3.js/pull/3290) [`2368163`](https://github.com/solana-labs/solana-web3.js/commit/23681637fa3ee0e2242b3b6bf087a066393bcbd8) Thanks [@mcintyre94](https://github.com/mcintyre94)! - Throw an error if a transaction fails when being simulated to estimate CUs
+
+-   [#3137](https://github.com/solana-labs/solana-web3.js/pull/3137) [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a) Thanks [@mcintyre94](https://github.com/mcintyre94)! - The build is now compatible with the Vercel Edge runtime and Cloudflare Workers through the addition of `edge-light` and `workerd` to the package exports.
+
+-   Updated dependencies [[`292487d`](https://github.com/solana-labs/solana-web3.js/commit/292487da00ee57350e8faf49ccf961203aed6403), [`10b08ac`](https://github.com/solana-labs/solana-web3.js/commit/10b08ac8cdb61aa1412475426cfcaf0eefe32722), [`3834d82`](https://github.com/solana-labs/solana-web3.js/commit/3834d82eb1dd150f261612d742c3105194689c13), [`696c72c`](https://github.com/solana-labs/solana-web3.js/commit/696c72ce25c96f06442785bddffbc890ceb802f3), [`9dfca45`](https://github.com/solana-labs/solana-web3.js/commit/9dfca454355819444bad29e48602886428ba4cac), [`3c02c35`](https://github.com/solana-labs/solana-web3.js/commit/3c02c3582f5b87151b7ac1d9cd24b9d20f6945ea), [`1c25dd4`](https://github.com/solana-labs/solana-web3.js/commit/1c25dd4069a3a8f5599285c9b0eaeb71a2f897d1), [`3fc388f`](https://github.com/solana-labs/solana-web3.js/commit/3fc388f0b40243436a3ecbcd2af27ea8efa683e4), [`0245265`](https://github.com/solana-labs/solana-web3.js/commit/024526554fa0145e31e62a0d47f1eea556a30e71), [`500a991`](https://github.com/solana-labs/solana-web3.js/commit/500a991d292638eaee1fa48a7b94acfe2ff83cb7), [`231a030`](https://github.com/solana-labs/solana-web3.js/commit/231a0303ae5960e783719a8ff1d17a50ff26ad78), [`8f94a9e`](https://github.com/solana-labs/solana-web3.js/commit/8f94a9ede71b32662bff991e6def68bc9e8bc921), [`38faba0`](https://github.com/solana-labs/solana-web3.js/commit/38faba05fab479ddbd95d0e211744d203f8aa823), [`4c7224d`](https://github.com/solana-labs/solana-web3.js/commit/4c7224d0a884b0dc91ea536ce5fbdcd0a0d7e011), [`44c8772`](https://github.com/solana-labs/solana-web3.js/commit/44c8772c8711b99e68dce3348e17bfc5b1d2a833), [`e1cb697`](https://github.com/solana-labs/solana-web3.js/commit/e1cb697d66dc906aa2433965452417e03cf86e13), [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a), [`4decebb`](https://github.com/solana-labs/solana-web3.js/commit/4decebb9b619972f49c740323b59cf470696e105), [`d4965ec`](https://github.com/solana-labs/solana-web3.js/commit/d4965ece9abaf81e3006442db15f3f77d89a622c), [`0158b31`](https://github.com/solana-labs/solana-web3.js/commit/0158b3181ed96996f269f3bff689f76411e460b3), [`db144da`](https://github.com/solana-labs/solana-web3.js/commit/db144da362e3389837b56f97abfb766cc8c847c2), [`c8e6e71`](https://github.com/solana-labs/solana-web3.js/commit/c8e6e71529f219caf83ed444e53f5a1e757129dc)]:
+    -   @solana/addresses@2.0.0-rc.2
+    -   @solana/rpc-subscriptions@2.0.0-rc.2
+    -   @solana/rpc-spec-types@2.0.0-rc.2
+    -   @solana/rpc@2.0.0-rc.2
+    -   @solana/rpc-types@2.0.0-rc.2
+    -   @solana/transaction-confirmation@2.0.0-rc.2
+    -   @solana/accounts@2.0.0-rc.2
+    -   @solana/transaction-messages@2.0.0-rc.2
+    -   @solana/rpc-parsed-types@2.0.0-rc.2
+    -   @solana/sysvars@2.0.0-rc.2
+    -   @solana/errors@2.0.0-rc.2
+    -   @solana/instructions@2.0.0-rc.2
+    -   @solana/transactions@2.0.0-rc.2
+    -   @solana/functional@2.0.0-rc.2
+    -   @solana/programs@2.0.0-rc.2
+    -   @solana/signers@2.0.0-rc.2
+    -   @solana/codecs@2.0.0-rc.2
+    -   @solana/keys@2.0.0-rc.2
+
 ## 2.0.0-rc.1
 
 ### Patch Changes
