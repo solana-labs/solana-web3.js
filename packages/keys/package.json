@@ -83,14 +83,6 @@
     "peerDependencies": {
         "typescript": ">=5"
     },
-    "bundlewatch": {
-        "defaultCompression": "gzip",
-        "files": [
-            {
-                "path": "./dist/index*.js"
-            }
-        ]
-    },
     "devDependencies": {
         "tinybench": "^2.9.0"
     },

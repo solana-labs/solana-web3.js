@@ -84,14 +84,6 @@
         "typescript": ">=5",
         "ws": "^8.18.0"
     },
-    "bundlewatch": {
-        "defaultCompression": "gzip",
-        "files": [
-            {
-                "path": "./dist/index*.js"
-            }
-        ]
-    },
     "engines": {
         "node": ">=20.18.0"
     }
