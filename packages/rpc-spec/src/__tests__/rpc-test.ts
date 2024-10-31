@@ -59,7 +59,7 @@ describe('JSON-RPC 2.0', () => {
                 .send()
                 .catch(() => {});
             expect(makeHttpRequest).toHaveBeenCalledWith({
-                payload: { ...createRpcMessage({ methodName: 'someMethod', params: [123] }), id: expect.any(Number) },
+                payload: { ...createRpcMessage({ methodName: 'someMethod', params: [123] }), id: expect.any(String) },
             });
         });
         it('returns results from the transport', async () => {
@@ -99,7 +99,7 @@ describe('JSON-RPC 2.0', () => {
             expect(makeHttpRequest).toHaveBeenCalledWith({
                 payload: {
                     ...createRpcMessage({ methodName: 'someMethodAugmented', params: [123, 'augmented', 'params'] }),
-                    id: expect.any(Number),
+                    id: expect.any(String),
                 },
             });
         });

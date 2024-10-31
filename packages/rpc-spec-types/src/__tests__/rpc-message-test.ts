@@ -5,12 +5,12 @@ describe('createRpcMessage', () => {
         const request = { methodName: 'foo', params: 'bar' };
         const { id: firstId } = createRpcMessage(request);
         const { id: secondId } = createRpcMessage(request);
-        expect(secondId - firstId).toBe(1);
+        expect(Number(secondId) - Number(firstId)).toBe(1);
     });
     it('returns a well-formed JSON-RPC 2.0 message', () => {
         const request = { methodName: 'someMethod', params: [1, 2, 3] };
         expect(createRpcMessage(request)).toStrictEqual({
-            id: expect.any(Number),
+            id: expect.any(String),
             jsonrpc: '2.0',
             method: 'someMethod',
             params: [1, 2, 3],

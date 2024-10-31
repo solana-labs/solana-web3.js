@@ -7,7 +7,7 @@ export type RpcResponseTransformer<TResponse = unknown> = {
 };
 
 interface IHasIdentifier {
-    readonly id: number;
+    readonly id: string;
 }
 
 type RpcErrorResponsePayload = Readonly<{

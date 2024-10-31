@@ -23,8 +23,7 @@ describe('accountNotifications', () => {
         rpcSubscriptions = createLocalhostSolanaRpcSubscriptions();
     });
 
-    // eslint-disable-next-line jest/no-disabled-tests
-    it.skip('can subscribe to account notifications', async () => {
+    it('can subscribe to account notifications', async () => {
         expect.hasAssertions();
         const abortSignal = new AbortController().signal;
         const subscriptionPromise = rpcSubscriptions
