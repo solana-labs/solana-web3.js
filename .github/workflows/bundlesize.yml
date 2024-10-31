@@ -1,39 +1,36 @@
-name: Analyze Library Bundle Size
+name: Compare bundle size
 
 on:
-  workflow_run:
-    workflows:
-      - Pull requests
-    types:
-      - completed
+  pull_request:
+
+env:
+  # Among other things, opts out of Turborepo telemetry
+  # See https://consoledonottrack.com/
+  DO_NOT_TRACK: '1'
+  # Some tasks slow down considerably on GitHub Actions runners when concurrency is high
+  TURBO_CONCURRENCY: 1
+  # Enables Turborepo Remote Caching.
+  TURBO_REMOTE_CACHE_SIGNATURE_KEY: ${{ secrets.TURBO_REMOTE_CACHE_SIGNATURE_KEY }}
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
 
 jobs:
   compare-bundle-size:
-    name: Compare Bundle Size
     runs-on: ubuntu-latest
 
-    if: >
-      github.event.workflow_run.event == 'pull_request' &&
-      github.event.workflow_run.conclusion == 'success'
-
     steps:
-      - name: Install package manager
-        uses: pnpm/action-setup@v3
-        with:
-          version: 9.1.0
-          run_install: false
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Download Library Bundle
-        uses: actions/download-artifact@v4
+      - name: Install Dependencies
+        uses: ./.github/workflows/actions/install-dependencies
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          run-id: ${{ github.event.workflow_run.id }}
-          name: library-dist
+          version: current
 
-      - name: Run Bundlewatch
-        run: pnpm dlx bundlewatch
-        env:
-          BUNDLEWATCH_GITHUB_TOKEN: ${{ secrets.BUNDLEWATCH_GITHUB_TOKEN }}
-          CI_BRANCH: ${{ github.ref	}}
-          CI_BRANCH_BASE: refs/heads/master
-          CI_COMMIT_SHA: ${{ github.event.pull_request.head.sha }}
+      - name: Build library
+        run: pnpm turbo compile:js --filter=@solana/web3.js
+
+      - uses: preactjs/compressed-size-action@v2
+        with:
+          build-script: --if-present noop # Trick pnpm into doing nothing.
+          pattern: ./packages/library/dist/index.*.mjs
