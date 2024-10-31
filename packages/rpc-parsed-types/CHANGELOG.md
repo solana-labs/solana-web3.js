@@ -1,5 +1,7 @@
 # @solana/rpc-parsed-types
 
+## 2.0.0-rc.3
+
 ## 2.0.0-rc.2
 
 ### Patch Changes

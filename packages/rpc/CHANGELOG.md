@@ -1,5 +1,20 @@
 # @solana/rpc
 
+## 2.0.0-rc.3
+
+### Patch Changes
+
+-   Updated dependencies [[`45df702`](https://github.com/solana-labs/solana-web3.js/commit/45df7028d872e65759dad86b97cd9d4a9a3a545e)]:
+    -   @solana/rpc-spec-types@2.0.0-rc.3
+    -   @solana/rpc-spec@2.0.0-rc.3
+    -   @solana/rpc-api@2.0.0-rc.3
+    -   @solana/rpc-transformers@2.0.0-rc.3
+    -   @solana/rpc-transport-http@2.0.0-rc.3
+    -   @solana/errors@2.0.0-rc.3
+    -   @solana/fast-stable-stringify@2.0.0-rc.3
+    -   @solana/functional@2.0.0-rc.3
+    -   @solana/rpc-types@2.0.0-rc.3
+
 ## 2.0.0-rc.2
 
 ### Patch Changes
