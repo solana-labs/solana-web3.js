@@ -4,4 +4,4 @@
 '@solana/rpc-spec': patch
 ---
 
-Use strings for RPC message IDs
+Fixed a bug where the subcription server's response would not be detected, because of a mismatch in the format of the `id`. Now all RPC message ids are strings, for avoidance of doubt.
