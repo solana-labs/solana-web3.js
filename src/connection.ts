@@ -39,6 +39,7 @@ import RpcWebSocketClient from './rpc-websocket';
 import {MS_PER_SLOT} from './timing';
 import {
   Transaction,
+  TransactionMessage,
   TransactionStatus,
   TransactionVersion,
   VersionedTransaction,
@@ -2598,20 +2599,6 @@ const GetParsedTransactionRpcResult = jsonRpcResult(
 );
 
 /**
- * Expected JSON RPC response for the "getRecentBlockhash" message
- *
- * @deprecated Deprecated since RPC v1.8.0. Please use {@link GetLatestBlockhashRpcResult} instead.
- */
-const GetRecentBlockhashAndContextRpcResult = jsonRpcResultAndContext(
-  pick({
-    blockhash: string(),
-    feeCalculator: pick({
-      lamportsPerSignature: number(),
-    }),
-  }),
-);
-
-/**
  * Expected JSON RPC response for the "getLatestBlockhash" message
  */
 const GetLatestBlockhashRpcResult = jsonRpcResultAndContext(
@@ -4565,13 +4552,46 @@ export class Connection {
       feeCalculator: FeeCalculator;
     }>
   > {
-    const args = this._buildArgs([], commitment);
-    const unsafeRes = await this._rpcRequest('getRecentBlockhash', args);
-    const res = create(unsafeRes, GetRecentBlockhashAndContextRpcResult);
-    if ('error' in res) {
-      throw new SolanaJSONRPCError(res.error, 'failed to get recent blockhash');
-    }
-    return res.result;
+    // In order to serve the same response (with blockhash and fee calculator)
+    // as the now-removed `getRecentBlockhash` method, we'll have to make two
+    // calls.
+
+    // First get the latest blockhash from `getLatestBlockhash`.
+    const {
+      context,
+      value: {blockhash: latestBlockhash},
+    } = await this.getLatestBlockhashAndContext(commitment);
+
+    // Then, in order to obtain the fee calculator for this blockhash, build a
+    // mock transaction message:
+    // * Use the obtained blockhash.
+    // * Provide only one signer.
+    // * Declare zero write locks.
+    // * Request no additional CUs.
+    const mockedMessage = new TransactionMessage({
+      payerKey: PublicKey.default, // Only one signer.
+      instructions: [],
+      recentBlockhash: latestBlockhash,
+    }).compileToLegacyMessage();
+
+    // Then query the `getFeeForMessage` method to obtain a fee for the mocked
+    // message. This will give us a fee which equates to the cluster's lamports
+    // per signature for the given blockhash.
+    const feeForMessage = await this.getFeeForMessage(
+      mockedMessage,
+      commitment,
+    );
+    const lamportsPerSignature = feeForMessage.value;
+
+    return {
+      context,
+      value: {
+        blockhash: latestBlockhash,
+        feeCalculator: {
+          lamportsPerSignature: lamportsPerSignature ?? 5000,
+        },
+      },
+    };
   }
 
   /**

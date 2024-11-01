@@ -160,14 +160,19 @@ const recentBlockhash = async ({
   }
 
   await mockRpcResponse({
-    method: 'getRecentBlockhash',
+    method: 'getLatestBlockhash',
     params,
     value: {
       blockhash,
-      feeCalculator: {
-        lamportsPerSignature: 42,
-      },
+      lastValidBlockHeight: 200,
     },
+    withContext: true,
+  });
+
+  await mockRpcResponse({
+    method: 'getFeeForMessage',
+    params,
+    value: 5000,
     withContext: true,
   });
 
