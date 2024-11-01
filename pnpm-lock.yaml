@@ -359,8 +359,8 @@ importers:
         specifier: ^2.1.1
         version: 2.1.1(browserslist@4.23.2)
       jscodeshift:
-        specifier: ^17.1.0
-        version: 17.1.0(@babel/preset-env@7.25.0(@babel/core@7.24.9))
+        specifier: ^17.1.1
+        version: 17.1.1(@babel/preset-env@7.25.0(@babel/core@7.24.9))
 
   packages/codecs:
     dependencies:
@@ -5582,8 +5582,8 @@ packages:
     resolution: {integrity: sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==}
     hasBin: true
 
-  jscodeshift@17.1.0:
-    resolution: {integrity: sha512-mFLmLioKzzT0Jm+IpGK2Nfb6U2NW9/gk1W8wqC2sSz4ze/2COe4TYCQKROe1jp72A11/yOn1YiemsNPAsAIg+g==}
+  jscodeshift@17.1.1:
+    resolution: {integrity: sha512-4vq5B1sD37aa9qed3zWq2XQPun5XjxebIv+Folr57lt8B4HLGDHEz1UG7pfcxzSaelzPbcY7yZSs033/S0i6wQ==}
     engines: {node: '>=16'}
     hasBin: true
     peerDependencies:
@@ -12335,7 +12335,7 @@ snapshots:
     dependencies:
       argparse: 2.0.1
 
-  jscodeshift@17.1.0(@babel/preset-env@7.25.0(@babel/core@7.24.9)):
+  jscodeshift@17.1.1(@babel/preset-env@7.25.0(@babel/core@7.24.9)):
     dependencies:
       '@babel/core': 7.24.9
       '@babel/parser': 7.25.0
