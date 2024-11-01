@@ -38,7 +38,7 @@ importers:
         version: link:packages/build-scripts
       '@solana/eslint-config-solana':
         specifier: ^4.0.0
-        version: 4.0.0(3vgqgk4idhzfisueqo776rbleq)
+        version: 4.0.0(@eslint/js@9.13.0)(@types/eslint__js@8.42.3)(eslint-plugin-jest@28.8.3(@typescript-eslint/eslint-plugin@8.12.2(@typescript-eslint/parser@8.12.2(eslint@9.13.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.13.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.13.0(jiti@1.21.0))(jest@30.0.0-alpha.6(@types/node@22.8.4)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.8.4)(typescript@5.6.3)))(typescript@5.6.3))(eslint-plugin-react-hooks@5.0.0(eslint@9.13.0(jiti@1.21.0)))(eslint-plugin-simple-import-sort@12.1.1(eslint@9.13.0(jiti@1.21.0)))(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@3.3.0(@typescript-eslint/parser@8.12.2(eslint@9.13.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.13.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.13.0(jiti@1.21.0))(globals@15.11.0)(jest@30.0.0-alpha.6(@types/node@22.8.4)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.8.4)(typescript@5.6.3)))(typescript-eslint@8.11.0(eslint@9.13.0(jiti@1.21.0))(typescript@5.6.3))(typescript@5.6.3)
       '@solana/prettier-config-solana':
         specifier: 0.0.5
         version: 0.0.5(prettier@3.3.3)
@@ -359,8 +359,8 @@ importers:
         specifier: ^2.1.1
         version: 2.1.1(browserslist@4.23.2)
       jscodeshift:
-        specifier: ^17.1.0
-        version: 17.1.0(@babel/preset-env@7.25.0(@babel/core@7.24.9))
+        specifier: ^17.1.1
+        version: 17.1.1(@babel/preset-env@7.25.0(@babel/core@7.24.9))
 
   packages/codecs:
     dependencies:
@@ -3944,10 +3944,6 @@ packages:
     resolution: {integrity: sha512-3CijvrO9utx598kjr45hTbbeeykQrQfKmSnxeWOgU25TOEpvcipD/bYDQWIqUv1Oc6KK4YStokSMu/FBNecGUQ==}
     engines: {node: '>=16'}
 
-  '@wallet-standard/base@0.0.0-20240802213516':
-    resolution: {integrity: sha512-stAZDW4Dkv3AYAqyjNAclheplzLdh1FDq7NxNre2tSQ2yJkFBB+cDXki4+dtMwBnumbY2bg1RV1qdYqSUh17QA==}
-    engines: {node: '>=16'}
-
   '@wallet-standard/base@1.1.0':
     resolution: {integrity: sha512-DJDQhjKmSNVLKWItoKThJS+CsJQjR9AOBOirBVT1F9YpRyC9oYHE+ZnSf8y8bxUphtKqdQMPVQ2mHohYdRvDVQ==}
     engines: {node: '>=16'}
@@ -3963,10 +3959,6 @@ packages:
 
   '@wallet-standard/experimental-features@0.2.0':
     resolution: {integrity: sha512-B6fBLgouurN3IAoqhh8/1Mm33IAWIErQXVyvMcyBJM+elOD6zkNDUjew5QMG19qCbJ+ZiZUZmdOUC5PxxWw69w==}
-    engines: {node: '>=16'}
-
-  '@wallet-standard/features@0.0.0-20240802213516':
-    resolution: {integrity: sha512-ac6Rx8VDE4JZ0nhxTGMNWTurLWCLU0RPPHHy18C1qtFj2xeKaCM6k5E1L+jkT+0tOT731B/96eGa0Lm3p2o34Q==}
     engines: {node: '>=16'}
 
   '@wallet-standard/features@1.1.0':
@@ -5590,8 +5582,8 @@ packages:
     resolution: {integrity: sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==}
     hasBin: true
 
-  jscodeshift@17.1.0:
-    resolution: {integrity: sha512-mFLmLioKzzT0Jm+IpGK2Nfb6U2NW9/gk1W8wqC2sSz4ze/2COe4TYCQKROe1jp72A11/yOn1YiemsNPAsAIg+g==}
+  jscodeshift@17.1.1:
+    resolution: {integrity: sha512-4vq5B1sD37aa9qed3zWq2XQPun5XjxebIv+Folr57lt8B4HLGDHEz1UG7pfcxzSaelzPbcY7yZSs033/S0i6wQ==}
     engines: {node: '>=16'}
     hasBin: true
     peerDependencies:
@@ -9691,8 +9683,8 @@ snapshots:
     dependencies:
       buffer: 6.0.3
 
-  '@solana/eslint-config-solana@4.0.0(3vgqgk4idhzfisueqo776rbleq)':
-    dependencies:
+  ? '@solana/eslint-config-solana@4.0.0(@eslint/js@9.13.0)(@types/eslint__js@8.42.3)(eslint-plugin-jest@28.8.3(@typescript-eslint/eslint-plugin@8.12.2(@typescript-eslint/parser@8.12.2(eslint@9.13.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.13.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.13.0(jiti@1.21.0))(jest@30.0.0-alpha.6(@types/node@22.8.4)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.8.4)(typescript@5.6.3)))(typescript@5.6.3))(eslint-plugin-react-hooks@5.0.0(eslint@9.13.0(jiti@1.21.0)))(eslint-plugin-simple-import-sort@12.1.1(eslint@9.13.0(jiti@1.21.0)))(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@3.3.0(@typescript-eslint/parser@8.12.2(eslint@9.13.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.13.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.13.0(jiti@1.21.0))(globals@15.11.0)(jest@30.0.0-alpha.6(@types/node@22.8.4)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.8.4)(typescript@5.6.3)))(typescript-eslint@8.11.0(eslint@9.13.0(jiti@1.21.0))(typescript@5.6.3))(typescript@5.6.3)'
+  : dependencies:
       '@eslint/js': 9.13.0
       '@types/eslint__js': 8.42.3
       eslint: 9.13.0(jiti@1.21.0)
@@ -9712,8 +9704,8 @@ snapshots:
 
   '@solana/wallet-standard-features@1.2.0':
     dependencies:
-      '@wallet-standard/base': 0.0.0-20240802213516
-      '@wallet-standard/features': 0.0.0-20240802213516
+      '@wallet-standard/base': 1.1.0
+      '@wallet-standard/features': 1.1.0
 
   '@solana/web3.js@1.95.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)':
     dependencies:
@@ -10227,8 +10219,6 @@ snapshots:
     dependencies:
       '@wallet-standard/base': 1.1.0
 
-  '@wallet-standard/base@0.0.0-20240802213516': {}
-
   '@wallet-standard/base@1.1.0': {}
 
   '@wallet-standard/core@1.1.0':
@@ -10247,10 +10237,6 @@ snapshots:
   '@wallet-standard/experimental-features@0.2.0':
     dependencies:
       '@wallet-standard/base': 1.1.0
-
-  '@wallet-standard/features@0.0.0-20240802213516':
-    dependencies:
-      '@wallet-standard/base': 0.0.0-20240802213516
 
   '@wallet-standard/features@1.1.0':
     dependencies:
@@ -12349,7 +12335,7 @@ snapshots:
     dependencies:
       argparse: 2.0.1
 
-  jscodeshift@17.1.0(@babel/preset-env@7.25.0(@babel/core@7.24.9)):
+  jscodeshift@17.1.1(@babel/preset-env@7.25.0(@babel/core@7.24.9)):
     dependencies:
       '@babel/core': 7.24.9
       '@babel/parser': 7.25.0
