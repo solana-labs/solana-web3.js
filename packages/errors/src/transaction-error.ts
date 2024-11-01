@@ -75,14 +75,14 @@ export function getSolanaErrorFromTransactionError(transactionError: string | { 
                     };
                 } else if (errorCode === SOLANA_ERROR__TRANSACTION_ERROR__DUPLICATE_INSTRUCTION) {
                     return {
-                        index: rpcErrorContext as number,
+                        index: Number(rpcErrorContext as bigint | number),
                     };
                 } else if (
                     errorCode === SOLANA_ERROR__TRANSACTION_ERROR__INSUFFICIENT_FUNDS_FOR_RENT ||
                     errorCode === SOLANA_ERROR__TRANSACTION_ERROR__PROGRAM_EXECUTION_TEMPORARILY_RESTRICTED
                 ) {
                     return {
-                        accountIndex: (rpcErrorContext as { account_index: number }).account_index,
+                        accountIndex: Number((rpcErrorContext as { account_index: bigint | number }).account_index),
                     };
                 }
             },
