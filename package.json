@@ -18,7 +18,7 @@
         "@changesets/changelog-github": "^0.5.0",
         "@changesets/cli": "^2.27.9",
         "@eslint/js": "^9.14.0",
-        "@eslint/json": "^0.5.0",
+        "@eslint/json": "^0.6.0",
         "@solana/build-scripts": "workspace:*",
         "@solana/eslint-config-solana": "^4.0.0",
         "@solana/prettier-config-solana": "0.0.5",

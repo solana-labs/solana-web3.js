@@ -31,8 +31,8 @@ importers:
         specifier: ^9.14.0
         version: 9.14.0
       '@eslint/json':
-        specifier: ^0.5.0
-        version: 0.5.0
+        specifier: ^0.6.0
+        version: 0.6.0
       '@solana/build-scripts':
         specifier: workspace:*
         version: link:packages/build-scripts
@@ -2466,8 +2466,8 @@ packages:
     resolution: {integrity: sha512-pFoEtFWCPyDOl+C6Ift+wC7Ro89otjigCf5vcuWqWgqNSQbRrpjSvdeE6ofLz4dHmyxD5f7gIdGT4+p36L6Twg==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@eslint/json@0.5.0':
-    resolution: {integrity: sha512-3cTSkHj/Mw/lLwrrVUgnhgWUH1FT2aJ3OLqi5gDvwunHMHBlf6ausKdsrxshH4vXx6mYS65dxG1dvWJI0U+Cuw==}
+  '@eslint/json@0.6.0':
+    resolution: {integrity: sha512-xlYoULv2QIeJnjFP4RVbPMpaGplsYo0vSIBpXP/QRnoi7oDYhVZ4u3wE5UUwI8hnhTQUMozrDhyuVFXMQ1HkMQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@eslint/object-schema@2.1.4':
@@ -8440,7 +8440,7 @@ snapshots:
 
   '@eslint/js@9.14.0': {}
 
-  '@eslint/json@0.5.0':
+  '@eslint/json@0.6.0':
     dependencies:
       '@eslint/plugin-kit': 0.2.1
       '@humanwhocodes/momoa': 3.3.0
