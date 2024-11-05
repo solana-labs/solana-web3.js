@@ -43,7 +43,7 @@
                 "test:treeshakability:native",
                 "test:treeshakability:node"
             ],
-            "passThroughEnv": ["GH_TOKEN", "NPM_TOKEN"]
+            "passThroughEnv": ["GH_TOKEN", "NPM_TOKEN", "PUBLISH_TAG"]
         },
         "style:fix": {
             "inputs": ["$TURBO_DEFAULT$", "*"],
