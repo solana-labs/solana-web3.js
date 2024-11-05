@@ -1,5 +1,7 @@
 # @solana/fast-stable-stringify
 
+## 2.0.0-rc.4
+
 ## 2.0.0-rc.3
 
 ## 2.0.0-rc.2

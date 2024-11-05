@@ -1,5 +1,11 @@
 # @solana/errors
 
+## 2.0.0-rc.4
+
+### Patch Changes
+
+-   [#3519](https://github.com/solana-labs/solana-web3.js/pull/3519) [`2798061`](https://github.com/solana-labs/solana-web3.js/commit/27980617e4f8d34dbc7b6da4507e4bca68a68090) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Accept bigints in RPC error factories, fixing functions such as `isProgramError`
+
 ## 2.0.0-rc.3
 
 ## 2.0.0-rc.2
