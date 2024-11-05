@@ -52,7 +52,7 @@
         "maintained node versions"
     ],
     "devDependencies": {
-        "@types/ws": "^8.5.12"
+        "@types/ws": "^8.5.13"
     },
     "peerDependencies": {
         "ws": "^8.18.0"
