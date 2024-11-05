@@ -58,8 +58,24 @@ describe('getSolanaErrorFromTransactionError', () => {
             }),
         );
     });
+    it.failing('produces the correct `SolanaError` for a `DuplicateInstruction` error with a bigint index', () => {
+        const error = getSolanaErrorFromTransactionError({ DuplicateInstruction: 1n });
+        expect(error).toEqual(
+            new SolanaError(SOLANA_ERROR__TRANSACTION_ERROR__DUPLICATE_INSTRUCTION, {
+                index: 1,
+            }),
+        );
+    });
     it('produces the correct `SolanaError` for a `InsufficientFundsForRent` error', () => {
         const error = getSolanaErrorFromTransactionError({ InsufficientFundsForRent: { account_index: 1 } });
+        expect(error).toEqual(
+            new SolanaError(SOLANA_ERROR__TRANSACTION_ERROR__INSUFFICIENT_FUNDS_FOR_RENT, {
+                accountIndex: 1,
+            }),
+        );
+    });
+    it.failing('produces the correct `SolanaError` for a `InsufficientFundsForRent` error with a bigint index', () => {
+        const error = getSolanaErrorFromTransactionError({ InsufficientFundsForRent: { account_index: 1n } });
         expect(error).toEqual(
             new SolanaError(SOLANA_ERROR__TRANSACTION_ERROR__INSUFFICIENT_FUNDS_FOR_RENT, {
                 accountIndex: 1,
@@ -76,6 +92,19 @@ describe('getSolanaErrorFromTransactionError', () => {
             }),
         );
     });
+    it.failing(
+        'produces the correct `SolanaError` for a `ProgramExecutionTemporarilyRestricted` error with a bigint index',
+        () => {
+            const error = getSolanaErrorFromTransactionError({
+                ProgramExecutionTemporarilyRestricted: { account_index: 1n },
+            });
+            expect(error).toEqual(
+                new SolanaError(SOLANA_ERROR__TRANSACTION_ERROR__PROGRAM_EXECUTION_TEMPORARILY_RESTRICTED, {
+                    accountIndex: 1,
+                }),
+            );
+        },
+    );
     it("returns the unknown error when encountering an enum name that's missing from the map", () => {
         const error = getSolanaErrorFromTransactionError('ThisDoesNotExist');
         expect(error).toEqual(
