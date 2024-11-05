@@ -56,6 +56,14 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           PUBLISH_TAG: rc
 
+      - name: Push Git Tag
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        run: |
+          (cd packages/library/ && pnpm pkg get version | sed -n '2p' | grep -o '"\([^"]\)\+"$' | tr -d \") | xargs -I{} git tag v{}
+          git push --tags
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Stop Test Validator
         if: always() && steps.start-test-validator.outcome == 'success'
         run: kill ${{ steps.start-test-validator.outputs.pid }}
