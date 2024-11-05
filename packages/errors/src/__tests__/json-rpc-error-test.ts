@@ -35,9 +35,9 @@ describe('getSolanaErrorFromJsonRpcError', () => {
         const error = getSolanaErrorFromJsonRpcError({ code, message: 'o no' });
         expect(error).toHaveProperty('context.__code', 123);
     });
-    it.failing('converts bigint codes to numbers', () => {
+    it('converts bigint codes to numbers', () => {
         const code = 123n;
-        const error = getSolanaErrorFromJsonRpcError({ code: code as unknown as number, message: 'o no' });
+        const error = getSolanaErrorFromJsonRpcError({ code, message: 'o no' });
         expect(error).toHaveProperty('context.__code', 123);
     });
     describe.each([

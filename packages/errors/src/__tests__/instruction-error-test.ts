@@ -70,10 +70,10 @@ describe('getSolanaErrorFromInstructionError', () => {
             expect(error).toEqual(new SolanaError(expectedCode as SolanaErrorCode, { index: 123 }));
         },
     );
-    it.failing.each(EXPECTED_ERROR_CODES)(
+    it.each(EXPECTED_ERROR_CODES)(
         'produces the correct `SolanaError` for a `%s` error with a bigint index',
         (transactionError, expectedCode) => {
-            const error = getSolanaErrorFromInstructionError(123n as unknown as number, transactionError);
+            const error = getSolanaErrorFromInstructionError(123n, transactionError);
             expect(error).toEqual(new SolanaError(expectedCode as SolanaErrorCode, { index: 123 }));
         },
     );
@@ -86,7 +86,7 @@ describe('getSolanaErrorFromInstructionError', () => {
             }),
         );
     });
-    it.failing('produces the correct `SolanaError` for a `Custom` error with a bigint code', () => {
+    it('produces the correct `SolanaError` for a `Custom` error with a bigint code', () => {
         const error = getSolanaErrorFromInstructionError(123, { Custom: 789n });
         expect(error).toEqual(
             new SolanaError(SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM, {

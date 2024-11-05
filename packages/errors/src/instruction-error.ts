@@ -67,9 +67,10 @@ const ORDERED_ERROR_NAMES = [
 ];
 
 export function getSolanaErrorFromInstructionError(
-    index: number,
+    index: bigint | number,
     instructionError: string | { [key: string]: unknown },
 ): SolanaError {
+    const numberIndex = Number(index);
     return getSolanaErrorFromRpcError(
         {
             errorCodeBaseOffset: 4615001,
@@ -77,21 +78,21 @@ export function getSolanaErrorFromInstructionError(
                 if (errorCode === SOLANA_ERROR__INSTRUCTION_ERROR__UNKNOWN) {
                     return {
                         errorName: rpcErrorName,
-                        index,
+                        index: numberIndex,
                         ...(rpcErrorContext !== undefined ? { instructionErrorContext: rpcErrorContext } : null),
                     };
                 } else if (errorCode === SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM) {
                     return {
-                        code: rpcErrorContext as number,
-                        index,
+                        code: Number(rpcErrorContext as bigint | number),
+                        index: numberIndex,
                     };
                 } else if (errorCode === SOLANA_ERROR__INSTRUCTION_ERROR__BORSH_IO_ERROR) {
                     return {
                         encodedData: rpcErrorContext as string,
-                        index,
+                        index: numberIndex,
                     };
                 }
-                return { index };
+                return { index: numberIndex };
             },
             orderedErrorNames: ORDERED_ERROR_NAMES,
             rpcEnumError: instructionError,
