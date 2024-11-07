@@ -857,11 +857,11 @@ Transaction message objects are also **frozen by these functions** to prevent th
 The `signTransaction(..)` function will raise a type error if your transaction message is not already equipped with a fee payer and a lifetime. This helps you catch errors at author-time instead of runtime.
 
 ```ts
-const feePayer = address('AxZfZWeqztBCL37Mkjkd4b8Hf6J13WCcfozrBY6vZzv3');
-const signer = await generateKeyPair();
+const feePayer = await generateKeyPair();
+const feePayerAddress = await getAddressFromPublicKey(feePayer.publicKey);
 
 const transactionMessage = createTransactionMessage({ version: 'legacy' });
-const transactionMessageWithFeePayer = setTransactionMessageFeePayer(feePayer, transactionMessage);
+const transactionMessageWithFeePayer = setTransactionMessageFeePayer(feePayerAddress, transactionMessage);
 
 // Attempting to sign the transaction message without a lifetime will throw a type error
 const signedTransaction = await signTransaction([signer], transactionMessageWithFeePayer);
