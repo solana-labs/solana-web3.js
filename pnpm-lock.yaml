@@ -38,7 +38,7 @@ importers:
         version: link:packages/build-scripts
       '@solana/eslint-config-solana':
         specifier: ^4.0.0
-        version: 4.0.0(@eslint/js@9.14.0)(@types/eslint__js@8.42.3)(eslint-plugin-jest@28.9.0(@typescript-eslint/eslint-plugin@8.13.0(@typescript-eslint/parser@8.13.0(eslint@9.14.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.14.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.14.0(jiti@1.21.0))(jest@30.0.0-alpha.6(@types/node@22.8.7)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.8.7)(typescript@5.6.3)))(typescript@5.6.3))(eslint-plugin-react-hooks@5.0.0(eslint@9.14.0(jiti@1.21.0)))(eslint-plugin-simple-import-sort@12.1.1(eslint@9.14.0(jiti@1.21.0)))(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@3.3.0(@typescript-eslint/parser@8.13.0(eslint@9.14.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.14.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.14.0(jiti@1.21.0))(globals@15.11.0)(jest@30.0.0-alpha.6(@types/node@22.8.7)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.8.7)(typescript@5.6.3)))(typescript-eslint@8.11.0(eslint@9.14.0(jiti@1.21.0))(typescript@5.6.3))(typescript@5.6.3)
+        version: 4.0.0(@eslint/js@9.14.0)(@types/eslint__js@8.42.3)(eslint-plugin-jest@28.9.0(@typescript-eslint/eslint-plugin@8.13.0(@typescript-eslint/parser@8.13.0(eslint@9.14.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.14.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.14.0(jiti@1.21.0))(jest@30.0.0-alpha.6(@types/node@22.8.7)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.8.7)(typescript@5.6.3)))(typescript@5.6.3))(eslint-plugin-react-hooks@5.0.0(eslint@9.14.0(jiti@1.21.0)))(eslint-plugin-simple-import-sort@12.1.1(eslint@9.14.0(jiti@1.21.0)))(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@3.3.0(@typescript-eslint/parser@8.13.0(eslint@9.14.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.14.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.14.0(jiti@1.21.0))(globals@15.12.0)(jest@30.0.0-alpha.6(@types/node@22.8.7)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.8.7)(typescript@5.6.3)))(typescript-eslint@8.11.0(eslint@9.14.0(jiti@1.21.0))(typescript@5.6.3))(typescript@5.6.3)
       '@solana/prettier-config-solana':
         specifier: 0.0.5
         version: 0.0.5(prettier@3.3.3)
@@ -210,8 +210,8 @@ importers:
         specifier: ^0.4.14
         version: 0.4.14(eslint@9.14.0(jiti@1.21.0))
       globals:
-        specifier: ^15.11.0
-        version: 15.11.0
+        specifier: ^15.12.0
+        version: 15.12.0
       vite:
         specifier: ^5.4.10
         version: 5.4.10(@types/node@22.8.7)(terser@5.18.0)
@@ -5088,8 +5088,8 @@ packages:
     resolution: {integrity: sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==}
     engines: {node: '>=18'}
 
-  globals@15.11.0:
-    resolution: {integrity: sha512-yeyNSjdbyVaWurlwCpcA6XNBrHTMIeDdj0/hnvX/OLJ9ekOXYbLsLinH/MucQyGvNnXhidTdNhTtJaffL2sMfw==}
+  globals@15.12.0:
+    resolution: {integrity: sha512-1+gLErljJFhbOVyaetcwJiJ4+eLe45S2E7P5UiZ9xGfeq3ATQf5DOv9G7MH3gGbKQLkzmNh2DxfZwLdw+j6oTQ==}
     engines: {node: '>=18'}
 
   globby@11.1.0:
@@ -9841,7 +9841,7 @@ snapshots:
     dependencies:
       buffer: 6.0.3
 
-  ? '@solana/eslint-config-solana@4.0.0(@eslint/js@9.14.0)(@types/eslint__js@8.42.3)(eslint-plugin-jest@28.9.0(@typescript-eslint/eslint-plugin@8.13.0(@typescript-eslint/parser@8.13.0(eslint@9.14.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.14.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.14.0(jiti@1.21.0))(jest@30.0.0-alpha.6(@types/node@22.8.7)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.8.7)(typescript@5.6.3)))(typescript@5.6.3))(eslint-plugin-react-hooks@5.0.0(eslint@9.14.0(jiti@1.21.0)))(eslint-plugin-simple-import-sort@12.1.1(eslint@9.14.0(jiti@1.21.0)))(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@3.3.0(@typescript-eslint/parser@8.13.0(eslint@9.14.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.14.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.14.0(jiti@1.21.0))(globals@15.11.0)(jest@30.0.0-alpha.6(@types/node@22.8.7)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.8.7)(typescript@5.6.3)))(typescript-eslint@8.11.0(eslint@9.14.0(jiti@1.21.0))(typescript@5.6.3))(typescript@5.6.3)'
+  ? '@solana/eslint-config-solana@4.0.0(@eslint/js@9.14.0)(@types/eslint__js@8.42.3)(eslint-plugin-jest@28.9.0(@typescript-eslint/eslint-plugin@8.13.0(@typescript-eslint/parser@8.13.0(eslint@9.14.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.14.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.14.0(jiti@1.21.0))(jest@30.0.0-alpha.6(@types/node@22.8.7)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.8.7)(typescript@5.6.3)))(typescript@5.6.3))(eslint-plugin-react-hooks@5.0.0(eslint@9.14.0(jiti@1.21.0)))(eslint-plugin-simple-import-sort@12.1.1(eslint@9.14.0(jiti@1.21.0)))(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@3.3.0(@typescript-eslint/parser@8.13.0(eslint@9.14.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.14.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.14.0(jiti@1.21.0))(globals@15.12.0)(jest@30.0.0-alpha.6(@types/node@22.8.7)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.8.7)(typescript@5.6.3)))(typescript-eslint@8.11.0(eslint@9.14.0(jiti@1.21.0))(typescript@5.6.3))(typescript@5.6.3)'
   : dependencies:
       '@eslint/js': 9.14.0
       '@types/eslint__js': 8.42.3
@@ -9851,7 +9851,7 @@ snapshots:
       eslint-plugin-simple-import-sort: 12.1.1(eslint@9.14.0(jiti@1.21.0))
       eslint-plugin-sort-keys-fix: 1.1.2
       eslint-plugin-typescript-sort-keys: 3.3.0(@typescript-eslint/parser@8.13.0(eslint@9.14.0(jiti@1.21.0))(typescript@5.6.3))(eslint@9.14.0(jiti@1.21.0))(typescript@5.6.3)
-      globals: 15.11.0
+      globals: 15.12.0
       jest: 30.0.0-alpha.6(@types/node@22.8.7)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.8.7)(typescript@5.6.3))
       typescript: 5.6.3
       typescript-eslint: 8.11.0(eslint@9.14.0(jiti@1.21.0))(typescript@5.6.3)
@@ -11506,7 +11506,7 @@ snapshots:
 
   globals@14.0.0: {}
 
-  globals@15.11.0: {}
+  globals@15.12.0: {}
 
   globby@11.1.0:
     dependencies:
