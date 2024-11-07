@@ -1,5 +1,25 @@
 # @solana/rpc-graphql
 
+## 2.0.0
+
+### Minor Changes
+
+-   [#3098](https://github.com/solana-labs/solana-web3.js/pull/3098) [`2f541b6`](https://github.com/solana-labs/solana-web3.js/commit/2f541b6c7e87002cf26e911d31df4779d4da674c) Thanks [@buffalojoec](https://github.com/buffalojoec)! - Update program accounts filters for `programAccounts` query
+
+### Patch Changes
+
+-   [#3213](https://github.com/solana-labs/solana-web3.js/pull/3213) [`3fc388f`](https://github.com/solana-labs/solana-web3.js/commit/3fc388f0b40243436a3ecbcd2af27ea8efa683e4) Thanks [@mcintyre94](https://github.com/mcintyre94)! - Clean up SolanaRpcApi: no longer extend RpcApiMethods + remove export
+
+-   [#3541](https://github.com/solana-labs/solana-web3.js/pull/3541) [`135dc5a`](https://github.com/solana-labs/solana-web3.js/commit/135dc5ad43f286380a4c3a689668016f0d7945f4) Thanks [@steveluscher](https://github.com/steveluscher)! - Drop the Release Candidate label and publish `@solana/web3.js` at version 2.0.0
+
+-   [#2606](https://github.com/solana-labs/solana-web3.js/pull/2606) [`367b8ad`](https://github.com/solana-labs/solana-web3.js/commit/367b8ad0cce55a916abfb0125f36b6e844333b2b) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Use commonjs package type
+
+-   [#3137](https://github.com/solana-labs/solana-web3.js/pull/3137) [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a) Thanks [@mcintyre94](https://github.com/mcintyre94)! - The build is now compatible with the Vercel Edge runtime and Cloudflare Workers through the addition of `edge-light` and `workerd` to the package exports.
+
+-   Updated dependencies [[`5ed19c6`](https://github.com/solana-labs/solana-web3.js/commit/5ed19c6c3c6e7a1bacde8c23c438ecb85454b126), [`31916ae`](https://github.com/solana-labs/solana-web3.js/commit/31916ae5d4fb29f239c63252a59745e33a6979ea), [`a548de2`](https://github.com/solana-labs/solana-web3.js/commit/a548de2ebe3cf7289fd126933c4c395c885c3224), [`3bf31e7`](https://github.com/solana-labs/solana-web3.js/commit/3bf31e7b7918cb60cd9f5f4476909d81257cdfd7), [`002cc38`](https://github.com/solana-labs/solana-web3.js/commit/002cc38a99cd4c91c7ce9023e1b4fb28f7e10832), [`135dc5a`](https://github.com/solana-labs/solana-web3.js/commit/135dc5ad43f286380a4c3a689668016f0d7945f4), [`2e5af9f`](https://github.com/solana-labs/solana-web3.js/commit/2e5af9f1a9410f15108863342b48225fdf9a0c83), [`367b8ad`](https://github.com/solana-labs/solana-web3.js/commit/367b8ad0cce55a916abfb0125f36b6e844333b2b), [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a)]:
+    -   @solana/fast-stable-stringify@2.0.0
+    -   @solana/codecs-strings@2.0.0
+
 ## 2.0.0-rc.4
 
 ### Patch Changes

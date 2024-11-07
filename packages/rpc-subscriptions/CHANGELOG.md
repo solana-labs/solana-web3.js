@@ -1,5 +1,62 @@
 # @solana/rpc-subscriptions
 
+## 2.0.0
+
+### Patch Changes
+
+-   [#3407](https://github.com/solana-labs/solana-web3.js/pull/3407) [`10b08ac`](https://github.com/solana-labs/solana-web3.js/commit/10b08ac8cdb61aa1412475426cfcaf0eefe32722) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Use `RpcRequest`, `RpcResponse` and their transformers in RPC Subscriptions packages
+
+    This change makes the RPC and RPC Subscriptions architecture more consistent by using the same `RpcRequest` and `RpcResponse` types and transformers as the basis for handling user requests (RPC calls or subscriptions) and returning responses to them.
+
+    See the following PRs for more details:
+
+    -   [PR #3393](https://github.com/solana-labs/solana-web3.js/pull/3393)
+    -   [PR #3394](https://github.com/solana-labs/solana-web3.js/pull/3394)
+    -   [PR #3403](https://github.com/solana-labs/solana-web3.js/pull/3403)
+    -   [PR #3404](https://github.com/solana-labs/solana-web3.js/pull/3404)
+    -   [PR #3405](https://github.com/solana-labs/solana-web3.js/pull/3405)
+
+-   [#3507](https://github.com/solana-labs/solana-web3.js/pull/3507) [`45df702`](https://github.com/solana-labs/solana-web3.js/commit/45df7028d872e65759dad86b97cd9d4a9a3a545e) Thanks [@mcintyre94](https://github.com/mcintyre94)! - Fixed a bug where the subcription server's response would not be detected, because of a mismatch in the format of the `id`. Now all RPC message ids are strings, for avoidance of doubt.
+
+-   [#3161](https://github.com/solana-labs/solana-web3.js/pull/3161) [`9dfca45`](https://github.com/solana-labs/solana-web3.js/commit/9dfca454355819444bad29e48602886428ba4cac) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Change first argument of `onIntegerOverflow` handler from `methodName: string` to `request: RpcRequest`
+
+-   [#3541](https://github.com/solana-labs/solana-web3.js/pull/3541) [`135dc5a`](https://github.com/solana-labs/solana-web3.js/commit/135dc5ad43f286380a4c3a689668016f0d7945f4) Thanks [@steveluscher](https://github.com/steveluscher)! - Drop the Release Candidate label and publish `@solana/web3.js` at version 2.0.0
+
+-   [#3455](https://github.com/solana-labs/solana-web3.js/pull/3455) [`500a991`](https://github.com/solana-labs/solana-web3.js/commit/500a991d292638eaee1fa48a7b94acfe2ff83cb7) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Adds a channel creator function called `createDefaultSolanaRpcSubscriptionsChannelCreator`. This function works similarly to `createDefaultRpcSubscriptionsChannelCreator` but with some Solana-specific defaults. For instance, it safely handles `BigInt` values in JSON messages since Solana RPC servers accept and return integers larger than `Number.MAX_SAFE_INTEGER`.
+
+-   [#3072](https://github.com/solana-labs/solana-web3.js/pull/3072) [`c122c75`](https://github.com/solana-labs/solana-web3.js/commit/c122c75936e8fa5364edf114a5182cf119b26922) Thanks [@steveluscher](https://github.com/steveluscher)! - Fixed a memory leak with transaction confirmation and subscriptions
+
+-   [#2907](https://github.com/solana-labs/solana-web3.js/pull/2907) [`677a9c4`](https://github.com/solana-labs/solana-web3.js/commit/677a9c4eb88a8ac6a9ede8d82f367c5ac8d69ff4) Thanks [@steveluscher](https://github.com/steveluscher)! - `__DEV__` mode will now be the default if you don't set `process.env.NODE_ENV` at all. This means fewer people ‘accidentally’ finding themselves in production mode with minified error messages.
+
+-   [#3451](https://github.com/solana-labs/solana-web3.js/pull/3451) [`8f94a9e`](https://github.com/solana-labs/solana-web3.js/commit/8f94a9ede71b32662bff991e6def68bc9e8bc921) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Add a \`getRpcSubscriptionsChannelWithBigIntJSONSerialization\` helper function that parses and stringifies JSON messages with support for \`BigInt\` values. Any integer value is parsed as a \`BigInt\` in order to safely handle numbers that exceed the JavaScript \`Number.MAX_SAFE_INTEGER\` value.
+
+-   [#3406](https://github.com/solana-labs/solana-web3.js/pull/3406) [`4c7224d`](https://github.com/solana-labs/solana-web3.js/commit/4c7224d0a884b0dc91ea536ce5fbdcd0a0d7e011) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Replace subscriptionConfigurationHash with RpcRequest in RpcSubscriptionPlan
+
+-   [#2504](https://github.com/solana-labs/solana-web3.js/pull/2504) [`18d6b56`](https://github.com/solana-labs/solana-web3.js/commit/18d6b56a69509e4c98de8f3de51abe2623b46763) Thanks [@steveluscher](https://github.com/steveluscher)! - Replaced `fast-stable-stringify` with our fork
+
+-   [#2606](https://github.com/solana-labs/solana-web3.js/pull/2606) [`367b8ad`](https://github.com/solana-labs/solana-web3.js/commit/367b8ad0cce55a916abfb0125f36b6e844333b2b) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Use commonjs package type
+
+-   [#3137](https://github.com/solana-labs/solana-web3.js/pull/3137) [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a) Thanks [@mcintyre94](https://github.com/mcintyre94)! - The build is now compatible with the Vercel Edge runtime and Cloudflare Workers through the addition of `edge-light` and `workerd` to the package exports.
+
+-   [`c8e6e71`](https://github.com/solana-labs/solana-web3.js/commit/c8e6e71529f219caf83ed444e53f5a1e757129dc) Thanks [@steveluscher](https://github.com/steveluscher)! - We refactored the lower levels of the subscriptions API entirely.
+
+    Previously, all layers of the subscriptions implementation, from the `WebSocket` transport to the API that developers use, dealt in `AsyncIterables`. These are notoriously difficult to code in such a way that expresses all of the ways in which a subscription might be cancelled or error out. Very slight omissions of care could open memory leaks that would bring down the simplest of apps. The new subscriptions infra in Release Candidate 2 deals with event-based subscriptions all the way up to the highest level API, at which point the subscription is vended to the application as an `AsyncIterable`.
+
+    This has eliminated several classes of memory leak and has made it easier to implement higher-level transports (like the autopinger and the subscription coalescer). Additionally, this update introduces a new channel pool implementation that opens new `WebSocket` connections when existing ones become ‘full.’ Lastly, performance in the new implementation has been improved through a new demultiplexing utility that can separate `message` events into several channels based on arbitrary criteria, meaning you can apply transforms to the message right at the source, and vend subscriptions to downstream consumers that care only about one particular kind of message.
+
+-   Updated dependencies [[`1d87b3c`](https://github.com/solana-labs/solana-web3.js/commit/1d87b3c9fb5637cdceb31c5675e876d8fe088677), [`5ed19c6`](https://github.com/solana-labs/solana-web3.js/commit/5ed19c6c3c6e7a1bacde8c23c438ecb85454b126), [`9370133`](https://github.com/solana-labs/solana-web3.js/commit/9370133e414bfa863517248d97905449e9a867eb), [`31916ae`](https://github.com/solana-labs/solana-web3.js/commit/31916ae5d4fb29f239c63252a59745e33a6979ea), [`10b08ac`](https://github.com/solana-labs/solana-web3.js/commit/10b08ac8cdb61aa1412475426cfcaf0eefe32722), [`3834d82`](https://github.com/solana-labs/solana-web3.js/commit/3834d82eb1dd150f261612d742c3105194689c13), [`45df702`](https://github.com/solana-labs/solana-web3.js/commit/45df7028d872e65759dad86b97cd9d4a9a3a545e), [`9dfca45`](https://github.com/solana-labs/solana-web3.js/commit/9dfca454355819444bad29e48602886428ba4cac), [`3c02c35`](https://github.com/solana-labs/solana-web3.js/commit/3c02c3582f5b87151b7ac1d9cd24b9d20f6945ea), [`1c25dd4`](https://github.com/solana-labs/solana-web3.js/commit/1c25dd4069a3a8f5599285c9b0eaeb71a2f897d1), [`89f399d`](https://github.com/solana-labs/solana-web3.js/commit/89f399d474abac463b1daaa864c88305d7b8c21f), [`ebb03cd`](https://github.com/solana-labs/solana-web3.js/commit/ebb03cd8270027db957d4cecc7d2374d468d4ccb), [`002cc38`](https://github.com/solana-labs/solana-web3.js/commit/002cc38a99cd4c91c7ce9023e1b4fb28f7e10832), [`17c373d`](https://github.com/solana-labs/solana-web3.js/commit/17c373dec6dd167ea5b4e37e213067aa05fa4e14), [`29d5113`](https://github.com/solana-labs/solana-web3.js/commit/29d5113b2c6f8c7907127ad992bad1329edbd7e7), [`0245265`](https://github.com/solana-labs/solana-web3.js/commit/024526554fa0145e31e62a0d47f1eea556a30e71), [`ce1be3f`](https://github.com/solana-labs/solana-web3.js/commit/ce1be3fe37ea9b744fd836f3d6c2c8e5e31efd77), [`82cf07f`](https://github.com/solana-labs/solana-web3.js/commit/82cf07f4e905f6b056e70a0463a94222c3e7cadd), [`29821df`](https://github.com/solana-labs/solana-web3.js/commit/29821df246b14eb41dd4606913f44fac40183957), [`2d54650`](https://github.com/solana-labs/solana-web3.js/commit/2d5465018d8060eceb00efbf4f718df26d145199), [`a705413`](https://github.com/solana-labs/solana-web3.js/commit/a705413e357fb5c5907c5fc1df17d241bc5c0f76), [`135dc5a`](https://github.com/solana-labs/solana-web3.js/commit/135dc5ad43f286380a4c3a689668016f0d7945f4), [`8c2cb9f`](https://github.com/solana-labs/solana-web3.js/commit/8c2cb9f44a52b3c27bc15c2c972bea1aae1622e7), [`bef9604`](https://github.com/solana-labs/solana-web3.js/commit/bef960435eb2303395bfa76e44f84d3348c5722d), [`7e86583`](https://github.com/solana-labs/solana-web3.js/commit/7e86583da68695076ec62033f3fe078b3890f026), [`9dfca45`](https://github.com/solana-labs/solana-web3.js/commit/9dfca454355819444bad29e48602886428ba4cac), [`747b9ab`](https://github.com/solana-labs/solana-web3.js/commit/747b9abb90c6baeec73a284d87a324bf3caeab03), [`4f19842`](https://github.com/solana-labs/solana-web3.js/commit/4f198423997d28d927f982333d268e19940656df), [`677a9c4`](https://github.com/solana-labs/solana-web3.js/commit/677a9c4eb88a8ac6a9ede8d82f367c5ac8d69ff4), [`38faba0`](https://github.com/solana-labs/solana-web3.js/commit/38faba05fab479ddbd95d0e211744d203f8aa823), [`73bd5a9`](https://github.com/solana-labs/solana-web3.js/commit/73bd5a9e0b32846cd5d76f2d2d1b21661eab0677), [`2e5af9f`](https://github.com/solana-labs/solana-web3.js/commit/2e5af9f1a9410f15108863342b48225fdf9a0c83), [`b4bf318`](https://github.com/solana-labs/solana-web3.js/commit/b4bf318d7d4bdd639e4c126c70350993a8540fe8), [`4c7224d`](https://github.com/solana-labs/solana-web3.js/commit/4c7224d0a884b0dc91ea536ce5fbdcd0a0d7e011), [`2798061`](https://github.com/solana-labs/solana-web3.js/commit/27980617e4f8d34dbc7b6da4507e4bca68a68090), [`be36bab`](https://github.com/solana-labs/solana-web3.js/commit/be36babd752b1c987a2f53b4ff83ac8c045a3418), [`f2bb4e8`](https://github.com/solana-labs/solana-web3.js/commit/f2bb4e8c7f7efd049cb1c3810291c99e9293c25d), [`28ca5d1`](https://github.com/solana-labs/solana-web3.js/commit/28ca5d17d4c574a690a5bf29d4f1fe0ad8f5883c), [`288029a`](https://github.com/solana-labs/solana-web3.js/commit/288029a55a5eeb863b6df960027a59214ffc37f1), [`4ae78f5`](https://github.com/solana-labs/solana-web3.js/commit/4ae78f5cdddd6772b25351beb813483d4e52cea6), [`478443f`](https://github.com/solana-labs/solana-web3.js/commit/478443fedac06678f12e8ac285aa7c7fcf503ee8), [`367b8ad`](https://github.com/solana-labs/solana-web3.js/commit/367b8ad0cce55a916abfb0125f36b6e844333b2b), [`c801637`](https://github.com/solana-labs/solana-web3.js/commit/c801637bcf94930be832c57817166da2d2fdb1a4), [`92655fd`](https://github.com/solana-labs/solana-web3.js/commit/92655fda6631339f07c6cd7097ed9e2518f86853), [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a), [`db144da`](https://github.com/solana-labs/solana-web3.js/commit/db144da362e3389837b56f97abfb766cc8c847c2), [`c8e6e71`](https://github.com/solana-labs/solana-web3.js/commit/c8e6e71529f219caf83ed444e53f5a1e757129dc)]:
+    -   @solana/rpc-subscriptions-spec@2.0.0
+    -   @solana/rpc-subscriptions-api@2.0.0
+    -   @solana/fast-stable-stringify@2.0.0
+    -   @solana/errors@2.0.0
+    -   @solana/rpc-types@2.0.0
+    -   @solana/rpc-transformers@2.0.0
+    -   @solana/rpc-spec-types@2.0.0
+    -   @solana/rpc-subscriptions-channel-websocket@2.0.0
+    -   @solana/subscribable@2.0.0
+    -   @solana/functional@2.0.0
+    -   @solana/promises@2.0.0
+
 ## 2.0.0-rc.4
 
 ### Patch Changes

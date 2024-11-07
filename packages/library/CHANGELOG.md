@@ -1,5 +1,121 @@
 # @solana/web3.js
 
+## 2.0.0
+
+### Major Changes
+
+-   [`4e7ec14`](https://github.com/solana-labs/solana-web3.js/commit/4e7ec14d9c1a74122d8b9b6cd177928bd1087c4b) Thanks [@steveluscher](https://github.com/steveluscher)! - This version of the `@solana/web3.js` Technology Preview fixes a bug with the default RPC transport, adds a utility that you can use to get an estimate of a transaction message's compute unit cost, and introduces `@solana/react` hooks for interacting with Wallet Standard wallets.
+
+    To install the fourth Technology Preview:
+
+    ```shell
+    npm install --save @solana/web3.js@tp4
+    ```
+
+    For an example of how to use the new `@solana/react` package to interact with wallets in a React application, see the example application in [`examples/react-app`](https://github.com/solana-labs/solana-web3.js/tree/master/examples/react-app#readme). We hope to see similar wallet-connection packages patterned off `@solana/react` for other application frameworks soon.
+
+    Try a demo of Technology Preview 4 in your browser at [CodeSandbox](https://codesandbox.io/p/sandbox/solana-javascript-sdk-technology-preview-4-h8cz4v?file=%2Fsrc%2Findex.ts%3A21%2C8).
+
+    -   [#2858](https://github.com/solana-labs/solana-web3.js/pull/2858) [`22a34aa`](https://github.com/solana-labs/solana-web3.js/commit/22a34aa08d1be7e9b43ccfea94a99eaa2694e491) Thanks [@steveluscher](https://github.com/steveluscher)! - Transaction signers' methods now take `minContextSlot` as an option. This is important for signers that simulate transactions, like wallets. They might be interested in knowing the slot at which the transaction was prepared, lest they run simulation at too early a slot.
+    -   [#2852](https://github.com/solana-labs/solana-web3.js/pull/2852) [`cec9048`](https://github.com/solana-labs/solana-web3.js/commit/cec9048b2f83535df7e499db5488c336981dfb5a) Thanks [@lorisleiva](https://github.com/lorisleiva)! - The `signAndSendTransactionMessageWithSigners` function now automatically asserts that the provided transaction message contains a single sending signer and fails otherwise.
+    -   [#2707](https://github.com/solana-labs/solana-web3.js/pull/2707) [`cb49bfa`](https://github.com/solana-labs/solana-web3.js/commit/cb49bfa28f412376a41e758eeda59e7e90983147) Thanks [@mcintyre94](https://github.com/mcintyre94)! - Allow creating keypairs and keys from ReadonlyUint8Array
+    -   [#2715](https://github.com/solana-labs/solana-web3.js/pull/2715) [`26dae19`](https://github.com/solana-labs/solana-web3.js/commit/26dae190c2ec835fbdaa7b7d66ca33d6ba0727b8) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Consolidated `getNullableCodec` and `getOptionCodec` with their `Zeroable` counterparts and added more configurations
+
+        Namely, the `prefix` option can now be set to `null` and the `fixed` option was replaced with the `noneValue` option which can be set to `"zeroes"` for `Zeroable` codecs or a custom byte array for custom representations of none values. This means the `getZeroableNullableCodec` and `getZeroableOptionCodec` functions were removed in favor of the new options.
+
+        ```ts
+        // Before.
+        getZeroableNullableCodec(getU16Codec());
+
+        // After.
+        getNullableCodec(getU16Codec(), { noneValue: 'zeroes', prefix: null });
+        ```
+
+        Additionally, it is now possible to create nullable codecs that have no `prefix` nor `noneValue`. In this case, the existence of the nullable item is indicated by the presence of any remaining bytes left to decode.
+
+        ```ts
+        const codec = getNullableCodec(getU16Codec(), { prefix: null });
+        codec.encode(42); // 0x2a00
+        codec.encode(null); // Encodes nothing.
+        codec.decode(new Uint8Array([42, 0])); // 42
+        codec.decode(new Uint8Array([])); // null
+        ```
+
+        Also note that it is now possible for custom `noneValue` byte arrays to be of any length — previously, it had to match the fixed-size of the nullable item.
+
+        Here is a recap of all supported scenarios, using a `u16` codec as an example:
+
+        | `encode(42)` / `encode(null)` | No `noneValue` (default) | `noneValue: "zeroes"`       | Custom `noneValue` (`0xff`) |
+        | ----------------------------- | ------------------------ | --------------------------- | --------------------------- |
+        | `u8` prefix (default)         | `0x012a00` / `0x00`      | `0x012a00` / `0x000000`     | `0x012a00` / `0x00ff`       |
+        | Custom `prefix` (`u16`)       | `0x01002a00` / `0x0000`  | `0x01002a00` / `0x00000000` | `0x01002a00` / `0x0000ff`   |
+        | No `prefix`                   | `0x2a00` / `0x`          | `0x2a00` / `0x0000`         | `0x2a00` / `0xff`           |
+
+        Reciprocal changes were made with `getOptionCodec`.
+
+    -   [#2785](https://github.com/solana-labs/solana-web3.js/pull/2785) [`4f19842`](https://github.com/solana-labs/solana-web3.js/commit/4f198423997d28d927f982333d268e19940656df) Thanks [@steveluscher](https://github.com/steveluscher)! - The development mode error message printer no longer fatals on Safari &lt; 16.4.
+    -   [#2867](https://github.com/solana-labs/solana-web3.js/pull/2867) [`be36bab`](https://github.com/solana-labs/solana-web3.js/commit/be36babd752b1c987a2f53b4ff83ac8c045a3418) Thanks [@steveluscher](https://github.com/steveluscher)! - The `innerInstructions` property of JSON-RPC errors used snake case rather than camelCase for `stackHeight` and `programId`. This has been corrected.
+    -   [#2728](https://github.com/solana-labs/solana-web3.js/pull/2728) [`f1e9ac2`](https://github.com/solana-labs/solana-web3.js/commit/f1e9ac2af579e4fbfb5550cbdbd971a87a4e4432) Thanks [@joncinque](https://github.com/joncinque)! - Simulate with the maximum quantity of compute units (1.4M) instead of `u32::MAX`
+    -   [#2703](https://github.com/solana-labs/solana-web3.js/pull/2703) [`0908628`](https://github.com/solana-labs/solana-web3.js/commit/09086289a230aa1b780c1035408b48243ab960f2) Thanks [@steveluscher](https://github.com/steveluscher)! - Created a utility function to estimate the compute unit consumption of a transaction message
+    -   [#2795](https://github.com/solana-labs/solana-web3.js/pull/2795) [`ce876d9`](https://github.com/solana-labs/solana-web3.js/commit/ce876d99f04d539292abd810acd77a319c52f50d) Thanks [@steveluscher](https://github.com/steveluscher)! - Added React hooks to which you can pass a Wallet Standard `UiWalletAccount` and obtain a `MessageModifyingSigner`, `TransactionModifyingSigner`, or `TransactionSendingSigner` for use in constructing, signing, and sending Solana transactions and messages
+    -   [#2772](https://github.com/solana-labs/solana-web3.js/pull/2772) [`8fe4551`](https://github.com/solana-labs/solana-web3.js/commit/8fe4551217a3ad8bfdcd1609ac7b23e8fd044c72) Thanks [@steveluscher](https://github.com/steveluscher)! - Added a series of React hooks to which you can pass a Wallet Standard `UiWalletAccount` to extract its `signMessage`, `signTransaction`, and `signAndSendTransaction` features
+    -   [#2819](https://github.com/solana-labs/solana-web3.js/pull/2819) [`7ee47ae`](https://github.com/solana-labs/solana-web3.js/commit/7ee47ae24ad73b429ee863342f300a6f6c49e3d2) Thanks [@steveluscher](https://github.com/steveluscher)! - Fixed a bug where coalesced RPC calls could end up aborted even though there were still interested consumers. This would happen if the consumer count fell to zero, then rose above zero again, in the same runloop.
+    -   [#2868](https://github.com/solana-labs/solana-web3.js/pull/2868) [`91fb1f3`](https://github.com/solana-labs/solana-web3.js/commit/91fb1f39bb174cf1e899a21365153a7b3bbf3571) Thanks [@steveluscher](https://github.com/steveluscher)! - The `simulateTransaction` RPC method now accepts an `innerInstructions` param. When `true`, the simulation result will include an array of inner instructions, if any.
+    -   [#2866](https://github.com/solana-labs/solana-web3.js/pull/2866) [`73bd5a9`](https://github.com/solana-labs/solana-web3.js/commit/73bd5a9e0b32846cd5d76f2d2d1b21661eab0677) Thanks [@steveluscher](https://github.com/steveluscher)! - The `TransactionInstruction` RPC type now has `stackHeight`
+    -   [#2751](https://github.com/solana-labs/solana-web3.js/pull/2751) [`6340744`](https://github.com/solana-labs/solana-web3.js/commit/6340744e5cf0ea91ae677f381d5a187638a19597) Thanks [@mcintyre94](https://github.com/mcintyre94)! - Allow Rpc Request params to be any type, instead of requiring an array
+
+### Patch Changes
+
+-   [#2728](https://github.com/solana-labs/solana-web3.js/pull/2728) [`f1e9ac2`](https://github.com/solana-labs/solana-web3.js/commit/f1e9ac2af579e4fbfb5550cbdbd971a87a4e4432) Thanks [@joncinque](https://github.com/joncinque)! - Simulate with the maximum quantity of compute units (1.4M) instead of `u32::MAX`
+
+-   [#3407](https://github.com/solana-labs/solana-web3.js/pull/3407) [`10b08ac`](https://github.com/solana-labs/solana-web3.js/commit/10b08ac8cdb61aa1412475426cfcaf0eefe32722) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Use `RpcRequest`, `RpcResponse` and their transformers in RPC Subscriptions packages
+
+    This change makes the RPC and RPC Subscriptions architecture more consistent by using the same `RpcRequest` and `RpcResponse` types and transformers as the basis for handling user requests (RPC calls or subscriptions) and returning responses to them.
+
+    See the following PRs for more details:
+
+    -   [PR #3393](https://github.com/solana-labs/solana-web3.js/pull/3393)
+    -   [PR #3394](https://github.com/solana-labs/solana-web3.js/pull/3394)
+    -   [PR #3403](https://github.com/solana-labs/solana-web3.js/pull/3403)
+    -   [PR #3404](https://github.com/solana-labs/solana-web3.js/pull/3404)
+    -   [PR #3405](https://github.com/solana-labs/solana-web3.js/pull/3405)
+
+-   [#3541](https://github.com/solana-labs/solana-web3.js/pull/3541) [`135dc5a`](https://github.com/solana-labs/solana-web3.js/commit/135dc5ad43f286380a4c3a689668016f0d7945f4) Thanks [@steveluscher](https://github.com/steveluscher)! - Drop the Release Candidate label and publish `@solana/web3.js` at version 2.0.0
+
+-   [#2905](https://github.com/solana-labs/solana-web3.js/pull/2905) [`56fde06`](https://github.com/solana-labs/solana-web3.js/commit/56fde06003841228d4e7de162059dda648f1043d) Thanks [@steveluscher](https://github.com/steveluscher)! - Fixed the type of `config` on `getComputeUnitEstimateForTransactionMessage`. It is now optional and does not include `transactionMessage`.
+
+-   [#3453](https://github.com/solana-labs/solana-web3.js/pull/3453) [`bafefed`](https://github.com/solana-labs/solana-web3.js/commit/bafefed88574009ba5a983023e439d91b65fada2) Thanks [@mcintyre94](https://github.com/mcintyre94)! - Rename decodeTransactionMessage to decompileTransactionMessageFetchingLookupTables
+
+-   [#2504](https://github.com/solana-labs/solana-web3.js/pull/2504) [`18d6b56`](https://github.com/solana-labs/solana-web3.js/commit/18d6b56a69509e4c98de8f3de51abe2623b46763) Thanks [@steveluscher](https://github.com/steveluscher)! - Replaced `fast-stable-stringify` with our fork
+
+-   [#3290](https://github.com/solana-labs/solana-web3.js/pull/3290) [`2368163`](https://github.com/solana-labs/solana-web3.js/commit/23681637fa3ee0e2242b3b6bf087a066393bcbd8) Thanks [@mcintyre94](https://github.com/mcintyre94)! - Throw an error if a transaction fails when being simulated to estimate CUs
+
+-   [#2606](https://github.com/solana-labs/solana-web3.js/pull/2606) [`367b8ad`](https://github.com/solana-labs/solana-web3.js/commit/367b8ad0cce55a916abfb0125f36b6e844333b2b) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Use commonjs package type
+
+-   [#2703](https://github.com/solana-labs/solana-web3.js/pull/2703) [`0908628`](https://github.com/solana-labs/solana-web3.js/commit/09086289a230aa1b780c1035408b48243ab960f2) Thanks [@steveluscher](https://github.com/steveluscher)! - Created a utility function to estimate the compute unit consumption of a transaction message
+
+-   [#3137](https://github.com/solana-labs/solana-web3.js/pull/3137) [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a) Thanks [@mcintyre94](https://github.com/mcintyre94)! - The build is now compatible with the Vercel Edge runtime and Cloudflare Workers through the addition of `edge-light` and `workerd` to the package exports.
+
+-   Updated dependencies [[`9370133`](https://github.com/solana-labs/solana-web3.js/commit/9370133e414bfa863517248d97905449e9a867eb), [`31916ae`](https://github.com/solana-labs/solana-web3.js/commit/31916ae5d4fb29f239c63252a59745e33a6979ea), [`42a70f4`](https://github.com/solana-labs/solana-web3.js/commit/42a70f4c3004e55fe6ce5a8e500f5610765ec66f), [`292487d`](https://github.com/solana-labs/solana-web3.js/commit/292487da00ee57350e8faf49ccf961203aed6403), [`10b08ac`](https://github.com/solana-labs/solana-web3.js/commit/10b08ac8cdb61aa1412475426cfcaf0eefe32722), [`7d310f6`](https://github.com/solana-labs/solana-web3.js/commit/7d310f6f9cd7d02fca4d6f8e311b857c9dd84e61), [`1ad523d`](https://github.com/solana-labs/solana-web3.js/commit/1ad523dc5792d9152a66e9dc2b83294e3eba4db0), [`7ee47ae`](https://github.com/solana-labs/solana-web3.js/commit/7ee47ae24ad73b429ee863342f300a6f6c49e3d2), [`3834d82`](https://github.com/solana-labs/solana-web3.js/commit/3834d82eb1dd150f261612d742c3105194689c13), [`696c72c`](https://github.com/solana-labs/solana-web3.js/commit/696c72ce25c96f06442785bddffbc890ceb802f3), [`419c12e`](https://github.com/solana-labs/solana-web3.js/commit/419c12e617435570d0cded6ca6d35370d0060da7), [`45df702`](https://github.com/solana-labs/solana-web3.js/commit/45df7028d872e65759dad86b97cd9d4a9a3a545e), [`9dfca45`](https://github.com/solana-labs/solana-web3.js/commit/9dfca454355819444bad29e48602886428ba4cac), [`3c02c35`](https://github.com/solana-labs/solana-web3.js/commit/3c02c3582f5b87151b7ac1d9cd24b9d20f6945ea), [`1c25dd4`](https://github.com/solana-labs/solana-web3.js/commit/1c25dd4069a3a8f5599285c9b0eaeb71a2f897d1), [`89f399d`](https://github.com/solana-labs/solana-web3.js/commit/89f399d474abac463b1daaa864c88305d7b8c21f), [`3fc388f`](https://github.com/solana-labs/solana-web3.js/commit/3fc388f0b40243436a3ecbcd2af27ea8efa683e4), [`ebb03cd`](https://github.com/solana-labs/solana-web3.js/commit/ebb03cd8270027db957d4cecc7d2374d468d4ccb), [`002cc38`](https://github.com/solana-labs/solana-web3.js/commit/002cc38a99cd4c91c7ce9023e1b4fb28f7e10832), [`26dae19`](https://github.com/solana-labs/solana-web3.js/commit/26dae190c2ec835fbdaa7b7d66ca33d6ba0727b8), [`2040f96`](https://github.com/solana-labs/solana-web3.js/commit/2040f96cc22e4195749577d265cd6a76d8a08b87), [`0245265`](https://github.com/solana-labs/solana-web3.js/commit/024526554fa0145e31e62a0d47f1eea556a30e71), [`ce1be3f`](https://github.com/solana-labs/solana-web3.js/commit/ce1be3fe37ea9b744fd836f3d6c2c8e5e31efd77), [`1672346`](https://github.com/solana-labs/solana-web3.js/commit/1672346246fe9444b018d726ab7bfcd4bb092ec2), [`82cf07f`](https://github.com/solana-labs/solana-web3.js/commit/82cf07f4e905f6b056e70a0463a94222c3e7cadd), [`2d54650`](https://github.com/solana-labs/solana-web3.js/commit/2d5465018d8060eceb00efbf4f718df26d145199), [`135dc5a`](https://github.com/solana-labs/solana-web3.js/commit/135dc5ad43f286380a4c3a689668016f0d7945f4), [`bef9604`](https://github.com/solana-labs/solana-web3.js/commit/bef960435eb2303395bfa76e44f84d3348c5722d), [`af9fa3b`](https://github.com/solana-labs/solana-web3.js/commit/af9fa3b7e83220d69eab67b37d3a36beac0e848c), [`7e86583`](https://github.com/solana-labs/solana-web3.js/commit/7e86583da68695076ec62033f3fe078b3890f026), [`500a991`](https://github.com/solana-labs/solana-web3.js/commit/500a991d292638eaee1fa48a7b94acfe2ff83cb7), [`c122c75`](https://github.com/solana-labs/solana-web3.js/commit/c122c75936e8fa5364edf114a5182cf119b26922), [`0b02de1`](https://github.com/solana-labs/solana-web3.js/commit/0b02de140887654f19f8eda374f40c6f5a8f5e92), [`4f19842`](https://github.com/solana-labs/solana-web3.js/commit/4f198423997d28d927f982333d268e19940656df), [`231a030`](https://github.com/solana-labs/solana-web3.js/commit/231a0303ae5960e783719a8ff1d17a50ff26ad78), [`677a9c4`](https://github.com/solana-labs/solana-web3.js/commit/677a9c4eb88a8ac6a9ede8d82f367c5ac8d69ff4), [`8f94a9e`](https://github.com/solana-labs/solana-web3.js/commit/8f94a9ede71b32662bff991e6def68bc9e8bc921), [`38faba0`](https://github.com/solana-labs/solana-web3.js/commit/38faba05fab479ddbd95d0e211744d203f8aa823), [`73bd5a9`](https://github.com/solana-labs/solana-web3.js/commit/73bd5a9e0b32846cd5d76f2d2d1b21661eab0677), [`2e5af9f`](https://github.com/solana-labs/solana-web3.js/commit/2e5af9f1a9410f15108863342b48225fdf9a0c83), [`cec9048`](https://github.com/solana-labs/solana-web3.js/commit/cec9048b2f83535df7e499db5488c336981dfb5a), [`e3e82d9`](https://github.com/solana-labs/solana-web3.js/commit/e3e82d909825e958ae234ed18500335a621773bd), [`4c7224d`](https://github.com/solana-labs/solana-web3.js/commit/4c7224d0a884b0dc91ea536ce5fbdcd0a0d7e011), [`2798061`](https://github.com/solana-labs/solana-web3.js/commit/27980617e4f8d34dbc7b6da4507e4bca68a68090), [`44c8772`](https://github.com/solana-labs/solana-web3.js/commit/44c8772c8711b99e68dce3348e17bfc5b1d2a833), [`54d68c4`](https://github.com/solana-labs/solana-web3.js/commit/54d68c482feebf4e62a9896b3badd77dab615941), [`be36bab`](https://github.com/solana-labs/solana-web3.js/commit/be36babd752b1c987a2f53b4ff83ac8c045a3418), [`cb49bfa`](https://github.com/solana-labs/solana-web3.js/commit/cb49bfa28f412376a41e758eeda59e7e90983147), [`18d6b56`](https://github.com/solana-labs/solana-web3.js/commit/18d6b56a69509e4c98de8f3de51abe2623b46763), [`e1cb697`](https://github.com/solana-labs/solana-web3.js/commit/e1cb697d66dc906aa2433965452417e03cf86e13), [`288029a`](https://github.com/solana-labs/solana-web3.js/commit/288029a55a5eeb863b6df960027a59214ffc37f1), [`4ae78f5`](https://github.com/solana-labs/solana-web3.js/commit/4ae78f5cdddd6772b25351beb813483d4e52cea6), [`3d90241`](https://github.com/solana-labs/solana-web3.js/commit/3d902419c1b232fa7145757b9c95976de69790c7), [`478443f`](https://github.com/solana-labs/solana-web3.js/commit/478443fedac06678f12e8ac285aa7c7fcf503ee8), [`367b8ad`](https://github.com/solana-labs/solana-web3.js/commit/367b8ad0cce55a916abfb0125f36b6e844333b2b), [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a), [`4decebb`](https://github.com/solana-labs/solana-web3.js/commit/4decebb9b619972f49c740323b59cf470696e105), [`d4965ec`](https://github.com/solana-labs/solana-web3.js/commit/d4965ece9abaf81e3006442db15f3f77d89a622c), [`9239e6e`](https://github.com/solana-labs/solana-web3.js/commit/9239e6ec972b4de9f0d15b197fbef1d2871759d9), [`0158b31`](https://github.com/solana-labs/solana-web3.js/commit/0158b3181ed96996f269f3bff689f76411e460b3), [`db144da`](https://github.com/solana-labs/solana-web3.js/commit/db144da362e3389837b56f97abfb766cc8c847c2), [`22a34aa`](https://github.com/solana-labs/solana-web3.js/commit/22a34aa08d1be7e9b43ccfea94a99eaa2694e491), [`f9a8446`](https://github.com/solana-labs/solana-web3.js/commit/f9a84460670a97d4ab6514b28fe0d29c6fac3302), [`c8e6e71`](https://github.com/solana-labs/solana-web3.js/commit/c8e6e71529f219caf83ed444e53f5a1e757129dc), [`125fc15`](https://github.com/solana-labs/solana-web3.js/commit/125fc1540cfbc0a4afdba5aabac0884c750e58c1)]:
+    -   @solana/errors@2.0.0
+    -   @solana/transactions@2.0.0
+    -   @solana/addresses@2.0.0
+    -   @solana/rpc-types@2.0.0
+    -   @solana/rpc@2.0.0
+    -   @solana/rpc-subscriptions@2.0.0
+    -   @solana/rpc-spec-types@2.0.0
+    -   @solana/keys@2.0.0
+    -   @solana/signers@2.0.0
+    -   @solana/transaction-confirmation@2.0.0
+    -   @solana/transaction-messages@2.0.0
+    -   @solana/accounts@2.0.0
+    -   @solana/codecs@2.0.0
+    -   @solana/programs@2.0.0
+    -   @solana/rpc-parsed-types@2.0.0
+    -   @solana/instructions@2.0.0
+    -   @solana/functional@2.0.0
+    -   @solana/sysvars@2.0.0
+
 ## 2.0.0-rc.4
 
 ### Patch Changes
