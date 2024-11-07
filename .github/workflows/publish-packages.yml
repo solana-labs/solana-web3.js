@@ -59,8 +59,8 @@ jobs:
       - name: Push Git Tag
         if: steps.changesets.outputs.hasChangesets == 'false'
         run: |
-          (cd packages/library/ && pnpm pkg get version | sed -n '2p' | grep -o '"\([^"]\)\+"$' | tr -d \") | xargs -I{} git tag v{}
-          git push --tags
+          VERSION_TAG=v$(cd packages/library/ && pnpm pkg get version | sed -n '2p' | grep -o '"\([^"]\)\+"$' | tr -d \")
+          if ! git ls-remote --tags | grep -q "$VERSION_TAG"; then git tag $VERSION_TAG && git push --tags; fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
