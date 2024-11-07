@@ -34,7 +34,7 @@ For use in a browser, without a build system:
 <script src="https://unpkg.com/@solana/web3.js@rc/dist/index.production.min.js"></script>
 ```
 
-# Examples
+# Quick Start
 
 To get a feel for the API, run and modify the live examples in the `examples/` directory. There, you will find a series of single-purpose Node scripts that demonstrate a specific feature or use case. You will also find a React application that you can run in a browser, that demonstrates being able to create, sign, and send transactions using browser wallets.
 
