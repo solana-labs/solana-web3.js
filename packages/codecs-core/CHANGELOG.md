@@ -1,5 +1,68 @@
 # @solana/codecs-core
 
+## 2.0.0
+
+### Patch Changes
+
+-   [#2434](https://github.com/solana-labs/solana-web3.js/pull/2434) [`31916ae`](https://github.com/solana-labs/solana-web3.js/commit/31916ae5d4fb29f239c63252a59745e33a6979ea) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Renamed `mapCodec` to `transformCodec`
+
+-   [#2397](https://github.com/solana-labs/solana-web3.js/pull/2397) [`a548de2`](https://github.com/solana-labs/solana-web3.js/commit/a548de2ebe3cf7289fd126933c4c395c885c3224) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Added a new `addCodecSizePrefix` primitive
+
+    ```ts
+    const codec = addCodecSizePrefix(getBase58Codec(), getU32Codec());
+
+    codec.encode('hello world');
+    // 0x0b00000068656c6c6f20776f726c64
+    //   |       └-- Our encoded base-58 string.
+    //   └-- Our encoded u32 size prefix.
+    ```
+
+-   [#2419](https://github.com/solana-labs/solana-web3.js/pull/2419) [`89f399d`](https://github.com/solana-labs/solana-web3.js/commit/89f399d474abac463b1daaa864c88305d7b8c21f) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Added new `addCodecSentinel` primitive
+
+    The `addCodecSentinel` function provides a new way of delimiting the size of a codec. It allows us to add a sentinel to the end of the encoded data and to read until that sentinel is found when decoding. It accepts any codec and a `Uint8Array` sentinel responsible for delimiting the encoded data.
+
+    ```ts
+    const codec = addCodecSentinel(getUtf8Codec(), new Uint8Array([255, 255]));
+    codec.encode('hello');
+    // 0x68656c6c6fffff
+    //   |        └-- Our sentinel.
+    //   └-- Our encoded string.
+    ```
+
+-   [#2400](https://github.com/solana-labs/solana-web3.js/pull/2400) [`ebb03cd`](https://github.com/solana-labs/solana-web3.js/commit/ebb03cd8270027db957d4cecc7d2374d468d4ccb) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Added new `containsBytes` and `getConstantCodec` helpers
+
+    The `containsBytes` helper checks if a `Uint8Array` contains another `Uint8Array` at a given offset.
+
+    ```ts
+    containsBytes(new Uint8Array([1, 2, 3, 4]), new Uint8Array([2, 3]), 1); // true
+    containsBytes(new Uint8Array([1, 2, 3, 4]), new Uint8Array([2, 3]), 2); // false
+    ```
+
+    The `getConstantCodec` function accepts any `Uint8Array` and returns a `Codec<void>`. When encoding, it will set the provided `Uint8Array` as-is. When decoding, it will assert that the next bytes contain the provided `Uint8Array` and move the offset forward.
+
+    ```ts
+    const codec = getConstantCodec(new Uint8Array([1, 2, 3]));
+
+    codec.encode(undefined); // 0x010203
+    codec.decode(new Uint8Array([1, 2, 3])); // undefined
+    codec.decode(new Uint8Array([1, 2, 4])); // Throws an error.
+    ```
+
+-   [#2383](https://github.com/solana-labs/solana-web3.js/pull/2383) [`ce1be3f`](https://github.com/solana-labs/solana-web3.js/commit/ce1be3fe37ea9b744fd836f3d6c2c8e5e31efd77) Thanks [@lorisleiva](https://github.com/lorisleiva)! - `getScalarEnumCodec` is now called `getEnumCodec`
+
+-   [#3541](https://github.com/solana-labs/solana-web3.js/pull/3541) [`135dc5a`](https://github.com/solana-labs/solana-web3.js/commit/135dc5ad43f286380a4c3a689668016f0d7945f4) Thanks [@steveluscher](https://github.com/steveluscher)! - Drop the Release Candidate label and publish `@solana/web3.js` at version 2.0.0
+
+-   [#2382](https://github.com/solana-labs/solana-web3.js/pull/2382) [`7e86583`](https://github.com/solana-labs/solana-web3.js/commit/7e86583da68695076ec62033f3fe078b3890f026) Thanks [@lorisleiva](https://github.com/lorisleiva)! - `getDataEnumCodec` is now called `getDiscriminatedUnionCodec`
+
+-   [#2411](https://github.com/solana-labs/solana-web3.js/pull/2411) [`2e5af9f`](https://github.com/solana-labs/solana-web3.js/commit/2e5af9f1a9410f15108863342b48225fdf9a0c83) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Renamed `fixCodec` to `fixCodecSize`
+
+-   [#2606](https://github.com/solana-labs/solana-web3.js/pull/2606) [`367b8ad`](https://github.com/solana-labs/solana-web3.js/commit/367b8ad0cce55a916abfb0125f36b6e844333b2b) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Use commonjs package type
+
+-   [#3137](https://github.com/solana-labs/solana-web3.js/pull/3137) [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a) Thanks [@mcintyre94](https://github.com/mcintyre94)! - The build is now compatible with the Vercel Edge runtime and Cloudflare Workers through the addition of `edge-light` and `workerd` to the package exports.
+
+-   Updated dependencies [[`9370133`](https://github.com/solana-labs/solana-web3.js/commit/9370133e414bfa863517248d97905449e9a867eb), [`89f399d`](https://github.com/solana-labs/solana-web3.js/commit/89f399d474abac463b1daaa864c88305d7b8c21f), [`ebb03cd`](https://github.com/solana-labs/solana-web3.js/commit/ebb03cd8270027db957d4cecc7d2374d468d4ccb), [`ce1be3f`](https://github.com/solana-labs/solana-web3.js/commit/ce1be3fe37ea9b744fd836f3d6c2c8e5e31efd77), [`82cf07f`](https://github.com/solana-labs/solana-web3.js/commit/82cf07f4e905f6b056e70a0463a94222c3e7cadd), [`2d54650`](https://github.com/solana-labs/solana-web3.js/commit/2d5465018d8060eceb00efbf4f718df26d145199), [`135dc5a`](https://github.com/solana-labs/solana-web3.js/commit/135dc5ad43f286380a4c3a689668016f0d7945f4), [`bef9604`](https://github.com/solana-labs/solana-web3.js/commit/bef960435eb2303395bfa76e44f84d3348c5722d), [`7e86583`](https://github.com/solana-labs/solana-web3.js/commit/7e86583da68695076ec62033f3fe078b3890f026), [`4f19842`](https://github.com/solana-labs/solana-web3.js/commit/4f198423997d28d927f982333d268e19940656df), [`677a9c4`](https://github.com/solana-labs/solana-web3.js/commit/677a9c4eb88a8ac6a9ede8d82f367c5ac8d69ff4), [`38faba0`](https://github.com/solana-labs/solana-web3.js/commit/38faba05fab479ddbd95d0e211744d203f8aa823), [`2798061`](https://github.com/solana-labs/solana-web3.js/commit/27980617e4f8d34dbc7b6da4507e4bca68a68090), [`be36bab`](https://github.com/solana-labs/solana-web3.js/commit/be36babd752b1c987a2f53b4ff83ac8c045a3418), [`288029a`](https://github.com/solana-labs/solana-web3.js/commit/288029a55a5eeb863b6df960027a59214ffc37f1), [`4ae78f5`](https://github.com/solana-labs/solana-web3.js/commit/4ae78f5cdddd6772b25351beb813483d4e52cea6), [`478443f`](https://github.com/solana-labs/solana-web3.js/commit/478443fedac06678f12e8ac285aa7c7fcf503ee8), [`367b8ad`](https://github.com/solana-labs/solana-web3.js/commit/367b8ad0cce55a916abfb0125f36b6e844333b2b), [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a)]:
+    -   @solana/errors@2.0.0
+
 ## 2.0.0-rc.4
 
 ### Patch Changes

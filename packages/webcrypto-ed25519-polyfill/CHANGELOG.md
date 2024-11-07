@@ -1,5 +1,21 @@
 # @solana/webcrypto-ed25519-polyfill
 
+## 2.0.0
+
+### Patch Changes
+
+-   [#3063](https://github.com/solana-labs/solana-web3.js/pull/3063) [`ae9e8d3`](https://github.com/solana-labs/solana-web3.js/commit/ae9e8d342740598d2dfc90e11c19aa9af520c1c4) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Add support for exporting keys as JWK
+
+-   [#3541](https://github.com/solana-labs/solana-web3.js/pull/3541) [`135dc5a`](https://github.com/solana-labs/solana-web3.js/commit/135dc5ad43f286380a4c3a689668016f0d7945f4) Thanks [@steveluscher](https://github.com/steveluscher)! - Drop the Release Candidate label and publish `@solana/web3.js` at version 2.0.0
+
+-   [#3064](https://github.com/solana-labs/solana-web3.js/pull/3064) [`2370096`](https://github.com/solana-labs/solana-web3.js/commit/237009609fbc0ae32eb9628d08a41f06229ac6d2) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Add support for importing JWK keys
+
+-   [#2907](https://github.com/solana-labs/solana-web3.js/pull/2907) [`677a9c4`](https://github.com/solana-labs/solana-web3.js/commit/677a9c4eb88a8ac6a9ede8d82f367c5ac8d69ff4) Thanks [@steveluscher](https://github.com/steveluscher)! - `__DEV__` mode will now be the default if you don't set `process.env.NODE_ENV` at all. This means fewer people ‘accidentally’ finding themselves in production mode with minified error messages.
+
+-   [#2606](https://github.com/solana-labs/solana-web3.js/pull/2606) [`367b8ad`](https://github.com/solana-labs/solana-web3.js/commit/367b8ad0cce55a916abfb0125f36b6e844333b2b) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Use commonjs package type
+
+-   [#3137](https://github.com/solana-labs/solana-web3.js/pull/3137) [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a) Thanks [@mcintyre94](https://github.com/mcintyre94)! - The build is now compatible with the Vercel Edge runtime and Cloudflare Workers through the addition of `edge-light` and `workerd` to the package exports.
+
 ## 2.0.0-rc.4
 
 ## 2.0.0-rc.3
