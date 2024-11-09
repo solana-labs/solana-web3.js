@@ -8,6 +8,7 @@ export * from './discriminated-union';
 export * from './enum';
 export * from './hidden-prefix';
 export * from './hidden-suffix';
+export * from './literal-union';
 export * from './map';
 export * from './nullable';
 export * from './set';
