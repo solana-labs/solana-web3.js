@@ -67,9 +67,6 @@
         "supports bigint and not dead",
         "maintained node versions"
     ],
-    "engine": {
-        "node": ">=17.4"
-    },
     "dependencies": {
         "@noble/ed25519": "^2.0.0"
     },
