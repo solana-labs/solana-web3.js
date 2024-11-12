@@ -24,3 +24,5 @@ updates:
       timezone: America/Los_Angeles
     labels:
       - 'automerge'
+    ignore:
+      - dependency-name: '@radix-ui/react-dropdown-menu'
