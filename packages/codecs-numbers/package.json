@@ -70,9 +70,6 @@
         "supports bigint and not dead",
         "maintained node versions"
     ],
-    "engine": {
-        "node": ">=17.4"
-    },
     "dependencies": {
         "@solana/codecs-core": "workspace:*",
         "@solana/errors": "workspace:*"
