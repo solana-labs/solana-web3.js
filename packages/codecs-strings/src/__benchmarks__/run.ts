@@ -56,7 +56,6 @@ bench
     );
 
 void (async () => {
-    await bench.warmup();
     await bench.run();
 
     console.table(bench.table());
