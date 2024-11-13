@@ -80,7 +80,7 @@
     "devDependencies": {
         "tinybench": "^3.0.4",
         "undici": "^6.20.0",
-        "zx": "^8.2.1"
+        "zx": "^8.2.2"
     },
     "peerDependencies": {
         "typescript": ">=5"
