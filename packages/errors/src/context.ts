@@ -506,6 +506,7 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
             value: bigint;
         };
         [SOLANA_ERROR__RPC__TRANSPORT_HTTP_ERROR]: {
+            headers: Headers;
             message: string;
             statusCode: number;
         };

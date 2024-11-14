@@ -65,6 +65,7 @@ export function createHttpTransport(config: Config): RpcTransport {
         const response = await fetch(url, requestInfo);
         if (!response.ok) {
             throw new SolanaError(SOLANA_ERROR__RPC__TRANSPORT_HTTP_ERROR, {
+                headers: response.headers,
                 message: response.statusText,
                 statusCode: response.status,
             });
