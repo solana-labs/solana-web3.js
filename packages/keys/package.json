@@ -81,7 +81,7 @@
         "typescript": ">=5"
     },
     "devDependencies": {
-        "tinybench": "^3.0.4"
+        "tinybench": "^3.0.5"
     },
     "engines": {
         "node": ">=20.18.0"
