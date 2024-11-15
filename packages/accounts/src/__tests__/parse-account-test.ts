@@ -17,6 +17,7 @@ describe('parseBase64RpcAccount', () => {
             executable: false,
             lamports: 1_000_000_000n,
             owner: '9999',
+            space: 6n,
         };
 
         // When we parse that RPC account using the parseBase64RpcAccount function.
@@ -33,6 +34,7 @@ describe('parseBase64RpcAccount', () => {
             exists: true,
             lamports: 1_000_000_000n,
             programAddress: '9999',
+            space: 6n,
         });
     });
 
@@ -58,6 +60,7 @@ describe('parseBase64RpcAccount', () => {
             executable: false,
             lamports: 1_000_000_000n,
             owner: '9999',
+            space: 6n,
         };
 
         // When we parse that RPC account using the parseBase64RpcAccount function.
@@ -88,6 +91,7 @@ describe('parseBase58RpcAccount', () => {
             executable: false,
             lamports: 1_000_000_000n,
             owner: '9999',
+            space: 6n,
         };
 
         // When we parse that RPC account using the parseBase58RpcAccount function.
@@ -104,6 +108,7 @@ describe('parseBase58RpcAccount', () => {
             exists: true,
             lamports: 1_000_000_000n,
             programAddress: '9999',
+            space: 6n,
         });
     });
 
@@ -115,6 +120,7 @@ describe('parseBase58RpcAccount', () => {
             executable: false,
             lamports: 1_000_000_000n,
             owner: '9999',
+            space: 6n,
         };
 
         // When we parse that RPC account using the parseBase58RpcAccount function.
@@ -131,6 +137,7 @@ describe('parseBase58RpcAccount', () => {
             exists: true,
             lamports: 1_000_000_000n,
             programAddress: '9999',
+            space: 6n,
         });
     });
 
@@ -156,6 +163,7 @@ describe('parseBase58RpcAccount', () => {
             executable: false,
             lamports: 1_000_000_000n,
             owner: '9999',
+            space: 6n,
         };
 
         // When we parse that RPC account using the parseBase58RpcAccount function.
@@ -188,11 +196,12 @@ describe('parseJsonRpcAccount', () => {
                     type: 'token',
                 },
                 program: 'splToken',
-                space: 165n,
+                space: 165n, // The space field is provided again on some JSON-parsed RPC response.
             },
             executable: false,
             lamports: 1_000_000_000n,
             owner: '9999',
+            space: 165n,
         };
 
         // When we parse that RPC account using the parseJsonRpcAccount function and a custom data type.
@@ -210,6 +219,7 @@ describe('parseJsonRpcAccount', () => {
             exists: true,
             lamports: lamports(1_000_000_000n),
             programAddress: '9999' as Address<'9999'>,
+            space: 165n,
         } as Account<MyData>);
     });
 
@@ -238,11 +248,12 @@ describe('parseJsonRpcAccount', () => {
                     type: 'token',
                 },
                 program: 'splToken',
-                space: 165n,
+                space: 165n, // The space field is provided again on some JSON-parsed RPC response.
             },
             executable: false,
             lamports: 1_000_000_000n,
             owner: '9999',
+            space: 165n,
         };
 
         // When we parse that RPC account using the parseJsonRpcAccount function.
