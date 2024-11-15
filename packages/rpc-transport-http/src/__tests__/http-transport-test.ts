@@ -19,8 +19,11 @@ describe('createHttpTransport', () => {
         });
     });
     describe('when the endpoint returns a non-200 status code', () => {
+        let expectedHeaders: Headers;
         beforeEach(() => {
+            expectedHeaders = new Headers([['Sekrit-Response-Header', 'doNotLog']]);
             fetchSpy.mockResolvedValue({
+                headers: expectedHeaders,
                 ok: false,
                 status: 404,
                 statusText: 'We looked everywhere',
@@ -31,10 +34,44 @@ describe('createHttpTransport', () => {
             const requestPromise = makeHttpRequest({ payload: 123 });
             await expect(requestPromise).rejects.toThrow(
                 new SolanaError(SOLANA_ERROR__RPC__TRANSPORT_HTTP_ERROR, {
+                    headers: expectedHeaders,
                     message: 'We looked everywhere',
                     statusCode: 404,
                 }),
             );
+        });
+        it('exposes the response headers on the error context', async () => {
+            expect.assertions(2);
+            let thrownError!: SolanaError<typeof SOLANA_ERROR__RPC__TRANSPORT_HTTP_ERROR>;
+            try {
+                await makeHttpRequest({ payload: 123 });
+            } catch (e) {
+                thrownError = e as SolanaError<typeof SOLANA_ERROR__RPC__TRANSPORT_HTTP_ERROR>;
+            }
+            expect(thrownError).toBeDefined();
+            expect(thrownError.context.headers).toBe(expectedHeaders);
+        });
+        it('does not leak the response header values through the error message', async () => {
+            expect.assertions(2);
+            let thrownError!: SolanaError<typeof SOLANA_ERROR__RPC__TRANSPORT_HTTP_ERROR>;
+            try {
+                await makeHttpRequest({ payload: 123 });
+            } catch (e) {
+                thrownError = e as SolanaError<typeof SOLANA_ERROR__RPC__TRANSPORT_HTTP_ERROR>;
+            }
+            expect(thrownError).toBeDefined();
+            expect(thrownError.message).not.toMatch(/doNotLog/);
+        });
+        it('the `Headers` on the error context do not leak the header values when stringified', async () => {
+            expect.assertions(2);
+            let thrownError!: SolanaError<typeof SOLANA_ERROR__RPC__TRANSPORT_HTTP_ERROR>;
+            try {
+                await makeHttpRequest({ payload: 123 });
+            } catch (e) {
+                thrownError = e as SolanaError<typeof SOLANA_ERROR__RPC__TRANSPORT_HTTP_ERROR>;
+            }
+            expect(thrownError).toBeDefined();
+            expect(`${thrownError.context.headers}`).not.toMatch(/doNotLog/);
         });
     });
     describe('when the transport fatals', () => {
