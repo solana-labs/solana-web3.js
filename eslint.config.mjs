@@ -13,7 +13,7 @@ export default [
             '@typescript-eslint/no-unsafe-enum-comparison': 'off',
             '@typescript-eslint/no-unsafe-member-access': 'off',
             '@typescript-eslint/no-unsafe-return': 'off',
-            '@typescript-eslint/only-throw-error': 'off',
+            '@typescript-eslint/only-throw-error': 'on',
             '@typescript-eslint/prefer-promise-reject-errors': 'off',
             '@typescript-eslint/restrict-plus-operands': 'off',
             '@typescript-eslint/restrict-template-expressions': 'off',
