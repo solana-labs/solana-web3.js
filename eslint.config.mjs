@@ -16,7 +16,7 @@ export default [
             '@typescript-eslint/only-throw-error': 'off',
             '@typescript-eslint/prefer-promise-reject-errors': 'off',
             '@typescript-eslint/restrict-plus-operands': 'off',
-            '@typescript-eslint/restrict-template-expressions': 'off',
+            '@typescript-eslint/restrict-template-expressions': 'on',
             '@typescript-eslint/unbound-method': 'off',
             'jest/expect-expect': [
                 'error',
