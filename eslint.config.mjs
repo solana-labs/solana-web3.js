@@ -7,7 +7,7 @@ export default [
     {
         rules: {
             '@typescript-eslint/no-base-to-string': 'off',
-            '@typescript-eslint/no-unsafe-argument': 'off',
+            '@typescript-eslint/no-unsafe-argument': 'on',
             '@typescript-eslint/no-unsafe-assignment': 'off',
             '@typescript-eslint/no-unsafe-call': 'off',
             '@typescript-eslint/no-unsafe-enum-comparison': 'off',
