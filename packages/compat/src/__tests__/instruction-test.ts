@@ -1,19 +1,21 @@
-import { Address } from '@solana/addresses';
+import { AccountRole } from '@solana/instructions';
 import { Keypair, TransactionInstruction } from '@solana/web3.js';
 
+import { fromLegacyPublicKey } from '../address';
 import { fromLegacyTransactionInstruction } from '../instruction';
 
 describe('fromLegacyTransactionInstruction', () => {
     it('should convert a legacy TransactionInstruction to IInstruction', () => {
-        const keypair1 = Keypair.generate();
-        const keypair2 = Keypair.generate();
+        const data = Buffer.from([1, 2, 3, 4]);
+        const account1 = Keypair.generate().publicKey;
+        const account2 = Keypair.generate().publicKey;
         const programId = Keypair.generate().publicKey;
 
         const legacyInstruction = new TransactionInstruction({
-            data: Buffer.from([1, 2, 3, 4]),
+            data,
             keys: [
-                { isSigner: true, isWritable: true, pubkey: keypair1.publicKey },
-                { isSigner: false, isWritable: false, pubkey: keypair2.publicKey },
+                { isSigner: true, isWritable: false, pubkey: account1 },
+                { isSigner: false, isWritable: true, pubkey: account2 },
             ],
             programId: programId,
         });
@@ -21,21 +23,17 @@ describe('fromLegacyTransactionInstruction', () => {
         const result = fromLegacyTransactionInstruction(legacyInstruction);
 
         expect(result.accounts).toHaveLength(2);
+        expect(result.data).toStrictEqual(data);
+        expect(result.programAddress).toEqual(programId);
+
         expect(result.accounts[0]).toEqual({
-            address: keypair1.publicKey as Address,
-            role: {
-                isSigner: true,
-                isWritable: true,
-            },
+            address: fromLegacyPublicKey(account1),
+            role: AccountRole.WRITABLE
         });
+
         expect(result.accounts[1]).toEqual({
-            address: keypair2.publicKey as Address,
-            role: {
-                isSigner: false,
-                isWritable: false,
-            },
+            address: fromLegacyPublicKey(account2),
+            role: AccountRole.WRITABLE_SIGNER,
         });
-        expect(result.data).toEqual(new Uint8Array([1, 2, 3, 4]));
-        expect(result.programAddress).toEqual(programId as Address);
     });
 });
