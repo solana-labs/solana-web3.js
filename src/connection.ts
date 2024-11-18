@@ -1050,6 +1050,7 @@ export type TokenBalance = {
   accountIndex: number;
   mint: string;
   owner?: string;
+  programId?:string;
   uiTokenAmount: TokenAmount;
 };
 
