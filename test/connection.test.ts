@@ -417,30 +417,38 @@ describe('Connection', function () {
       });
     }
 
-    {
-      await helpers.airdrop({
-        connection,
-        address: account1.publicKey,
-        amount: 0.5 * LAMPORTS_PER_SOL,
-      });
+    await helpers.airdrop({
+      connection,
+      address: account1.publicKey,
+      amount: 0.5 * LAMPORTS_PER_SOL,
+    });
 
-      const transaction = new Transaction().add(
-        SystemProgram.assign({
-          accountPubkey: account1.publicKey,
-          programId: programId.publicKey,
-        }),
-      );
+    const {blockhash, lastValidBlockHeight} = await helpers.latestBlockhash({
+      connection,
+    });
+    const feePayer = account1.publicKey;
 
-      await helpers.processTransaction({
-        connection,
-        transaction,
-        signers: [account1],
-        commitment: 'confirmed',
-      });
-    }
+    const transaction = new Transaction({
+      blockhash,
+      lastValidBlockHeight,
+      feePayer,
+    }).add(
+      SystemProgram.assign({
+        accountPubkey: account1.publicKey,
+        programId: programId.publicKey,
+      }),
+    );
 
-    const feeCalculator = (await helpers.recentBlockhash({connection}))
-      .feeCalculator;
+    const message = transaction._compile();
+    const fee =
+      (await helpers.getFeeForMessage({connection, message})).value ?? 0;
+
+    await helpers.processTransaction({
+      connection,
+      transaction,
+      signers: [account1],
+      commitment: 'confirmed',
+    });
 
     {
       await mockRpcResponse({
@@ -454,7 +462,7 @@ describe('Connection', function () {
             account: {
               data: ['', 'base64'],
               executable: false,
-              lamports: LAMPORTS_PER_SOL - feeCalculator.lamportsPerSignature,
+              lamports: LAMPORTS_PER_SOL - fee,
               owner: programId.publicKey.toBase58(),
               rentEpoch: 20,
               space: 0,
@@ -465,8 +473,7 @@ describe('Connection', function () {
             account: {
               data: ['', 'base64'],
               executable: false,
-              lamports:
-                0.5 * LAMPORTS_PER_SOL - feeCalculator.lamportsPerSignature,
+              lamports: 0.5 * LAMPORTS_PER_SOL - fee,
               owner: programId.publicKey.toBase58(),
               rentEpoch: 20,
               space: 0,
@@ -485,13 +492,11 @@ describe('Connection', function () {
       expect(programAccounts).to.have.length(2);
       programAccounts.forEach(function (keyedAccount) {
         if (keyedAccount.pubkey.equals(account0.publicKey)) {
-          expect(keyedAccount.account.lamports).to.eq(
-            LAMPORTS_PER_SOL - feeCalculator.lamportsPerSignature,
-          );
+          expect(keyedAccount.account.lamports).to.eq(LAMPORTS_PER_SOL - fee);
         } else {
           expect(keyedAccount.pubkey).to.eql(account1.publicKey);
           expect(keyedAccount.account.lamports).to.eq(
-            0.5 * LAMPORTS_PER_SOL - feeCalculator.lamportsPerSignature,
+            0.5 * LAMPORTS_PER_SOL - fee,
           );
         }
       });
@@ -509,7 +514,7 @@ describe('Connection', function () {
             account: {
               data: ['', 'base64'],
               executable: false,
-              lamports: LAMPORTS_PER_SOL - feeCalculator.lamportsPerSignature,
+              lamports: LAMPORTS_PER_SOL - fee,
               owner: programId.publicKey.toBase58(),
               rentEpoch: 20,
               space: 0,
@@ -520,8 +525,7 @@ describe('Connection', function () {
             account: {
               data: ['', 'base64'],
               executable: false,
-              lamports:
-                0.5 * LAMPORTS_PER_SOL - feeCalculator.lamportsPerSignature,
+              lamports: 0.5 * LAMPORTS_PER_SOL - fee,
               owner: programId.publicKey.toBase58(),
               rentEpoch: 20,
               space: 0,
@@ -538,13 +542,11 @@ describe('Connection', function () {
       expect(programAccounts).to.have.length(2);
       programAccounts.forEach(function (keyedAccount) {
         if (keyedAccount.pubkey.equals(account0.publicKey)) {
-          expect(keyedAccount.account.lamports).to.eq(
-            LAMPORTS_PER_SOL - feeCalculator.lamportsPerSignature,
-          );
+          expect(keyedAccount.account.lamports).to.eq(LAMPORTS_PER_SOL - fee);
         } else {
           expect(keyedAccount.pubkey).to.eql(account1.publicKey);
           expect(keyedAccount.account.lamports).to.eq(
-            0.5 * LAMPORTS_PER_SOL - feeCalculator.lamportsPerSignature,
+            0.5 * LAMPORTS_PER_SOL - fee,
           );
         }
       });
@@ -570,7 +572,7 @@ describe('Connection', function () {
             account: {
               data: ['', 'base64'],
               executable: false,
-              lamports: LAMPORTS_PER_SOL - feeCalculator.lamportsPerSignature,
+              lamports: LAMPORTS_PER_SOL - fee,
               owner: programId.publicKey.toBase58(),
               rentEpoch: 20,
               space: 0,
@@ -581,8 +583,7 @@ describe('Connection', function () {
             account: {
               data: ['', 'base64'],
               executable: false,
-              lamports:
-                0.5 * LAMPORTS_PER_SOL - feeCalculator.lamportsPerSignature,
+              lamports: 0.5 * LAMPORTS_PER_SOL - fee,
               owner: programId.publicKey.toBase58(),
               rentEpoch: 20,
               space: 0,
@@ -652,7 +653,7 @@ describe('Connection', function () {
             account: {
               data: ['', 'base64'],
               executable: false,
-              lamports: LAMPORTS_PER_SOL - feeCalculator.lamportsPerSignature,
+              lamports: LAMPORTS_PER_SOL - fee,
               owner: programId.publicKey.toBase58(),
               rentEpoch: 20,
               space: 0,
@@ -663,8 +664,7 @@ describe('Connection', function () {
             account: {
               data: ['', 'base64'],
               executable: false,
-              lamports:
-                0.5 * LAMPORTS_PER_SOL - feeCalculator.lamportsPerSignature,
+              lamports: 0.5 * LAMPORTS_PER_SOL - fee,
               owner: programId.publicKey.toBase58(),
               rentEpoch: 20,
               space: 0,
@@ -684,14 +684,10 @@ describe('Connection', function () {
 
       programAccounts.forEach(function (element) {
         if (element.pubkey.equals(account0.publicKey)) {
-          expect(element.account.lamports).to.eq(
-            LAMPORTS_PER_SOL - feeCalculator.lamportsPerSignature,
-          );
+          expect(element.account.lamports).to.eq(LAMPORTS_PER_SOL - fee);
         } else {
           expect(element.pubkey).to.eql(account1.publicKey);
-          expect(element.account.lamports).to.eq(
-            0.5 * LAMPORTS_PER_SOL - feeCalculator.lamportsPerSignature,
-          );
+          expect(element.account.lamports).to.eq(0.5 * LAMPORTS_PER_SOL - fee);
         }
       });
     }
@@ -746,7 +742,7 @@ describe('Connection', function () {
             account: {
               data: ['', 'base64'],
               executable: false,
-              lamports: LAMPORTS_PER_SOL - feeCalculator.lamportsPerSignature,
+              lamports: LAMPORTS_PER_SOL - fee,
               owner: programId.publicKey.toBase58(),
               rentEpoch: 20,
               space: 0,
@@ -757,8 +753,7 @@ describe('Connection', function () {
             account: {
               data: ['', 'base64'],
               executable: false,
-              lamports:
-                0.5 * LAMPORTS_PER_SOL - feeCalculator.lamportsPerSignature,
+              lamports: 0.5 * LAMPORTS_PER_SOL - fee,
               owner: programId.publicKey.toBase58(),
               rentEpoch: 20,
               space: 0,
@@ -4622,12 +4617,27 @@ describe('Connection', function () {
   it('get recent blockhash', async () => {
     const commitments: Commitment[] = ['processed', 'confirmed', 'finalized'];
     for (const commitment of commitments) {
+      const {blockhash} = await helpers.recentBlockhash({
+        connection,
+        commitment,
+      });
+      expect(bs58.decode(blockhash)).to.have.length(32);
+    }
+  });
+
+  it('get recent blockhash LPS field throws', async () => {
+    const commitments: Commitment[] = ['processed', 'confirmed', 'finalized'];
+    for (const commitment of commitments) {
       const {blockhash, feeCalculator} = await helpers.recentBlockhash({
         connection,
         commitment,
       });
       expect(bs58.decode(blockhash)).to.have.length(32);
-      expect(feeCalculator.lamportsPerSignature).to.be.at.least(0);
+      // Accessing the blockhash field works fine.
+      // When attempting to access `lamportsPerSignature`, throws.
+      expect(() => feeCalculator.lamportsPerSignature).to.throw(
+        'The capability to fetch `lamportsPerSignature` using the `getRecentBlockhash` API is no longer offered by the network. Use the `getFeeForMessage` API to obtain the fee for a given message.',
+      );
     }
   });
 

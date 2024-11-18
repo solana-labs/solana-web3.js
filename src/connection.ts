@@ -2600,20 +2600,6 @@ const GetParsedTransactionRpcResult = jsonRpcResult(
 );
 
 /**
- * Expected JSON RPC response for the "getRecentBlockhash" message
- *
- * @deprecated Deprecated since RPC v1.8.0. Please use {@link GetLatestBlockhashRpcResult} instead.
- */
-const GetRecentBlockhashAndContextRpcResult = jsonRpcResultAndContext(
-  pick({
-    blockhash: string(),
-    feeCalculator: pick({
-      lamportsPerSignature: number(),
-    }),
-  }),
-);
-
-/**
  * Expected JSON RPC response for the "getLatestBlockhash" message
  */
 const GetLatestBlockhashRpcResult = jsonRpcResultAndContext(
@@ -4567,13 +4553,25 @@ export class Connection {
       feeCalculator: FeeCalculator;
     }>
   > {
-    const args = this._buildArgs([], commitment);
-    const unsafeRes = await this._rpcRequest('getRecentBlockhash', args);
-    const res = create(unsafeRes, GetRecentBlockhashAndContextRpcResult);
-    if ('error' in res) {
-      throw new SolanaJSONRPCError(res.error, 'failed to get recent blockhash');
-    }
-    return res.result;
+    const {
+      context,
+      value: {blockhash},
+    } = await this.getLatestBlockhashAndContext(commitment);
+    return {
+      context,
+      value: {
+        blockhash,
+        feeCalculator: {
+          get lamportsPerSignature(): number {
+            throw new Error(
+              'The capability to fetch `lamportsPerSignature` using the `getRecentBlockhash` API is ' +
+                'no longer offered by the network. Use the `getFeeForMessage` API to obtain the fee ' +
+                'for a given message.',
+            );
+          },
+        },
+      },
+    };
   }
 
   /**
