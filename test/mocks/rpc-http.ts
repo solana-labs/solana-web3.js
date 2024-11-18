@@ -3,7 +3,13 @@ import BN from 'bn.js';
 import * as mockttp from 'mockttp';
 
 import {mockRpcMessage} from './rpc-websocket';
-import {Connection, PublicKey, Transaction, Signer} from '../../src';
+import {
+  Connection,
+  PublicKey,
+  Transaction,
+  Signer,
+  VersionedMessage,
+} from '../../src';
 import invariant from '../../src/utils/assert';
 import type {Commitment, HttpHeaders, RpcParams} from '../../src/connection';
 
@@ -146,6 +152,30 @@ const latestBlockhash = async ({
   return await connection.getLatestBlockhash(commitment);
 };
 
+const getFeeForMessage = async ({
+  connection,
+  commitment,
+  message,
+}: {
+  connection: Connection;
+  commitment?: Commitment;
+  message: VersionedMessage;
+}) => {
+  const params: Array<Object> = [];
+  if (commitment) {
+    params.push({commitment});
+  }
+
+  await mockRpcResponse({
+    method: 'getFeeForMessage',
+    params,
+    value: 42,
+    withContext: true,
+  });
+
+  return await connection.getFeeForMessage(message, commitment);
+};
+
 const recentBlockhash = async ({
   connection,
   commitment,
@@ -160,13 +190,11 @@ const recentBlockhash = async ({
   }
 
   await mockRpcResponse({
-    method: 'getRecentBlockhash',
+    method: 'getLatestBlockhash',
     params,
     value: {
       blockhash,
-      feeCalculator: {
-        lamportsPerSignature: 42,
-      },
+      lastValidBlockHeight: 100,
     },
     withContext: true,
   });
@@ -267,7 +295,8 @@ const airdrop = async ({
 
 export const helpers = {
   airdrop,
+  getFeeForMessage,
+  latestBlockhash,
   processTransaction,
   recentBlockhash,
-  latestBlockhash,
 };
