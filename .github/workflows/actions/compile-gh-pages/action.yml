@@ -1,0 +1,32 @@
+name: Compile GitHub Pages
+description: Compiles content for GitHub Pages and uploads it to the artifact cache
+
+inputs:
+  pr-number:
+    type: number
+  repository:
+    default: 'solana-web3.js'
+    type: string
+
+runs:
+  using: composite
+  steps:
+    - name: Compile
+      shell: bash
+      run: pnpm turbo run compile:typedefs compile:ghpages --concurrency=${TURBO_CONCURRENCY:-1}
+      env:
+        REACT_EXAMPLE_APP_BASE_PATH: /${{ inputs.repository }}${{ inputs.pr-number && format('/{0}', inputs.pr-number) || '' }}/example/
+
+    - name: Assemble Deploy Directory
+      shell: bash
+      run: |
+        mkdir -p .ghpages-deploy
+        mv ./examples/react-app/dist/ .ghpages-deploy/example/
+        mv ./docs/* .ghpages-deploy/
+
+    - uses: actions/upload-artifact@v4
+      with:
+        include-hidden-files: true
+        name: ghpages-deploy-artifacts
+        path: .ghpages-deploy
+        retention-days: 1
