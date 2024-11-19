@@ -1050,7 +1050,7 @@ export type TokenBalance = {
   accountIndex: number;
   mint: string;
   owner?: string;
-  programId?:string;
+  programId?: string;
   uiTokenAmount: TokenAmount;
 };
 
@@ -2331,7 +2331,7 @@ const TokenBalanceResult = pick({
   accountIndex: number(),
   mint: string(),
   owner: optional(string()),
-  programId:optional(string()),
+  programId: optional(string()),
   uiTokenAmount: TokenAmountResult,
 });
 
