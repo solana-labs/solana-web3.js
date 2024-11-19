@@ -74,6 +74,7 @@
         "@solana/addresses": "workspace:*",
         "@solana/codecs-core": "workspace:*",
         "@solana/errors": "workspace:*",
+        "@solana/instructions": "workspace:*",
         "@solana/keys": "workspace:*",
         "@solana/transactions": "workspace:*"
     },
