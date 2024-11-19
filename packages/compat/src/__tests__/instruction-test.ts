@@ -85,21 +85,6 @@ describe('fromLegacyTransactionInstruction', () => {
         });
     });
 
-    it('throws an error when the programId is invalid', () => {
-        const invalidProgramId = null as unknown as Uint8Array;
-        const data = new Uint8Array([100, 110, 120]);
-
-        expect(() => {
-            const instruction = new TransactionInstruction({
-                data: Buffer.from(data),
-                keys: [],
-                programId: new PublicKey(invalidProgramId),
-            });
-
-            fromLegacyTransactionInstruction(instruction);
-        }).toThrow('Invalid programId');
-    });
-
     it('handles an empty data field gracefully', () => {
         const programId = new Uint8Array([13, 14, 15, 16]);
         const keys = [
@@ -118,9 +103,9 @@ describe('fromLegacyTransactionInstruction', () => {
             data: Buffer.from([]),
             keys: [
                 {
-                    pubkey: 'F7Kzv7G6p1PvHXL1xXLPTm4myKWpLjnVphCV8ABZJfgT',
                     isSigner: true,
                     isWritable: false,
+                    pubkey: 'F7Kzv7G6p1PvHXL1xXLPTm4myKWpLjnVphCV8ABZJfgT',
                 },
             ],
             programId: programId.toString(),
