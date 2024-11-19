@@ -76,5 +76,6 @@ function parseBaseAccount(rpcAccount: AccountInfoBase): BaseAccount {
         executable: rpcAccount.executable,
         lamports: rpcAccount.lamports,
         programAddress: rpcAccount.owner,
+        space: rpcAccount.space,
     });
 }
