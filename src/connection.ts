@@ -2331,6 +2331,7 @@ const TokenBalanceResult = pick({
   accountIndex: number(),
   mint: string(),
   owner: optional(string()),
+  programId:optional(string()),
   uiTokenAmount: TokenAmountResult,
 });
 
