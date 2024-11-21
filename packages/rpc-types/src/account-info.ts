@@ -17,6 +17,8 @@ export type AccountInfoBase = Readonly<{
     owner: Address;
     /** the epoch at which this account will next owe rent */
     rentEpoch: bigint;
+    /** the size of the account data in bytes (excluding the 128 bytes of header) */
+    space: bigint;
 }>;
 
 /** @deprecated */
