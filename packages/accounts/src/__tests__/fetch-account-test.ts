@@ -23,6 +23,7 @@ describe('fetchEncodedAccount', () => {
                 executable: false,
                 lamports: 1_000_000_000n,
                 owner: '9999',
+                space: 6n,
             },
         });
 
@@ -38,6 +39,7 @@ describe('fetchEncodedAccount', () => {
             exists: true,
             lamports: 1_000_000_000n,
             programAddress: '9999',
+            space: 6n,
         });
 
         // And the getAccountInfo RPC method to have been called with the given address and an explicit base64 encoding.
@@ -73,6 +75,7 @@ describe('fetchEncodedAccount', () => {
                 executable: false,
                 lamports: 1_000_000_000n,
                 owner: '9999',
+                space: 6n,
             },
         });
 
@@ -98,11 +101,12 @@ describe('fetchJsonParsedAccount', () => {
                         type: 'token',
                     },
                     program: 'splToken',
-                    space: 165n,
+                    space: 165n, // The space field is provided again on some JSON-parsed RPC response.
                 },
                 executable: false,
                 lamports: 1_000_000_000n,
                 owner: '9999',
+                space: 165n,
             },
         });
 
@@ -119,6 +123,7 @@ describe('fetchJsonParsedAccount', () => {
             exists: true,
             lamports: 1_000_000_000n,
             programAddress: '9999',
+            space: 165n,
         });
 
         // And the getAccountInfo RPC method to have been called with the given address and an explicit jsonParsed encoding.
@@ -188,6 +193,7 @@ describe('fetchEncodedAccounts', () => {
                 executable: false,
                 lamports: 1_000_000_000n,
                 owner: '9999',
+                space: 6n,
             },
         });
 
@@ -206,6 +212,7 @@ describe('fetchEncodedAccounts', () => {
             exists: true,
             lamports: 1_000_000_000n,
             programAddress: '9999',
+            space: 6n,
         });
 
         // And account B is returned as a non-existing account.
@@ -229,6 +236,7 @@ describe('fetchEncodedAccounts', () => {
                 executable: false,
                 lamports: 1_000_000_000n,
                 owner: '9999',
+                space: 6n,
             },
         });
 
@@ -258,11 +266,12 @@ describe('fetchJsonParsedAccounts', () => {
                         type: 'token',
                     },
                     program: 'splToken',
-                    space: 165n,
+                    space: 165n, // The space field is provided again on some JSON-parsed RPC response.
                 },
                 executable: false,
                 lamports: 1_000_000_000n,
                 owner: '9999',
+                space: 165n,
             },
         });
 
@@ -282,6 +291,7 @@ describe('fetchJsonParsedAccounts', () => {
             exists: true,
             lamports: 1_000_000_000n,
             programAddress: '9999',
+            space: 165n,
         });
 
         // And account B is returned as a non-existing account.

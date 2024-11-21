@@ -22,6 +22,7 @@ describe('decodeAccount', () => {
             executable: false,
             lamports: 1_000_000_000n,
             programAddress: '9999',
+            space: 3n,
         };
 
         // And a mock decoder.
@@ -37,6 +38,7 @@ describe('decodeAccount', () => {
             executable: false,
             lamports: 1_000_000_000n,
             programAddress: '9999',
+            space: 3n,
         });
 
         // And the decoder to have been called with the encoded account data.
@@ -51,6 +53,7 @@ describe('decodeAccount', () => {
             executable: false,
             lamports: 1_000_000_000n,
             programAddress: '9999',
+            space: 3n,
         };
 
         // And a mock decoder.
