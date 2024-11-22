@@ -304,7 +304,43 @@ const rpc = createSolanaRpcFromTransport(retryingTransport);
 Support for handling network failures can be implemented in the transport itself. Here’s an example of some failover logic integrated into a transport:
 
 ```ts
-// TODO: Your turn; send us a pull request with an example.
+import { createDefaultRpcTransport, createSolanaRpcFromTransport, type RpcTransport } from '@solana/web3.js';
+
+// List of RPC endpoints for failover.
+const rpcEndpoints = [
+    'https://mainnet-beta.my-server-1.com',
+    'https://mainnet-beta.my-server-2.com',
+    'https://mainnet-beta.my-server-3.com',
+    'https://mainnet-beta.my-server-3.com',
+];
+
+// Create an array of transports from the endpoints.
+const transports = rpcEndpoints.map((url) => createDefaultRpcTransport({ url }));
+
+// Sleep function to wait for a given number of milliseconds.
+function sleep(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// A failover transport that switches to the next transport on failure.
+async function failoverTransport<TResponse>(...args: Parameters<RpcTransport>): Promise<TResponse> {
+    let lastError;
+    for (const transport of transports) {
+        try {
+            return await transport(...args);
+        } catch (err) {
+            lastError = err;
+            console.warn(`Transport failed: ${err}. Trying next transport...`);
+            // Optional: Add a small delay before trying the next transport.
+            await sleep(100);
+        }
+    }
+    // If all transports fail, throw the last error.
+    throw lastError;
+}
+
+// Create the RPC client using the failover transport.
+const rpc = createSolanaRpcFromTransport(failoverTransport);
 ```
 
 ### Augmenting/Constraining the RPC API
