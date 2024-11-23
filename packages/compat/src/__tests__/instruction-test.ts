@@ -1,6 +1,8 @@
+import { address } from '@solana/addresses';
 import { AccountRole, IInstruction } from '@solana/instructions';
 import { PublicKey, TransactionInstruction } from '@solana/web3.js';
 
+import { fromLegacyPublicKey } from '../address';
 import { fromLegacyTransactionInstruction } from '../instruction';
 
 describe('fromLegacyTransactionInstruction', () => {
@@ -26,12 +28,12 @@ describe('fromLegacyTransactionInstruction', () => {
         expect(converted).toMatchObject<IInstruction>({
             accounts: [
                 {
-                    address: '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK',
+                    address: address('7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK'),
                     role: AccountRole.WRITABLE,
                 },
             ],
             data: Buffer.from(data),
-            programAddress: new PublicKey(programId).toBase58(),
+            programAddress: fromLegacyPublicKey(new PublicKey(programId)),
         });
     });
 
@@ -50,7 +52,7 @@ describe('fromLegacyTransactionInstruction', () => {
         expect(converted).toMatchObject<IInstruction>({
             accounts: [],
             data: Buffer.from(data),
-            programAddress: programId.toString(),
+            programAddress: fromLegacyPublicKey(new PublicKey(programId)),
         });
     });
 
@@ -77,16 +79,16 @@ describe('fromLegacyTransactionInstruction', () => {
         expect(converted).toMatchObject<IInstruction>({
             accounts: [
                 {
-                    address: '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK',
+                    address: address('7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK'),
                     role: AccountRole.WRITABLE_SIGNER,
                 },
                 {
-                    address: '9A87Qt8sxxLMe7hcrjC4cPnho1CwWKRpk84ZTRPyvWNw',
+                    address: address( '9A87Qt8sxxLMe7hcrjC4cPnho1CwWKRpk84ZTRPyvWNw'),
                     role: AccountRole.READONLY,
                 },
             ],
             data: Buffer.from(data),
-            programAddress: programId.toString(),
+            programAddress: fromLegacyPublicKey(new PublicKey(programId)),
         });
     });
 
@@ -111,12 +113,12 @@ describe('fromLegacyTransactionInstruction', () => {
         expect(converted).toMatchObject<IInstruction>({
             accounts: [
                 {
-                    address: 'F7Kzv7G6p1PvHXL1xXLPTm4myKWpLjnVphCV8ABZJfgT',
+                    address: address('F7Kzv7G6p1PvHXL1xXLPTm4myKWpLjnVphCV8ABZJfgT'),
                     role: AccountRole.READONLY_SIGNER,
                 },
             ],
             data: Buffer.from([]),
-            programAddress: programId.toString(),
+            programAddress: fromLegacyPublicKey(new PublicKey(programId)),
         });
     });
 });
