@@ -83,7 +83,7 @@ describe('fromLegacyTransactionInstruction', () => {
                     role: AccountRole.WRITABLE_SIGNER,
                 },
                 {
-                    address: address( '9A87Qt8sxxLMe7hcrjC4cPnho1CwWKRpk84ZTRPyvWNw'),
+                    address: address('9A87Qt8sxxLMe7hcrjC4cPnho1CwWKRpk84ZTRPyvWNw'),
                     role: AccountRole.READONLY,
                 },
             ],
