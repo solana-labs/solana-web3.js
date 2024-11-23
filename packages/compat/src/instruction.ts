@@ -1,9 +1,7 @@
-import { AccountRole, IInstruction } from '@solana/instructions';
+import { AccountRole, IInstruction } from '@solana/instructions/src';
 import { TransactionInstruction } from '@solana/web3.js';
 
-export function fromLegacyTransactionInstruction(
-    legacyInstruction: TransactionInstruction
-): IInstruction {
+export function fromLegacyTransactionInstruction(legacyInstruction: TransactionInstruction): IInstruction {
     // Map data (Buffer -> Uint8Array)
     const data = legacyInstruction.data ? Uint8Array.from(legacyInstruction.data) : undefined;
 
@@ -17,16 +15,16 @@ export function fromLegacyTransactionInstruction(
     const programAddress = legacyInstruction.programId.toBase58();
 
     return {
-        data,
         accounts,
+        data,
         programAddress,
     };
 }
 
 // Helper function to determine the role
 function determineRole(isSigner: boolean, isWritable: boolean): AccountRole {
-    if (isSigner && isWritable) return 'SignerWritable';
-    if (isSigner) return 'Signer';
-    if (isWritable) return 'Writable';
-    return 'Readonly';
+    if (isSigner && isWritable) return AccountRole.WRITABLE_SIGNER;
+    if (isSigner) return AccountRole.READONLY_SIGNER;
+    if (isWritable) return AccountRole.WRITABLE;
+    return AccountRole.READONLY;
 }
