@@ -1,4 +1,5 @@
 import { Address } from '@solana/addresses';
+import { ReadonlyUint8Array } from '@solana/codecs-core';
 import { SOLANA_ERROR__TRANSACTION__EXPECTED_NONCE_LIFETIME, SolanaError } from '@solana/errors';
 import {
     AccountRole,
@@ -111,7 +112,7 @@ export function isAdvanceNonceAccountInstruction(
     );
 }
 
-function isAdvanceNonceAccountInstructionData(data: Uint8Array): data is AdvanceNonceAccountInstructionData {
+function isAdvanceNonceAccountInstructionData(data: ReadonlyUint8Array): data is AdvanceNonceAccountInstructionData {
     // AdvanceNonceAccount is the fifth instruction in the System Program (index 4)
     return data.byteLength === 4 && data[0] === 4 && data[1] === 0 && data[2] === 0 && data[3] === 0;
 }

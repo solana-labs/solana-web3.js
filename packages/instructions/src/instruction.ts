@@ -1,4 +1,5 @@
 import { Address } from '@solana/addresses';
+import { ReadonlyUint8Array } from '@solana/codecs-core';
 import {
     SOLANA_ERROR__INSTRUCTION__EXPECTED_TO_HAVE_ACCOUNTS,
     SOLANA_ERROR__INSTRUCTION__EXPECTED_TO_HAVE_DATA,
@@ -13,7 +14,7 @@ export interface IInstruction<
     TAccounts extends readonly (IAccountLookupMeta | IAccountMeta)[] = readonly (IAccountLookupMeta | IAccountMeta)[],
 > {
     readonly accounts?: TAccounts;
-    readonly data?: Uint8Array;
+    readonly data?: ReadonlyUint8Array;
     readonly programAddress: Address<TProgramAddress>;
 }
 
@@ -60,19 +61,19 @@ export function assertIsInstructionWithAccounts<
     }
 }
 
-export interface IInstructionWithData<TData extends Uint8Array> extends IInstruction {
+export interface IInstructionWithData<TData extends ReadonlyUint8Array> extends IInstruction {
     readonly data: TData;
 }
 
 export function isInstructionWithData<
-    TData extends Uint8Array = Uint8Array,
+    TData extends ReadonlyUint8Array = ReadonlyUint8Array,
     TInstruction extends IInstruction = IInstruction,
 >(instruction: TInstruction): instruction is IInstructionWithData<TData> & TInstruction {
     return instruction.data !== undefined;
 }
 
 export function assertIsInstructionWithData<
-    TData extends Uint8Array = Uint8Array,
+    TData extends ReadonlyUint8Array = ReadonlyUint8Array,
     TInstruction extends IInstruction = IInstruction,
 >(instruction: TInstruction): asserts instruction is IInstructionWithData<TData> & TInstruction {
     if (instruction.data === undefined) {
