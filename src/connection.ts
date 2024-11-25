@@ -1999,6 +1999,7 @@ const GetConfirmedSignaturesForAddress2RpcResult = jsonRpcResult(
       err: TransactionErrorResult,
       memo: nullable(string()),
       blockTime: optional(nullable(number())),
+      blockHeight: nullable(number()),
     }),
   ),
 );
@@ -2014,6 +2015,7 @@ const GetSignaturesForAddressRpcResult = jsonRpcResult(
       err: TransactionErrorResult,
       memo: nullable(string()),
       blockTime: optional(nullable(number())),
+      blockHeight: nullable(number()),
     }),
   ),
 );
