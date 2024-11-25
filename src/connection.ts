@@ -1294,6 +1294,8 @@ export type ParsedTransactionWithMeta = {
  * A processed block fetched from the RPC API
  */
 export type BlockResponse = {
+  /** Block height of this block */
+  blockHeight: number | null;
   /** Blockhash of this block */
   blockhash: Blockhash;
   /** Blockhash of this block's parent */
@@ -1410,6 +1412,8 @@ export type ParsedNoneModeBlockResponse = Omit<
  * A processed block fetched from the RPC API
  */
 export type VersionedBlockResponse = {
+  /** Block height of this block */
+  blockHeight: number | null;
   /** Blockhash of this block */
   blockhash: Blockhash;
   /** Blockhash of this block's parent */
