@@ -137,7 +137,7 @@ importers:
         version: 5.1.2
       chai-as-promised:
         specifier: ^8.0.0
-        version: 8.0.0(chai@5.1.2)
+        version: 8.0.1(chai@5.1.2)
       commitlint:
         specifier: ^19.3.0
         version: 19.6.0(@types/node@22.0.0)(typescript@5.6.3)
@@ -1840,8 +1840,8 @@ packages:
   caniuse-lite@1.0.30001666:
     resolution: {integrity: sha512-gD14ICmoV5ZZM1OdzPWmpx+q4GyefaK06zi8hmfHV5xe4/2nOQX3+Dw5o+fSqOws2xVwL9j+anOPFwHzdEdV4g==}
 
-  chai-as-promised@8.0.0:
-    resolution: {integrity: sha512-sMsGXTrS3FunP/wbqh/KxM8Kj/aLPXQGkNtvE5wPfSToq8wkkvBpTZo1LIiEVmC4BwkKpag+l5h/20lBMk6nUg==}
+  chai-as-promised@8.0.1:
+    resolution: {integrity: sha512-OIEJtOL8xxJSH8JJWbIoRjybbzR52iFuDHuF8eb+nTPD6tgXLjRqsgnUGqQfFODxYvq5QdirT0pN9dZ0+Gz6rA==}
     peerDependencies:
       chai: '>= 2.1.2 < 6'
 
@@ -6449,7 +6449,7 @@ snapshots:
 
   caniuse-lite@1.0.30001666: {}
 
-  chai-as-promised@8.0.0(chai@5.1.2):
+  chai-as-promised@8.0.1(chai@5.1.2):
     dependencies:
       chai: 5.1.2
       check-error: 2.1.1
