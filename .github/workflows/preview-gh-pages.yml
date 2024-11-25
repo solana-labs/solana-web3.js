@@ -58,7 +58,8 @@ jobs:
       - name: Install Dependencies
         uses: ./.github/workflows/actions/install-dependencies
 
-      - uses: actions/download-artifact@v4
+      - name: Download Deploy Directory from Artifact Cache
+        uses: actions/download-artifact@v4
         with:
           path: .ghpages-deploy
           pattern: ghpages-deploy-artifacts*

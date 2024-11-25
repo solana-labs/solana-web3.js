@@ -4,6 +4,8 @@ description: Compiles content for GitHub Pages and uploads it to the artifact ca
 inputs:
   pr-number:
     type: number
+  # Typically used when it's important to know the base URL for the GitHub Pages site,
+  # for instance when a web app's router needs to know its base URL.
   repository:
     default: 'solana-web3.js'
     type: string
@@ -24,7 +26,8 @@ runs:
         mv ./examples/react-app/dist/ .ghpages-deploy/example/
         mv ./docs/* .ghpages-deploy/
 
-    - uses: actions/upload-artifact@v4
+    - name: Upload Deploy Directory to Artifact Cache
+      uses: actions/upload-artifact@v4
       with:
         include-hidden-files: true
         name: ghpages-deploy-artifacts
