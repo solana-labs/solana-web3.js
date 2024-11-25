@@ -22,7 +22,7 @@ env:
   TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
 
 jobs:
-  compile-v1-docs:
+  compile-gh-pages-legacy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -33,22 +33,11 @@ jobs:
       - name: Install Dependencies
         uses: ./.github/workflows/actions/install-dependencies
 
-      - name: Compile docs
-        run: pnpm compile:docs
+      - name: Compile and Upload Artifacts
+        # Be aware that this is the version that lives on the `maintenance/v1.x` branch.
+        uses: ./.github/workflows/actions/compile-gh-pages
 
-      - name: Assemble Deploy Directory
-        run: |
-          mkdir -p .ghpages-deploy/v1.x
-          mv ./doc/* .ghpages-deploy/v1.x
-
-      - uses: actions/upload-artifact@v4
-        with:
-          include-hidden-files: true
-          name: ghpages-deploy-artifacts-v1-docs
-          path: .ghpages-deploy
-          retention-days: 1
-
-  compile-github-pages:
+  compile-gh-pages:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -57,27 +46,12 @@ jobs:
       - name: Install Dependencies
         uses: ./.github/workflows/actions/install-dependencies
 
-      - name: Compile
-        run: pnpm turbo run compile:typedefs compile:ghpages --concurrency=${TURBO_CONCURRENCY:-1}
-        env:
-          REACT_EXAMPLE_APP_BASE_PATH: /solana-web3.js/example/
-
-      - name: Assemble Deploy Directory
-        run: |
-          mkdir -p .ghpages-deploy
-          mv ./examples/react-app/dist/ .ghpages-deploy/example/
-          mv ./docs/* .ghpages-deploy/
-
-      - uses: actions/upload-artifact@v4
-        with:
-          include-hidden-files: true
-          name: ghpages-deploy-artifacts
-          path: .ghpages-deploy
-          retention-days: 1
+      - name: Compile and Upload Artifacts
+        uses: ./.github/workflows/actions/compile-gh-pages
 
   publish:
     runs-on: ubuntu-latest
-    needs: [compile-v1-docs, compile-github-pages]
+    needs: [compile-gh-pages, compile-gh-pages-legacy]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -85,14 +59,15 @@ jobs:
       - name: Install Dependencies
         uses: ./.github/workflows/actions/install-dependencies
 
-      - uses: actions/download-artifact@v4
+      - name: Download Deploy Directory from Artifact Cache
+        uses: actions/download-artifact@v4
         with:
           path: .ghpages-deploy
           pattern: ghpages-deploy-artifacts*
           merge-multiple: true
 
       - name: Deploy to Github Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: .ghpages-deploy
