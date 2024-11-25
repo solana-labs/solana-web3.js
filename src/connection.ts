@@ -2554,6 +2554,7 @@ const GetConfirmedBlockRpcResult = jsonRpcResult(
       ),
       rewards: optional(array(RewardsResult)),
       blockTime: nullable(number()),
+      blockHeight: nullable(number()),
     }),
   ),
 );
@@ -2569,6 +2570,7 @@ const GetBlockSignaturesRpcResult = jsonRpcResult(
       parentSlot: number(),
       signatures: array(string()),
       blockTime: nullable(number()),
+      blockHeight: nullable(number()),
     }),
   ),
 );
