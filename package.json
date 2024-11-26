@@ -56,6 +56,7 @@
     "test:unit": "cross-env NODE_ENV=test NODE_OPTIONS='--import tsx' mocha './test/**/*.test.ts'"
   },
   "dependencies": {
+    "@anza-xyz": "github:buffalojoec/solana-rpc-client-extensions#do-not-actually-use-web3-js",
     "@babel/runtime": "^7.25.0",
     "@noble/curves": "^1.4.2",
     "@noble/hashes": "^1.4.0",

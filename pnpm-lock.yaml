@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@anza-xyz':
+        specifier: github:buffalojoec/solana-rpc-client-extensions#do-not-actually-use-web3-js
+        version: solana-rpc-client-extensions#do-not-actually-use-web3-js@https://codeload.github.com/buffalojoec/solana-rpc-client-extensions/tar.gz/a2d5f9446ad1fbb8478303b74fc5e3eb36f682ea
       '@babel/runtime':
         specifier: ^7.25.0
         version: 7.26.0
@@ -2366,7 +2369,6 @@ packages:
   eslint@8.57.0:
     resolution: {integrity: sha512-dZ6+mexnaTIbSBZWgou51U6OmzIhYM2VcNdtiTtI7qPNZm35Akpr0f6vtw3w1Kmn5PYo+tZVfh13WrhpS6oLqQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
-    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
 
   esm@3.2.25:
@@ -4051,6 +4053,10 @@ packages:
   socks@2.8.1:
     resolution: {integrity: sha512-B6w7tkwNid7ToxjZ08rQMT8M9BJAf8DKx8Ft4NivzH0zBUfd6jldGcisJn/RLgxcX3FPNDdNQCUEMMT79b+oCQ==}
     engines: {node: '>= 10.0.0', npm: '>= 3.0.0'}
+
+  solana-rpc-client-extensions#do-not-actually-use-web3-js@https://codeload.github.com/buffalojoec/solana-rpc-client-extensions/tar.gz/a2d5f9446ad1fbb8478303b74fc5e3eb36f682ea:
+    resolution: {tarball: https://codeload.github.com/buffalojoec/solana-rpc-client-extensions/tar.gz/a2d5f9446ad1fbb8478303b74fc5e3eb36f682ea}
+    version: 0.0.0
 
   source-map-support@0.5.21:
     resolution: {integrity: sha512-uBHU3L3czsIyYXKX88fdrGovxdSCoTGDRZ6SYXtSRxLZUzHg5P/66Ht6uoUlHu9EZod+inXhKo3qQgwXUT/y1w==}
@@ -8824,6 +8830,8 @@ snapshots:
     dependencies:
       ip-address: 9.0.5
       smart-buffer: 4.2.0
+
+  solana-rpc-client-extensions#do-not-actually-use-web3-js@https://codeload.github.com/buffalojoec/solana-rpc-client-extensions/tar.gz/a2d5f9446ad1fbb8478303b74fc5e3eb36f682ea: {}
 
   source-map-support@0.5.21:
     dependencies:
