@@ -5,13 +5,13 @@
 
 [code-style-prettier-image]: https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square
 [code-style-prettier-url]: https://github.com/prettier/prettier
-[npm-downloads-image]: https://img.shields.io/npm/dm/@solana/codecs/rc.svg?style=flat
-[npm-image]: https://img.shields.io/npm/v/@solana/codecs/rc.svg?style=flat
-[npm-url]: https://www.npmjs.com/package/@solana/codecs/v/rc
+[npm-downloads-image]: https://img.shields.io/npm/dm/@solana/codecs/next.svg?style=flat
+[npm-image]: https://img.shields.io/npm/v/@solana/codecs/next.svg?style=flat
+[npm-url]: https://www.npmjs.com/package/@solana/codecs/v/next
 
 # @solana/codecs
 
-This package contains all types and helpers for encoding and decoding anything to and from a `Uint8Array`. It can be used standalone, but it is also exported as part of the Solana JavaScript SDK [`@solana/web3.js@rc`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/library).
+This package contains all types and helpers for encoding and decoding anything to and from a `Uint8Array`. It can be used standalone, but it is also exported as part of the Solana JavaScript SDK [`@solana/web3.js@next`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/library).
 
 No matter which serialization strategy we use, Codecs abstract away its implementation and offers a simple `encode` and `decode` interface. Codecs are also highly composable, allowing us to build complex data structures from simple building blocks.
 

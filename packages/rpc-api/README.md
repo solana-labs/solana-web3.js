@@ -5,13 +5,13 @@
 
 [code-style-prettier-image]: https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square
 [code-style-prettier-url]: https://github.com/prettier/prettier
-[npm-downloads-image]: https://img.shields.io/npm/dm/@solana/rpc-api/rc.svg?style=flat
-[npm-image]: https://img.shields.io/npm/v/@solana/rpc-api/rc.svg?style=flat
-[npm-url]: https://www.npmjs.com/package/@solana/rpc-api/v/rc
+[npm-downloads-image]: https://img.shields.io/npm/dm/@solana/rpc-api/next.svg?style=flat
+[npm-image]: https://img.shields.io/npm/v/@solana/rpc-api/next.svg?style=flat
+[npm-url]: https://www.npmjs.com/package/@solana/rpc-api/v/next
 
 # @solana/rpc-api
 
-This package contains types that describe the [methods](https://solana.com/docs/rpc/http) of the Solana JSON RPC API, and utilities for creating a `RpcApi` implementation with sensible defaults. It can be used standalone, but it is also exported as part of the Solana JavaScript SDK [`@solana/web3.js@rc`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/library).
+This package contains types that describe the [methods](https://solana.com/docs/rpc/http) of the Solana JSON RPC API, and utilities for creating a `RpcApi` implementation with sensible defaults. It can be used standalone, but it is also exported as part of the Solana JavaScript SDK [`@solana/web3.js@next`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/library).
 
 Each RPC method is described in terms of a TypeScript type of the following form:
 

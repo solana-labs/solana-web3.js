@@ -5,13 +5,13 @@
 
 [code-style-prettier-image]: https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square
 [code-style-prettier-url]: https://github.com/prettier/prettier
-[npm-downloads-image]: https://img.shields.io/npm/dm/@solana/rpc-spec-types/rc.svg?style=flat
-[npm-image]: https://img.shields.io/npm/v/@solana/rpc-spec-types/rc.svg?style=flat
-[npm-url]: https://www.npmjs.com/package/@solana/rpc-spec-types/v/rc
+[npm-downloads-image]: https://img.shields.io/npm/dm/@solana/rpc-spec-types/next.svg?style=flat
+[npm-image]: https://img.shields.io/npm/v/@solana/rpc-spec-types/next.svg?style=flat
+[npm-url]: https://www.npmjs.com/package/@solana/rpc-spec-types/v/next
 
 # @solana/rpc-spec-types
 
-This package contains core types that can be used on both RPC and RPC Subscriptions specifications. It can be used standalone, but it is also exported as part of the Solana JavaScript SDK [`@solana/web3.js@rc`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/library).
+This package contains core types that can be used on both RPC and RPC Subscriptions specifications. It can be used standalone, but it is also exported as part of the Solana JavaScript SDK [`@solana/web3.js@next`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/library).
 
 ## Types
 

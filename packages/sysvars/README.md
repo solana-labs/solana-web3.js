@@ -5,16 +5,16 @@
 
 [code-style-prettier-image]: https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square
 [code-style-prettier-url]: https://github.com/prettier/prettier
-[npm-downloads-image]: https://img.shields.io/npm/dm/@solana/sysvars/rc.svg?style=flat
-[npm-image]: https://img.shields.io/npm/v/@solana/sysvars/rc.svg?style=flat
-[npm-url]: https://www.npmjs.com/package/@solana/sysvars/v/rc
+[npm-downloads-image]: https://img.shields.io/npm/dm/@solana/sysvars/next.svg?style=flat
+[npm-image]: https://img.shields.io/npm/v/@solana/sysvars/next.svg?style=flat
+[npm-url]: https://www.npmjs.com/package/@solana/sysvars/v/next
 
 # @solana/sysvars
 
 This package contains types and helpers for fetching and decoding Solana
 sysvars. It can be used standalone, but it is also exported as part of the
 Solana JavaScript SDK
-[`@solana/web3.js@rc`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/library).
+[`@solana/web3.js@next`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/library).
 
 More information about the available sysvars on Solana can be found in the docs
 at <https://docs.solanalabs.com/runtime/sysvars>.
