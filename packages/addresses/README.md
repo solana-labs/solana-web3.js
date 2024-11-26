@@ -11,7 +11,7 @@
 
 # @solana/addresses
 
-This package contains utilities for generating account addresses. It can be used standalone, but it is also exported as part of the Solana JavaScript SDK [`@solana/web3.js@rc`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/library).
+This package contains utilities for generating account addresses. It can be used standalone, but it is also exported as part of the Solana JavaScript SDK [`@solana/web3.js@next`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/library).
 
 ## Types
 
