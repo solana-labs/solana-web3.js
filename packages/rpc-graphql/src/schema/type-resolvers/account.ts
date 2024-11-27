@@ -147,9 +147,6 @@ export const accountTypeResolvers = {
                     if (jsonParsedConfigs.accountType === 'epochSchedule') {
                         return 'SysvarEpochScheduleAccount';
                     }
-                    if (jsonParsedConfigs.accountType === 'fees') {
-                        return 'SysvarFeesAccount';
-                    }
                     if (jsonParsedConfigs.accountType === 'lastRestartSlot') {
                         return 'SysvarLastRestartSlotAccount';
                     }
@@ -268,10 +265,6 @@ export const accountTypeResolvers = {
         ownerProgram: resolveAccount('ownerProgram'),
     },
     SysvarEpochScheduleAccount: {
-        data: resolveAccountData(),
-        ownerProgram: resolveAccount('ownerProgram'),
-    },
-    SysvarFeesAccount: {
         data: resolveAccountData(),
         ownerProgram: resolveAccount('ownerProgram'),
     },
