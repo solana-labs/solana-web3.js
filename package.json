@@ -32,7 +32,7 @@
         "@typescript-eslint/parser": "^8.16.0",
         "agadoo": "^3.0.0",
         "bundlemon": "^3.1.0",
-        "eslint": "^9.14.0",
+        "eslint": "^9.15.0",
         "eslint-plugin-jest": "^28.9.0",
         "eslint-plugin-react-hooks": "^5.0.0",
         "eslint-plugin-simple-import-sort": "^12.1.1",
