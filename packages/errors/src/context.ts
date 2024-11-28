@@ -386,7 +386,7 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
             instructionErrorContext?: unknown;
         };
         [SOLANA_ERROR__INSTRUCTION__EXPECTED_TO_HAVE_ACCOUNTS]: {
-            data?: Uint8Array;
+            data?: ReadonlyUint8Array;
             programAddress: string;
         };
         [SOLANA_ERROR__INSTRUCTION__EXPECTED_TO_HAVE_DATA]: {

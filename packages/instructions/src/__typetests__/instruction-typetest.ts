@@ -1,4 +1,5 @@
 import { Address } from '@solana/addresses';
+import { ReadonlyUint8Array } from '@solana/codecs-core';
 
 import { IAccountLookupMeta, IAccountMeta } from '../accounts';
 import {
@@ -21,12 +22,12 @@ import {
     instruction satisfies IInstructionWithAccounts<readonly (IAccountLookupMeta | IAccountMeta)[]>;
 
     // @ts-expect-error instruction might not have data
-    instruction satisfies IInstructionWithData<Uint8Array>;
+    instruction satisfies IInstructionWithData<ReadonlyUint8Array>;
 
     if (isInstructionWithAccounts(instruction) && isInstructionWithData(instruction)) {
         instruction satisfies IInstruction &
             IInstructionWithAccounts<readonly (IAccountLookupMeta | IAccountMeta)[]> &
-            IInstructionWithData<Uint8Array>;
+            IInstructionWithData<ReadonlyUint8Array>;
     }
 }
 
@@ -38,7 +39,7 @@ import {
     instruction satisfies IInstructionWithAccounts<readonly (IAccountLookupMeta | IAccountMeta)[]>;
 
     // @ts-expect-error instruction might not have data
-    instruction satisfies IInstructionWithData<Uint8Array>;
+    instruction satisfies IInstructionWithData<ReadonlyUint8Array>;
 
     assertIsInstructionWithAccounts(instruction);
     instruction satisfies IInstruction & IInstructionWithAccounts<readonly (IAccountLookupMeta | IAccountMeta)[]>;
@@ -46,7 +47,7 @@ import {
     assertIsInstructionWithData(instruction);
     instruction satisfies IInstruction &
         IInstructionWithAccounts<readonly (IAccountLookupMeta | IAccountMeta)[]> &
-        IInstructionWithData<Uint8Array>;
+        IInstructionWithData<ReadonlyUint8Array>;
 }
 
 // narrowing by program address
