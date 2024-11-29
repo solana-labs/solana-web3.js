@@ -352,7 +352,7 @@ import {
 } from '@solana/web3.js';
 
 const api = createSolanaRpcApi<GetAccountInfoApi & GetMultipleAccountsApi>(DEFAULT_RPC_CONFIG);
-const transport = createDefaultRpcTransport({ url: 'http:127.0.0.1:8899' });
+const transport = createDefaultRpcTransport({ url: 'http://127.0.0.1:8899' });
 
 const rpc = createRpc({ api, transport });
 ```
@@ -1027,7 +1027,7 @@ export const getMyTokenCodec = (): Codec<MyTokenArgs, MyToken> =>
     combineCodec(getMyTokenEncoder(), getMyTokenDecoder());
 ```
 
-You can read me about codecs in [the official Codec documentation](https://github.com/solana-labs/solana-web3.js/blob/master/packages/codecs/README.md).
+You can read more about codecs in [the official Codec documentation](https://github.com/solana-labs/solana-web3.js/blob/master/packages/codecs/README.md).
 
 ## Type-Safety
 
@@ -1166,7 +1166,7 @@ const signature = rpc.requestAirdrop(myAddress, airdropAmount).send();
 
 ## Compatibility Layer
 
-You will have noticed by now that web3.js is a complete and total breaking change from the 1.x line. We want to provide you with a strategy for interacting with 1.x APIs while building your application using 2.0. You need a tool for commuting between 1.x and 2.0 data types.
+You will have noticed by now that web3.js is a complete and total breaking change from the 1.x line. We want to provide you with a strategy for interacting with 1.x APIs while building your application using 2.0. You need a tool for converting between 1.x and 2.0 data types.
 
 The `@solana/compat` library allows for interoperability between functions and class objects from the legacy library - such as `VersionedTransaction`, `PublicKey`, and `Keypair` - and functions and types of the new library - such as `Address`, `Transaction`, and `CryptoKeyPair`.
 
@@ -1264,7 +1264,7 @@ On top of instruction builders, these clients offer a variety of utilities such 
 -   Account helpers — e.g. `fetchAddressLookupTable`.
 -   PDA helpers — e.g. `findAddressLookupTablePda`, `fetchAddressLookupTableFromSeeds`.
 -   Defined types and their codecs — e.g. `NonceState`, `getNonceStateCodec`.
--   Program helpers — e.g. `SYSTEM_PROGRAM_ADDRESS`, `SystemAccount` enum, `SystemAccount` enum, `identifySystemInstruction`.
+-   Program helpers — e.g. `SYSTEM_PROGRAM_ADDRESS`, `SystemAccount` enum, `identifySystemInstruction`.
 -   And much more!
 
 Here’s another example that fetches an `AddressLookupTable` PDA from its seeds.
