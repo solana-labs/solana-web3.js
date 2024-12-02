@@ -48,14 +48,14 @@ export function getRpcSubscriptionsChannelWithAutoping<TChannel extends RpcSubsc
         restartPingTimer();
     }
     if (__BROWSER__) {
-        globalThis.window.addEventListener(
+        globalThis.addEventListener(
             'offline',
             function handleOffline() {
                 clearInterval(intervalId);
             },
             { signal: pingerAbortController.signal },
         );
-        globalThis.window.addEventListener(
+        globalThis.addEventListener(
             'online',
             function handleOnline() {
                 sendPing();
