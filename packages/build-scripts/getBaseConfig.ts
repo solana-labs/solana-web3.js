@@ -62,6 +62,7 @@ export function getBaseConfig(platform: Platform, formats: Format[], _options: O
                               // @noble/ed25519 is an ESM-only module, so we have to inline it in CJS builds.
                               ...(format === 'cjs' ? ['@noble/ed25519'] : []),
                               '@solana/crypto-impl',
+                              '@solana/event-target-impl',
                               '@solana/text-encoding-impl',
                               '@solana/ws-impl',
                           ],

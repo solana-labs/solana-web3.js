@@ -1,3 +1,5 @@
+import { EventTarget } from '@solana/event-target-impl';
+
 import { DataPublisher, getDataPublisherFromEventEmitter } from './data-publisher';
 
 export function demultiplexDataPublisher<

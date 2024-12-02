@@ -3,6 +3,7 @@ import {
     SOLANA_ERROR__INVARIANT_VIOLATION__SUBSCRIPTION_ITERATOR_STATE_MISSING,
     SolanaError,
 } from '@solana/errors';
+import { AbortController } from '@solana/event-target-impl';
 
 import { DataPublisher } from './data-publisher';
 

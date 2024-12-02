@@ -491,6 +491,8 @@ importers:
         specifier: '>=5'
         version: 5.7.2
 
+  packages/event-target-impl: {}
+
   packages/fast-stable-stringify:
     dependencies:
       typescript:
@@ -723,6 +725,9 @@ importers:
       '@solana/errors':
         specifier: workspace:*
         version: link:../errors
+      '@solana/event-target-impl':
+        specifier: workspace:*
+        version: link:../event-target-impl
       '@solana/fast-stable-stringify':
         specifier: workspace:*
         version: link:../fast-stable-stringify
@@ -870,6 +875,9 @@ importers:
       '@solana/errors':
         specifier: workspace:*
         version: link:../errors
+      '@solana/event-target-impl':
+        specifier: workspace:*
+        version: link:../event-target-impl
       '@solana/fast-stable-stringify':
         specifier: workspace:*
         version: link:../fast-stable-stringify
@@ -944,6 +952,9 @@ importers:
       '@solana/errors':
         specifier: workspace:*
         version: link:../errors
+      '@solana/event-target-impl':
+        specifier: workspace:*
+        version: link:../event-target-impl
       '@solana/functional':
         specifier: workspace:*
         version: link:../functional
@@ -972,6 +983,9 @@ importers:
       '@solana/errors':
         specifier: workspace:*
         version: link:../errors
+      '@solana/event-target-impl':
+        specifier: workspace:*
+        version: link:../event-target-impl
       '@solana/promises':
         specifier: workspace:*
         version: link:../promises
@@ -1091,6 +1105,9 @@ importers:
       '@solana/errors':
         specifier: workspace:*
         version: link:../errors
+      '@solana/event-target-impl':
+        specifier: workspace:*
+        version: link:../event-target-impl
       typescript:
         specifier: '>=5'
         version: 5.7.2
@@ -1168,6 +1185,9 @@ importers:
       '@solana/errors':
         specifier: workspace:*
         version: link:../errors
+      '@solana/event-target-impl':
+        specifier: workspace:*
+        version: link:../event-target-impl
       '@solana/keys':
         specifier: workspace:*
         version: link:../keys

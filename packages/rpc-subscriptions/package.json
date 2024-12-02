@@ -72,6 +72,7 @@
     ],
     "dependencies": {
         "@solana/errors": "workspace:*",
+        "@solana/event-target-impl": "workspace:*",
         "@solana/fast-stable-stringify": "workspace:*",
         "@solana/functional": "workspace:*",
         "@solana/promises": "workspace:*",
