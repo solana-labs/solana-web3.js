@@ -25,6 +25,7 @@ type SlotsUpdatesNotificationsApiNotificationFrozen = Readonly<{
         numSuccessfulTransactions: bigint;
         numTransactionEntries: bigint;
     }>;
+    hash?: string;
     type: 'frozen';
 }> &
     SlotsUpdatesNotificationsApiNotificationBase;
