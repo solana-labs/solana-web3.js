@@ -38,7 +38,7 @@ importers:
         version: link:packages/build-scripts
       '@solana/eslint-config-solana':
         specifier: ^4.0.0
-        version: 4.0.0(d6xsfi5oyljmzo52rgje277zli)
+        version: 4.0.0(@eslint/js@9.15.0)(@types/eslint__js@8.42.3)(eslint-plugin-jest@28.9.0(@typescript-eslint/eslint-plugin@8.17.0(@typescript-eslint/parser@8.17.0(eslint@9.14.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.14.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.14.0(jiti@1.21.0))(jest@30.0.0-alpha.6(@types/node@22.10.1)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.10.1)(typescript@5.7.2)))(typescript@5.7.2))(eslint-plugin-react-hooks@5.0.0(eslint@9.14.0(jiti@1.21.0)))(eslint-plugin-simple-import-sort@12.1.1(eslint@9.14.0(jiti@1.21.0)))(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@3.3.0(@typescript-eslint/parser@8.17.0(eslint@9.14.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.14.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.14.0(jiti@1.21.0))(globals@15.12.0)(jest@30.0.0-alpha.6(@types/node@22.10.1)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.10.1)(typescript@5.7.2)))(typescript-eslint@8.17.0(eslint@9.14.0(jiti@1.21.0))(typescript@5.7.2))(typescript@5.7.2)
       '@solana/prettier-config-solana':
         specifier: 0.0.5
         version: 0.0.5(prettier@3.4.1)
@@ -207,8 +207,8 @@ importers:
         specifier: ^3.7.2
         version: 3.7.2(@swc/helpers@0.5.11)(vite@6.0.1(@types/node@22.10.1)(jiti@1.21.0)(terser@5.18.0)(tsx@4.19.2)(yaml@2.6.1))
       eslint-plugin-react-refresh:
-        specifier: ^0.4.14
-        version: 0.4.14(eslint@9.14.0(jiti@1.21.0))
+        specifier: ^0.4.16
+        version: 0.4.16(eslint@9.14.0(jiti@1.21.0))
       globals:
         specifier: ^15.12.0
         version: 15.12.0
@@ -4576,10 +4576,10 @@ packages:
     peerDependencies:
       eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0 || ^9.0.0
 
-  eslint-plugin-react-refresh@0.4.14:
-    resolution: {integrity: sha512-aXvzCTK7ZBv1e7fahFuR3Z/fyQQSIQ711yPgYRj+Oj64tyTgO4iQIDmYXDBqvSWQ/FA4OSCsXOStlF+noU0/NA==}
+  eslint-plugin-react-refresh@0.4.16:
+    resolution: {integrity: sha512-slterMlxAhov/DZO8NScf6mEeMBBXodFUolijDvrtTxyezyLoTQaa73FyYus/VbTdftd8wBgBxPMRk3poleXNQ==}
     peerDependencies:
-      eslint: '>=7'
+      eslint: '>=8.40'
 
   eslint-plugin-simple-import-sort@12.1.1:
     resolution: {integrity: sha512-6nuzu4xwQtE3332Uz0to+TxDQYRLTKRESSc2hefVT48Zc8JthmN23Gx9lnYhu0FtkRSL1oxny3kJ2aveVhmOVA==}
@@ -9568,8 +9568,8 @@ snapshots:
     dependencies:
       buffer: 6.0.3
 
-  '@solana/eslint-config-solana@4.0.0(d6xsfi5oyljmzo52rgje277zli)':
-    dependencies:
+  ? '@solana/eslint-config-solana@4.0.0(@eslint/js@9.15.0)(@types/eslint__js@8.42.3)(eslint-plugin-jest@28.9.0(@typescript-eslint/eslint-plugin@8.17.0(@typescript-eslint/parser@8.17.0(eslint@9.14.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.14.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.14.0(jiti@1.21.0))(jest@30.0.0-alpha.6(@types/node@22.10.1)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.10.1)(typescript@5.7.2)))(typescript@5.7.2))(eslint-plugin-react-hooks@5.0.0(eslint@9.14.0(jiti@1.21.0)))(eslint-plugin-simple-import-sort@12.1.1(eslint@9.14.0(jiti@1.21.0)))(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@3.3.0(@typescript-eslint/parser@8.17.0(eslint@9.14.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.14.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.14.0(jiti@1.21.0))(globals@15.12.0)(jest@30.0.0-alpha.6(@types/node@22.10.1)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.10.1)(typescript@5.7.2)))(typescript-eslint@8.17.0(eslint@9.14.0(jiti@1.21.0))(typescript@5.7.2))(typescript@5.7.2)'
+  : dependencies:
       '@eslint/js': 9.15.0
       '@types/eslint__js': 8.42.3
       eslint: 9.14.0(jiti@1.21.0)
@@ -10738,7 +10738,7 @@ snapshots:
     dependencies:
       eslint: 9.14.0(jiti@1.21.0)
 
-  eslint-plugin-react-refresh@0.4.14(eslint@9.14.0(jiti@1.21.0)):
+  eslint-plugin-react-refresh@0.4.16(eslint@9.14.0(jiti@1.21.0)):
     dependencies:
       eslint: 9.14.0(jiti@1.21.0)
 
