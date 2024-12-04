@@ -74,7 +74,7 @@
         "@graphql-tools/schema": "^10.0.10",
         "@solana/codecs-strings": "workspace:*",
         "@solana/fast-stable-stringify": "workspace:*",
-        "dataloader": "^2.2.2",
+        "dataloader": "^2.2.3",
         "graphql": "^16.9.0"
     },
     "devDependencies": {
