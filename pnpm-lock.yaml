@@ -205,7 +205,7 @@ importers:
         version: 18.3.0
       '@vitejs/plugin-react-swc':
         specifier: ^3.7.2
-        version: 3.7.2(@swc/helpers@0.5.11)(vite@6.0.1(@types/node@22.10.1)(jiti@1.21.0)(terser@5.18.0)(tsx@4.19.2)(yaml@2.6.1))
+        version: 3.7.2(@swc/helpers@0.5.11)(vite@6.0.2(@types/node@22.10.1)(jiti@1.21.0)(terser@5.18.0)(tsx@4.19.2)(yaml@2.6.1))
       eslint-plugin-react-refresh:
         specifier: ^0.4.16
         version: 0.4.16(eslint@9.16.0(jiti@1.21.0))
@@ -213,8 +213,8 @@ importers:
         specifier: ^15.13.0
         version: 15.13.0
       vite:
-        specifier: ^6.0.1
-        version: 6.0.1(@types/node@22.10.1)(jiti@1.21.0)(terser@5.18.0)(tsx@4.19.2)(yaml@2.6.1)
+        specifier: ^6.0.2
+        version: 6.0.2(@types/node@22.10.1)(jiti@1.21.0)(terser@5.18.0)(tsx@4.19.2)(yaml@2.6.1)
 
   examples/rpc-custom-api:
     dependencies:
@@ -6681,8 +6681,8 @@ packages:
     resolution: {integrity: sha512-Z6Uz+TYwEqE7ZN50gwn+1LCVo9ZVrpxRPOhOLnncYkY1ZzOYtrX8Fwf/rFktZ8R5mJms6EZf5TqNOMeZmnPq9Q==}
     engines: {node: '>=12'}
 
-  vite@6.0.1:
-    resolution: {integrity: sha512-Ldn6gorLGr4mCdFnmeAOLweJxZ34HjKnDm4HGo6P66IEqTxQb36VEdFJQENKxWjupNfoIjvRUnswjn1hpYEpjQ==}
+  vite@6.0.2:
+    resolution: {integrity: sha512-XdQ+VsY2tJpBsKGs0wf3U/+azx8BBpYRHFAyKm5VeEZNOJZRB63q7Sc8Iup3k0TrN3KO6QgyzFf+opSbfY1y0g==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
     peerDependencies:
@@ -9949,10 +9949,10 @@ snapshots:
 
   '@ungap/structured-clone@1.2.0': {}
 
-  '@vitejs/plugin-react-swc@3.7.2(@swc/helpers@0.5.11)(vite@6.0.1(@types/node@22.10.1)(jiti@1.21.0)(terser@5.18.0)(tsx@4.19.2)(yaml@2.6.1))':
+  '@vitejs/plugin-react-swc@3.7.2(@swc/helpers@0.5.11)(vite@6.0.2(@types/node@22.10.1)(jiti@1.21.0)(terser@5.18.0)(tsx@4.19.2)(yaml@2.6.1))':
     dependencies:
       '@swc/core': 1.7.26(@swc/helpers@0.5.11)
-      vite: 6.0.1(@types/node@22.10.1)(jiti@1.21.0)(terser@5.18.0)(tsx@4.19.2)(yaml@2.6.1)
+      vite: 6.0.2(@types/node@22.10.1)(jiti@1.21.0)(terser@5.18.0)(tsx@4.19.2)(yaml@2.6.1)
     transitivePeerDependencies:
       - '@swc/helpers'
 
@@ -13216,7 +13216,7 @@ snapshots:
 
   value-or-promise@1.0.12: {}
 
-  vite@6.0.1(@types/node@22.10.1)(jiti@1.21.0)(terser@5.18.0)(tsx@4.19.2)(yaml@2.6.1):
+  vite@6.0.2(@types/node@22.10.1)(jiti@1.21.0)(terser@5.18.0)(tsx@4.19.2)(yaml@2.6.1):
     dependencies:
       esbuild: 0.24.0
       postcss: 8.4.49
