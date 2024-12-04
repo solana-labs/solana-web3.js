@@ -71,7 +71,8 @@
         "maintained node versions"
     ],
     "dependencies": {
-        "@solana/errors": "workspace:*"
+        "@solana/errors": "workspace:*",
+        "@solana/event-target-impl": "workspace:*"
     },
     "peerDependencies": {
         "typescript": ">=5"

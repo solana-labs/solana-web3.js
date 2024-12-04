@@ -4,6 +4,7 @@ import {
     SOLANA_ERROR__RPC_SUBSCRIPTIONS__CHANNEL_FAILED_TO_CONNECT,
     SolanaError,
 } from '@solana/errors';
+import { EventTarget } from '@solana/event-target-impl';
 import { RpcSubscriptionsChannel } from '@solana/rpc-subscriptions-spec';
 import { getDataPublisherFromEventEmitter } from '@solana/subscribable';
 import WebSocket from '@solana/ws-impl';

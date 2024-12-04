@@ -1,4 +1,5 @@
 import { isSolanaError, SOLANA_ERROR__RPC_SUBSCRIPTIONS__CHANNEL_CONNECTION_CLOSED } from '@solana/errors';
+import { AbortController } from '@solana/event-target-impl';
 import type { RpcSubscriptionsChannel } from '@solana/rpc-subscriptions-spec';
 
 type Config<TChannel extends RpcSubscriptionsChannel<unknown, unknown>> = Readonly<{

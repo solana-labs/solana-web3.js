@@ -1,3 +1,4 @@
+import { AbortController } from '@solana/event-target-impl';
 import { RpcSubscriptionsChannelCreator } from '@solana/rpc-subscriptions-spec';
 
 import { ChannelPoolEntry, createChannelPool } from './rpc-subscriptions-channel-pool-internal';

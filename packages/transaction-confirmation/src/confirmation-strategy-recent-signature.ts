@@ -1,4 +1,5 @@
 import { getSolanaErrorFromTransactionError } from '@solana/errors';
+import { AbortController } from '@solana/event-target-impl';
 import type { Signature } from '@solana/keys';
 import { safeRace } from '@solana/promises';
 import type { GetSignatureStatusesApi, Rpc } from '@solana/rpc';

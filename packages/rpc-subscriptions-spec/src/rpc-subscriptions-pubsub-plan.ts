@@ -4,6 +4,7 @@ import {
     SOLANA_ERROR__RPC_SUBSCRIPTIONS__EXPECTED_SERVER_SUBSCRIPTION_ID,
     SolanaError,
 } from '@solana/errors';
+import { AbortController } from '@solana/event-target-impl';
 import { safeRace } from '@solana/promises';
 import { createRpcMessage, RpcRequest, RpcResponseData, RpcResponseTransformer } from '@solana/rpc-spec-types';
 import { DataPublisher } from '@solana/subscribable';

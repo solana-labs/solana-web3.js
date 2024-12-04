@@ -1,3 +1,4 @@
+import { AbortController } from '@solana/event-target-impl';
 import fastStableStringify from '@solana/fast-stable-stringify';
 import { RpcSubscriptionsTransport } from '@solana/rpc-subscriptions-spec';
 import { DataPublisher } from '@solana/subscribable';

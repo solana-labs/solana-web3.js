@@ -1,4 +1,5 @@
 import { SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED, SolanaError } from '@solana/errors';
+import { AbortController } from '@solana/event-target-impl';
 import type { GetEpochInfoApi, Rpc } from '@solana/rpc';
 import type { RpcSubscriptions, SlotNotificationsApi } from '@solana/rpc-subscriptions';
 import type { Commitment } from '@solana/rpc-types';

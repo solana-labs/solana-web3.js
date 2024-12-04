@@ -5,6 +5,7 @@
     "exclude": [
         "packages/build-scripts",
         "packages/crypto-impl",
+        "packages/event-target-impl",
         "packages/fetch-impl",
         "packages/rpc-graphql",
         "packages/test-config",
