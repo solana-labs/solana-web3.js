@@ -72,10 +72,12 @@
     ],
     "dependencies": {
         "@solana/errors": "workspace:*",
-        "@solana/event-target-impl": "workspace:*",
         "@solana/promises": "workspace:*",
         "@solana/rpc-spec-types": "workspace:*",
         "@solana/subscribable": "workspace:*"
+    },
+    "devDependencies": {
+        "@solana/event-target-impl": "workspace:*"
     },
     "peerDependencies": {
         "typescript": ">=5"

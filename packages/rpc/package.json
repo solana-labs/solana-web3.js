@@ -72,7 +72,6 @@
     ],
     "dependencies": {
         "@solana/errors": "workspace:*",
-        "@solana/event-target-impl": "workspace:*",
         "@solana/fast-stable-stringify": "workspace:*",
         "@solana/functional": "workspace:*",
         "@solana/rpc-api": "workspace:*",
@@ -81,6 +80,9 @@
         "@solana/rpc-transformers": "workspace:*",
         "@solana/rpc-transport-http": "workspace:*",
         "@solana/rpc-types": "workspace:*"
+    },
+    "devDependencies": {
+        "@solana/event-target-impl": "workspace:*"
     },
     "peerDependencies": {
         "typescript": ">=5"

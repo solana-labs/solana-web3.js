@@ -38,7 +38,7 @@ importers:
         version: link:packages/build-scripts
       '@solana/eslint-config-solana':
         specifier: ^4.0.0
-        version: 4.0.0(@eslint/js@9.16.0)(@types/eslint__js@8.42.3)(eslint-plugin-jest@28.9.0(@typescript-eslint/eslint-plugin@8.17.0(@typescript-eslint/parser@8.17.0(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.0))(jest@30.0.0-alpha.6(@types/node@22.10.1)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.10.1)(typescript@5.7.2)))(typescript@5.7.2))(eslint-plugin-react-hooks@5.0.0(eslint@9.16.0(jiti@1.21.0)))(eslint-plugin-simple-import-sort@12.1.1(eslint@9.16.0(jiti@1.21.0)))(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@3.3.0(@typescript-eslint/parser@8.17.0(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.0))(globals@15.13.0)(jest@30.0.0-alpha.6(@types/node@22.10.1)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.10.1)(typescript@5.7.2)))(typescript-eslint@8.17.0(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(typescript@5.7.2)
+        version: 4.0.0(6goksmkc3ytlvnzs6lter6j4wq)
       '@solana/prettier-config-solana':
         specifier: 0.0.5
         version: 0.0.5(prettier@3.4.2)
@@ -725,9 +725,6 @@ importers:
       '@solana/errors':
         specifier: workspace:*
         version: link:../errors
-      '@solana/event-target-impl':
-        specifier: workspace:*
-        version: link:../event-target-impl
       '@solana/fast-stable-stringify':
         specifier: workspace:*
         version: link:../fast-stable-stringify
@@ -755,6 +752,10 @@ importers:
       typescript:
         specifier: '>=5'
         version: 5.7.2
+    devDependencies:
+      '@solana/event-target-impl':
+        specifier: workspace:*
+        version: link:../event-target-impl
 
   packages/rpc-api:
     dependencies:
@@ -875,9 +876,6 @@ importers:
       '@solana/errors':
         specifier: workspace:*
         version: link:../errors
-      '@solana/event-target-impl':
-        specifier: workspace:*
-        version: link:../event-target-impl
       '@solana/fast-stable-stringify':
         specifier: workspace:*
         version: link:../fast-stable-stringify
@@ -915,6 +913,9 @@ importers:
       '@solana/addresses':
         specifier: workspace:*
         version: link:../addresses
+      '@solana/event-target-impl':
+        specifier: workspace:*
+        version: link:../event-target-impl
 
   packages/rpc-subscriptions-api:
     dependencies:
@@ -952,9 +953,6 @@ importers:
       '@solana/errors':
         specifier: workspace:*
         version: link:../errors
-      '@solana/event-target-impl':
-        specifier: workspace:*
-        version: link:../event-target-impl
       '@solana/functional':
         specifier: workspace:*
         version: link:../functional
@@ -971,6 +969,9 @@ importers:
         specifier: ^8.18.0
         version: 8.18.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
     devDependencies:
+      '@solana/event-target-impl':
+        specifier: workspace:*
+        version: link:../event-target-impl
       '@solana/ws-impl':
         specifier: workspace:*
         version: link:../ws-impl
@@ -983,9 +984,6 @@ importers:
       '@solana/errors':
         specifier: workspace:*
         version: link:../errors
-      '@solana/event-target-impl':
-        specifier: workspace:*
-        version: link:../event-target-impl
       '@solana/promises':
         specifier: workspace:*
         version: link:../promises
@@ -998,6 +996,10 @@ importers:
       typescript:
         specifier: '>=5'
         version: 5.7.2
+    devDependencies:
+      '@solana/event-target-impl':
+        specifier: workspace:*
+        version: link:../event-target-impl
 
   packages/rpc-transformers:
     dependencies:
@@ -1105,12 +1107,13 @@ importers:
       '@solana/errors':
         specifier: workspace:*
         version: link:../errors
-      '@solana/event-target-impl':
-        specifier: workspace:*
-        version: link:../event-target-impl
       typescript:
         specifier: '>=5'
         version: 5.7.2
+    devDependencies:
+      '@solana/event-target-impl':
+        specifier: workspace:*
+        version: link:../event-target-impl
 
   packages/sysvars:
     dependencies:
@@ -1185,9 +1188,6 @@ importers:
       '@solana/errors':
         specifier: workspace:*
         version: link:../errors
-      '@solana/event-target-impl':
-        specifier: workspace:*
-        version: link:../event-target-impl
       '@solana/keys':
         specifier: workspace:*
         version: link:../keys
@@ -1216,6 +1216,9 @@ importers:
       '@solana/codecs-core':
         specifier: workspace:*
         version: link:../codecs-core
+      '@solana/event-target-impl':
+        specifier: workspace:*
+        version: link:../event-target-impl
       '@solana/instructions':
         specifier: workspace:*
         version: link:../instructions
@@ -9564,8 +9567,8 @@ snapshots:
     dependencies:
       buffer: 6.0.3
 
-  ? '@solana/eslint-config-solana@4.0.0(@eslint/js@9.16.0)(@types/eslint__js@8.42.3)(eslint-plugin-jest@28.9.0(@typescript-eslint/eslint-plugin@8.17.0(@typescript-eslint/parser@8.17.0(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.0))(jest@30.0.0-alpha.6(@types/node@22.10.1)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.10.1)(typescript@5.7.2)))(typescript@5.7.2))(eslint-plugin-react-hooks@5.0.0(eslint@9.16.0(jiti@1.21.0)))(eslint-plugin-simple-import-sort@12.1.1(eslint@9.16.0(jiti@1.21.0)))(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@3.3.0(@typescript-eslint/parser@8.17.0(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.0))(globals@15.13.0)(jest@30.0.0-alpha.6(@types/node@22.10.1)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.10.1)(typescript@5.7.2)))(typescript-eslint@8.17.0(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(typescript@5.7.2)'
-  : dependencies:
+  '@solana/eslint-config-solana@4.0.0(6goksmkc3ytlvnzs6lter6j4wq)':
+    dependencies:
       '@eslint/js': 9.16.0
       '@types/eslint__js': 8.42.3
       eslint: 9.16.0(jiti@1.21.0)

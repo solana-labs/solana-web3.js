@@ -72,12 +72,12 @@
     ],
     "dependencies": {
         "@solana/errors": "workspace:*",
-        "@solana/event-target-impl": "workspace:*",
         "@solana/functional": "workspace:*",
         "@solana/rpc-subscriptions-spec": "workspace:*",
         "@solana/subscribable": "workspace:*"
     },
     "devDependencies": {
+        "@solana/event-target-impl": "workspace:*",
         "@solana/ws-impl": "workspace:*",
         "jest-websocket-mock": "^2.5.0"
     },
