@@ -73,7 +73,6 @@
         "@solana/addresses": "workspace:*",
         "@solana/codecs-strings": "workspace:*",
         "@solana/errors": "workspace:*",
-        "@solana/event-target-impl": "workspace:*",
         "@solana/keys": "workspace:*",
         "@solana/promises": "workspace:*",
         "@solana/rpc": "workspace:*",
@@ -84,6 +83,7 @@
     },
     "devDependencies": {
         "@solana/codecs-core": "workspace:*",
+        "@solana/event-target-impl": "workspace:*",
         "@solana/instructions": "workspace:*"
     },
     "peerDependencies": {
