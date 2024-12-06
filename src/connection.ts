@@ -4557,19 +4557,23 @@ export class Connection {
       context,
       value: {blockhash},
     } = await this.getLatestBlockhashAndContext(commitment);
+    const feeCalculator = {
+      get lamportsPerSignature(): number {
+        throw new Error(
+          'The capability to fetch `lamportsPerSignature` using the `getRecentBlockhash` API is ' +
+            'no longer offered by the network. Use the `getFeeForMessage` API to obtain the fee ' +
+            'for a given message.',
+        );
+      },
+      toJSON() {
+        return {};
+      },
+    };
     return {
       context,
       value: {
         blockhash,
-        feeCalculator: {
-          get lamportsPerSignature(): number {
-            throw new Error(
-              'The capability to fetch `lamportsPerSignature` using the `getRecentBlockhash` API is ' +
-                'no longer offered by the network. Use the `getFeeForMessage` API to obtain the fee ' +
-                'for a given message.',
-            );
-          },
-        },
+        feeCalculator,
       },
     };
   }

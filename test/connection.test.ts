@@ -4625,6 +4625,19 @@ describe('Connection', function () {
     }
   });
 
+  it('get recent blockhash can stringify', async () => {
+    const commitments: Commitment[] = ['processed', 'confirmed', 'finalized'];
+    for (const commitment of commitments) {
+      const response = await helpers.recentBlockhash({
+        connection,
+        commitment,
+      });
+      expect(JSON.stringify(response)).to.match(
+        /{"blockhash":"\w+","feeCalculator":{}}/,
+      );
+    }
+  });
+
   it('get recent blockhash LPS field throws', async () => {
     const commitments: Commitment[] = ['processed', 'confirmed', 'finalized'];
     for (const commitment of commitments) {
