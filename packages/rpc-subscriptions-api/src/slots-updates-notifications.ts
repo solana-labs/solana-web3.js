@@ -19,13 +19,13 @@ type SlotsUpdatesNotificationsApiNotificationDead = Readonly<{
     SlotsUpdatesNotificationsApiNotificationBase;
 
 type SlotsUpdatesNotificationsApiNotificationFrozen = Readonly<{
+    hash?: string;
     stats: Readonly<{
         maxTransactionsPerEntry: bigint;
         numFailedTransactions: bigint;
         numSuccessfulTransactions: bigint;
         numTransactionEntries: bigint;
     }>;
-    hash?: string;
     type: 'frozen';
 }> &
     SlotsUpdatesNotificationsApiNotificationBase;
