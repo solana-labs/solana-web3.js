@@ -34,7 +34,7 @@ export function Balance({ account }: Props) {
                     title="Failed to fetch account balance"
                 />
                 <Text>
-                    <Tooltip content={`Could not fetch balance: ${getErrorMessage(error, 'Unknown reason')}`}>
+                    <Tooltip content={<>Could not fetch balance: {getErrorMessage(error, 'Unknown reason')}</>}>
                         <ExclamationTriangleIcon
                             color="red"
                             style={{ height: 16, verticalAlign: 'text-bottom', width: 16 }}
