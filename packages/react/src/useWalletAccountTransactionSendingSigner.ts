@@ -25,7 +25,7 @@ export function useWalletAccountTransactionSendingSigner<TWalletAccount extends 
     uiWalletAccount: TWalletAccount,
     chain: `solana:${string}`,
 ): TransactionSendingSigner<TWalletAccount['address']> {
-    const encoderRef = useRef<ReturnType<typeof getTransactionEncoder>>();
+    const encoderRef = useRef<ReturnType<typeof getTransactionEncoder> | null>(null);
     const signAndSendTransaction = useSignAndSendTransaction(uiWalletAccount, chain);
     return useMemo(
         () => ({
