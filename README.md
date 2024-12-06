@@ -317,11 +317,6 @@ const rpcEndpoints = [
 // Create an array of transports from the endpoints.
 const transports = rpcEndpoints.map((url) => createDefaultRpcTransport({ url }));
 
-// Sleep function to wait for a given number of milliseconds.
-function sleep(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 // A failover transport that switches to the next transport on failure.
 async function failoverTransport<TResponse>(...args: Parameters<RpcTransport>): Promise<TResponse> {
     let lastError;
@@ -331,8 +326,6 @@ async function failoverTransport<TResponse>(...args: Parameters<RpcTransport>): 
         } catch (err) {
             lastError = err;
             console.warn(`Transport failed: ${err}. Trying next transport...`);
-            // Optional: Add a small delay before trying the next transport.
-            await sleep(100);
         }
     }
     // If all transports fail, throw the last error.
