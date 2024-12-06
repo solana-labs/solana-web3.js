@@ -21,14 +21,14 @@
         "@solana/web3.js": "workspace:*",
         "@wallet-standard/core": "^1.1.0",
         "@wallet-standard/react": "^1.0.0",
-        "react": "^18.3.0",
+        "react": "^19.0.0",
         "react-dom": "^18.3.0",
         "react-error-boundary": "^4.1.2",
         "swr": "^2.2.5"
     },
     "devDependencies": {
         "@solana/wallet-standard-features": "^1.2.0",
-        "@types/react": "^18.3",
+        "@types/react": "^19.0",
         "@types/react-dom": "^18.3",
         "@vitejs/plugin-react-swc": "^3.7.2",
         "eslint-plugin-react-refresh": "^0.4.16",
