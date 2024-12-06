@@ -471,20 +471,6 @@ export const accountTypeDefs = /* GraphQL */ `
     }
 
     """
-    Sysvar Fees
-    """
-    type SysvarFeesAccount implements Account {
-        address: Address
-        data(encoding: AccountEncoding!, dataSlice: DataSlice): String
-        executable: Boolean
-        lamports: Lamports
-        ownerProgram: Account
-        space: BigInt
-        rentEpoch: Epoch
-        feeCalculator: FeeCalculator
-    }
-
-    """
     Sysvar Last Restart Slot
     """
     type SysvarLastRestartSlotAccount implements Account {

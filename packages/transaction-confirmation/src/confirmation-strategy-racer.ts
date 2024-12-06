@@ -1,3 +1,4 @@
+import { AbortController } from '@solana/event-target-impl';
 import type { Signature } from '@solana/keys';
 import { safeRace } from '@solana/promises';
 import type { Commitment } from '@solana/rpc-types';

@@ -73,6 +73,9 @@
     "dependencies": {
         "@solana/errors": "workspace:*"
     },
+    "devDependencies": {
+        "@solana/event-target-impl": "workspace:*"
+    },
     "peerDependencies": {
         "typescript": ">=5"
     },

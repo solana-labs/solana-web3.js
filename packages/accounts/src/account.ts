@@ -10,6 +10,7 @@ export type BaseAccount = {
     readonly executable: boolean;
     readonly lamports: Lamports;
     readonly programAddress: Address;
+    readonly space: bigint;
 };
 
 /** Defines a Solana account with its generic details and parsed or encoded data. */

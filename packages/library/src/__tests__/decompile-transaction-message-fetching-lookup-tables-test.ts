@@ -269,6 +269,7 @@ describe('decompileTransactionMessageFetchingLookupTables', () => {
                 exists: true,
                 lamports: 0n as Lamports,
                 programAddress: 'program' as Address,
+                space: 0n,
             },
             {
                 address: lookupTableAddress2,
@@ -279,6 +280,7 @@ describe('decompileTransactionMessageFetchingLookupTables', () => {
                 exists: true,
                 lamports: 0n as Lamports,
                 programAddress: 'program' as Address,
+                space: 0n,
             },
         ];
 

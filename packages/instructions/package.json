@@ -71,6 +71,7 @@
         "maintained node versions"
     ],
     "dependencies": {
+        "@solana/codecs-core": "workspace:*",
         "@solana/errors": "workspace:*"
     },
     "devDependencies": {

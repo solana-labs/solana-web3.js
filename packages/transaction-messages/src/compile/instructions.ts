@@ -1,11 +1,12 @@
 import { Address } from '@solana/addresses';
+import { ReadonlyUint8Array } from '@solana/codecs-core';
 import { IInstruction } from '@solana/instructions';
 
 import { OrderedAccounts } from './accounts';
 
 type CompiledInstruction = Readonly<{
     accountIndices?: number[];
-    data?: Uint8Array;
+    data?: ReadonlyUint8Array;
     programAddressIndex: number;
 }>;
 

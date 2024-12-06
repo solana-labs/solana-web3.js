@@ -1,4 +1,5 @@
 import { isSolanaError, SOLANA_ERROR__RPC_SUBSCRIPTIONS__CHANNEL_CONNECTION_CLOSED } from '@solana/errors';
+import { AbortController } from '@solana/event-target-impl';
 import type { RpcSubscriptionsChannel } from '@solana/rpc-subscriptions-spec';
 
 type Config<TChannel extends RpcSubscriptionsChannel<unknown, unknown>> = Readonly<{
@@ -48,14 +49,14 @@ export function getRpcSubscriptionsChannelWithAutoping<TChannel extends RpcSubsc
         restartPingTimer();
     }
     if (__BROWSER__) {
-        globalThis.window.addEventListener(
+        globalThis.addEventListener(
             'offline',
             function handleOffline() {
                 clearInterval(intervalId);
             },
             { signal: pingerAbortController.signal },
         );
-        globalThis.window.addEventListener(
+        globalThis.addEventListener(
             'online',
             function handleOnline() {
                 sendPing();

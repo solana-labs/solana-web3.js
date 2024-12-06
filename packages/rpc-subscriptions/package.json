@@ -84,7 +84,8 @@
         "@solana/subscribable": "workspace:*"
     },
     "devDependencies": {
-        "@solana/addresses": "workspace:*"
+        "@solana/addresses": "workspace:*",
+        "@solana/event-target-impl": "workspace:*"
     },
     "peerDependencies": {
         "typescript": ">=5"

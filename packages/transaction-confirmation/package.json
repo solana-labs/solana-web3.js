@@ -83,6 +83,7 @@
     },
     "devDependencies": {
         "@solana/codecs-core": "workspace:*",
+        "@solana/event-target-impl": "workspace:*",
         "@solana/instructions": "workspace:*"
     },
     "peerDependencies": {

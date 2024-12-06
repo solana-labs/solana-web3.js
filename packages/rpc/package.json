@@ -81,6 +81,9 @@
         "@solana/rpc-transport-http": "workspace:*",
         "@solana/rpc-types": "workspace:*"
     },
+    "devDependencies": {
+        "@solana/event-target-impl": "workspace:*"
+    },
     "peerDependencies": {
         "typescript": ">=5"
     },

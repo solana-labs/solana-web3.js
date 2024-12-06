@@ -1088,24 +1088,6 @@ describe('getProgramAccounts', () => {
                                     data: {
                                         parsed: {
                                             info: expect.any(Object),
-                                            type: 'fees',
-                                        },
-                                        program: 'sysvar',
-                                        space: 8n,
-                                    },
-                                    executable: false,
-                                    lamports: 946560n,
-                                    owner: 'Sysvar1111111111111111111111111111111111111',
-                                    rentEpoch: expect.any(BigInt),
-                                    space: 8n,
-                                },
-                                pubkey: 'SysvarFees111111111111111111111111111111111',
-                            },
-                            {
-                                account: {
-                                    data: {
-                                        parsed: {
-                                            info: expect.any(Object),
                                             type: 'recentBlockhashes',
                                         },
                                         program: 'sysvar',
@@ -2063,7 +2045,7 @@ describe('getProgramAccounts', () => {
                                     data: {
                                         parsed: {
                                             info: expect.any(Object),
-                                            type: 'fees',
+                                            type: 'lastRestartSlot',
                                         },
                                         program: 'sysvar',
                                         space: 8n,
@@ -2074,7 +2056,7 @@ describe('getProgramAccounts', () => {
                                     rentEpoch: expect.any(BigInt),
                                     space: 8n,
                                 },
-                                pubkey: 'SysvarFees111111111111111111111111111111111',
+                                pubkey: 'SysvarLastRestartS1ot1111111111111111111111',
                             },
                             {
                                 account: {

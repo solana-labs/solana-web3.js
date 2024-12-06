@@ -50,8 +50,8 @@ describe('getLargestAccounts', () => {
                     const faucetAddress = await getNodeAddress(faucetKeypairPath);
                     const validatorAddress = await getNodeAddress(validatorKeypairPath);
                     const voteAccountAddress = await getNodeAddress(voteAccountKeypairPath);
-                    const largestAcountsPromise = rpc.getLargestAccounts({ commitment }).send();
-                    await expect(largestAcountsPromise).resolves.toStrictEqual({
+                    const largestAccountsPromise = rpc.getLargestAccounts({ commitment }).send();
+                    await expect(largestAccountsPromise).resolves.toStrictEqual({
                         context: CONTEXT_MATCHER,
                         // We can't guarantee ordering is preserved across test runs
                         value: expect.arrayContaining([
@@ -80,8 +80,8 @@ describe('getLargestAccounts', () => {
                     const faucetAddress = await getNodeAddress(faucetKeypairPath);
                     const validatorAddress = await getNodeAddress(validatorKeypairPath);
                     const voteAccountAddress = await getNodeAddress(voteAccountKeypairPath);
-                    const largestAcountsPromise = rpc.getLargestAccounts({ commitment, filter: 'circulating' }).send();
-                    await expect(largestAcountsPromise).resolves.toStrictEqual({
+                    const largestAccountsPromise = rpc.getLargestAccounts({ commitment, filter: 'circulating' }).send();
+                    await expect(largestAccountsPromise).resolves.toStrictEqual({
                         context: CONTEXT_MATCHER,
                         // We can't guarantee ordering is preserved across test runs
                         value: expect.arrayContaining([

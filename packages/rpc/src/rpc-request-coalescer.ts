@@ -1,3 +1,4 @@
+import { AbortController } from '@solana/event-target-impl';
 import type { RpcTransport } from '@solana/rpc-spec';
 import type { RpcResponse } from '@solana/rpc-spec-types';
 

@@ -5,9 +5,9 @@
 
 [code-style-prettier-image]: https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square
 [code-style-prettier-url]: https://github.com/prettier/prettier
-[npm-downloads-image]: https://img.shields.io/npm/dm/@solana/web3.js/rc.svg?style=flat
-[npm-image]: https://img.shields.io/npm/v/@solana/web3.js/rc.svg?style=flat
-[npm-url]: https://www.npmjs.com/package/@solana/web3.js/v/rc
+[npm-downloads-image]: https://img.shields.io/npm/dm/@solana/web3.js/next.svg?style=flat
+[npm-image]: https://img.shields.io/npm/v/@solana/web3.js/next.svg?style=flat
+[npm-url]: https://www.npmjs.com/package/@solana/web3.js/v/next
 
 # Solana JavaScript SDK
 
@@ -21,17 +21,17 @@ This is the JavaScript SDK for building Solana apps for Node, web, and React Nat
 For use in a Node.js or web application:
 
 ```shell
-npm install --save @solana/web3.js@rc
+npm install --save @solana/web3.js@next
 ```
 
 For use in a browser, without a build system:
 
 ```html
 <!-- Development (debug mode, unminified) -->
-<script src="https://unpkg.com/@solana/web3.js@rc/dist/index.development.js"></script>
+<script src="https://unpkg.com/@solana/web3.js@next/dist/index.development.js"></script>
 
 <!-- Production (minified) -->
-<script src="https://unpkg.com/@solana/web3.js@rc/dist/index.production.min.js"></script>
+<script src="https://unpkg.com/@solana/web3.js@next/dist/index.production.min.js"></script>
 ```
 
 # Quick Start
@@ -73,7 +73,7 @@ The new library itself is comprised of several smaller, modular packages under t
 
 Some of these packages are themselves composed of smaller packages. For instance, `@solana/rpc` is composed of `@solana/rpc-spec` (for core JSON RPC specification types), `@solana/rpc-api` (for the Solana-specific RPC methods), `@solana/rpc-transport-http` (for the default HTTP transport) and so on.
 
-Developers can use the default configurations within the main library (`@solana/web3.js@rc`) or import any of its subpackages where customization-through-composition is desired.
+Developers can use the default configurations within the main library (`@solana/web3.js@next`) or import any of its subpackages where customization-through-composition is desired.
 
 ## Composable Internals
 
@@ -88,7 +88,7 @@ The inability to customize web3.js up until now has been a source of frustration
 
 Version 2.0 exposes far more of its internals, particularly where communication with an RPC is concerned, and allows willing developers the ability to compose new implementations from the default ones that manifest a nearly limitless array of customizations.
 
-The individual modules that make up web3.js are assembled in a **default** configuration reminiscent of the legacy library as part of the npm package `@solana/web3.js@rc`, but those who wish to assemble them in different configurations may do so.
+The individual modules that make up web3.js are assembled in a **default** configuration reminiscent of the legacy library as part of the npm package `@solana/web3.js@next`, but those who wish to assemble them in different configurations may do so.
 
 Generic types are offered in numerous places, allowing you to specify new functionality, to make extensions to each API via composition and supertypes, and to encourage you to create higher-level opinionated abstractions of your own.
 
@@ -304,7 +304,36 @@ const rpc = createSolanaRpcFromTransport(retryingTransport);
 Support for handling network failures can be implemented in the transport itself. Here’s an example of some failover logic integrated into a transport:
 
 ```ts
-// TODO: Your turn; send us a pull request with an example.
+import { createDefaultRpcTransport, createSolanaRpcFromTransport, type RpcTransport } from '@solana/web3.js';
+
+// List of RPC endpoints for failover.
+const rpcEndpoints = [
+    'https://mainnet-beta.my-server-1.com',
+    'https://mainnet-beta.my-server-2.com',
+    'https://mainnet-beta.my-server-3.com',
+    'https://mainnet-beta.my-server-3.com',
+];
+
+// Create an array of transports from the endpoints.
+const transports = rpcEndpoints.map((url) => createDefaultRpcTransport({ url }));
+
+// A failover transport that switches to the next transport on failure.
+async function failoverTransport<TResponse>(...args: Parameters<RpcTransport>): Promise<TResponse> {
+    let lastError;
+    for (const transport of transports) {
+        try {
+            return await transport(...args);
+        } catch (err) {
+            lastError = err;
+            console.warn(`Transport failed: ${err}. Trying next transport...`);
+        }
+    }
+    // If all transports fail, throw the last error.
+    throw lastError;
+}
+
+// Create the RPC client using the failover transport.
+const rpc = createSolanaRpcFromTransport(failoverTransport);
 ```
 
 ### Augmenting/Constraining the RPC API
@@ -352,7 +381,7 @@ import {
 } from '@solana/web3.js';
 
 const api = createSolanaRpcApi<GetAccountInfoApi & GetMultipleAccountsApi>(DEFAULT_RPC_CONFIG);
-const transport = createDefaultRpcTransport({ url: 'http:127.0.0.1:8899' });
+const transport = createDefaultRpcTransport({ url: 'http://127.0.0.1:8899' });
 
 const rpc = createRpc({ api, transport });
 ```
@@ -1027,7 +1056,7 @@ export const getMyTokenCodec = (): Codec<MyTokenArgs, MyToken> =>
     combineCodec(getMyTokenEncoder(), getMyTokenDecoder());
 ```
 
-You can read me about codecs in [the official Codec documentation](https://github.com/solana-labs/solana-web3.js/blob/master/packages/codecs/README.md).
+You can read more about codecs in [the official Codec documentation](https://github.com/solana-labs/solana-web3.js/blob/master/packages/codecs/README.md).
 
 ## Type-Safety
 
@@ -1166,7 +1195,7 @@ const signature = rpc.requestAirdrop(myAddress, airdropAmount).send();
 
 ## Compatibility Layer
 
-You will have noticed by now that web3.js is a complete and total breaking change from the 1.x line. We want to provide you with a strategy for interacting with 1.x APIs while building your application using 2.0. You need a tool for commuting between 1.x and 2.0 data types.
+You will have noticed by now that web3.js is a complete and total breaking change from the 1.x line. We want to provide you with a strategy for interacting with 1.x APIs while building your application using 2.0. You need a tool for converting between 1.x and 2.0 data types.
 
 The `@solana/compat` library allows for interoperability between functions and class objects from the legacy library - such as `VersionedTransaction`, `PublicKey`, and `Keypair` - and functions and types of the new library - such as `Address`, `Transaction`, and `CryptoKeyPair`.
 
@@ -1264,7 +1293,7 @@ On top of instruction builders, these clients offer a variety of utilities such 
 -   Account helpers — e.g. `fetchAddressLookupTable`.
 -   PDA helpers — e.g. `findAddressLookupTablePda`, `fetchAddressLookupTableFromSeeds`.
 -   Defined types and their codecs — e.g. `NonceState`, `getNonceStateCodec`.
--   Program helpers — e.g. `SYSTEM_PROGRAM_ADDRESS`, `SystemAccount` enum, `SystemAccount` enum, `identifySystemInstruction`.
+-   Program helpers — e.g. `SYSTEM_PROGRAM_ADDRESS`, `SystemAccount` enum, `identifySystemInstruction`.
 -   And much more!
 
 Here’s another example that fetches an `AddressLookupTable` PDA from its seeds.

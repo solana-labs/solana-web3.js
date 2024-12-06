@@ -10,7 +10,7 @@ describe('getRpcSubscriptionsChannelWithAutoping', () => {
     let mockOn: jest.Mock;
     let mockSend: jest.Mock;
     let mockWindowAddEventListener: jest.Mock;
-    let originalWindowAddEventListener: typeof globalThis.window.addEventListener;
+    let originalWindowAddEventListener: typeof globalThis.addEventListener;
     function receiveError(error?: unknown) {
         mockOn.mock.calls.filter(([type]) => type === 'error').forEach(([_, listener]) => listener(error));
     }
@@ -25,8 +25,8 @@ describe('getRpcSubscriptionsChannelWithAutoping', () => {
     beforeEach(() => {
         jest.useFakeTimers();
         if (__BROWSER__) {
-            originalWindowAddEventListener = globalThis.window.addEventListener;
-            globalThis.window.addEventListener = mockWindowAddEventListener = jest.fn();
+            originalWindowAddEventListener = globalThis.addEventListener;
+            globalThis.addEventListener = mockWindowAddEventListener = jest.fn();
         }
         mockOn = jest.fn().mockReturnValue(() => {});
         mockSend = jest.fn().mockResolvedValue(void 0);
@@ -37,7 +37,7 @@ describe('getRpcSubscriptionsChannelWithAutoping', () => {
     });
     afterEach(() => {
         if (__BROWSER__) {
-            globalThis.window.addEventListener = originalWindowAddEventListener;
+            globalThis.addEventListener = originalWindowAddEventListener;
         }
     });
     it('sends a ping message to the channel at the specified interval', async () => {
