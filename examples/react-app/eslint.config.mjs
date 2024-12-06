@@ -27,7 +27,7 @@ export default [
             '@typescript-eslint/no-misused-promises': 'off',
             '@typescript-eslint/no-unsafe-argument': 'off',
             '@typescript-eslint/no-unsafe-assignment': 'off',
-            '@typescript-eslint/restrict-template-expressions': 'off',
+            '@typescript-eslint/restrict-template-expressions': 'error',
             'react-refresh/only-export-components': [
                 'warn',
                 {
