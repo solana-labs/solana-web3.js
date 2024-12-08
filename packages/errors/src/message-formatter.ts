@@ -28,6 +28,7 @@ export function getHumanReadableErrorMessage<TErrorCode extends SolanaErrorCode>
             const variableName = messageFormatString.slice(state[START_INDEX] + 1, endIndex);
 
             fragments.push(
+                // eslint-disable-next-line @typescript-eslint/restrict-template-expressions 
                 variableName in context ? `${context[variableName as keyof typeof context]}` : `$${variableName}`,
             );
         } else if (state[TYPE] === StateType.Text) {
@@ -43,8 +44,8 @@ export function getHumanReadableErrorMessage<TErrorCode extends SolanaErrorCode>
                     messageFormatString[0] === '\\'
                         ? StateType.EscapeSequence
                         : messageFormatString[0] === '$'
-                          ? StateType.Variable
-                          : StateType.Text,
+                            ? StateType.Variable
+                            : StateType.Text,
             };
             return;
         }
