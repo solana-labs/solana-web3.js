@@ -71,6 +71,9 @@ describe('createHttpTransport', () => {
                 thrownError = e as SolanaError<typeof SOLANA_ERROR__RPC__TRANSPORT_HTTP_ERROR>;
             }
             expect(thrownError).toBeDefined();
+            
+            // Note: Stringifying this variable, it will leak header values and the test will fail
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions 
             expect(`${thrownError.context.headers}`).not.toMatch(/doNotLog/);
         });
     });
