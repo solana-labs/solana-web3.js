@@ -310,7 +310,7 @@ const decompiledTransactionMessage = await decompileTransactionMessageFetchingLo
 // This is the same data structure that was created before we first signed the transaction
 
 // We can see the fee payer:
-log.info(`[step 3] The transaction fee payer is ${decompiledTransactionMessage.feePayer}`);
+log.info(`[step 3] The transaction fee payer is ${decompiledTransactionMessage.feePayer.address}`);
 
 // And the lifetime constraint:
 log.info(decompiledTransactionMessage.lifetimeConstraint, '[step 3] The transaction lifetime constraint');
