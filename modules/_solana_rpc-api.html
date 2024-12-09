@@ -16,7 +16,7 @@
 <a id="functions" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Functions<a href="#functions" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="createsolanarpcapiconfig" class="tsd-anchor"></a><h3 class="tsd-anchor-link"><code>createSolanaRpcApi(config)</code><a href="#createsolanarpcapiconfig" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Creates a <code>RpcApi</code> implementation of the Solana JSON RPC API with some default behaviours.</p>
 <p>The default behaviours include:</p>
 <ul>
-<li>A transform that converts <code>bigint</code> inputs to <code>number</code> for compatiblity with version 1.0 of the Solana JSON RPC.</li>
+<li>A transform that converts <code>bigint</code> inputs to <code>number</code> for compatibility with version 1.0 of the Solana JSON RPC.</li>
 <li>A transform that calls the config's <code>onIntegerOverflow</code> handler whenever a <code>bigint</code> input would overflow a JavaScript IEEE 754 number. See <a href="https://github.com/solana-labs/solana-web3.js/issues/1116" target="_blank" class="external">this</a> GitHub issue for more information.</li>
 <li>A transform that applies a default commitment wherever not specified</li>
 </ul>
