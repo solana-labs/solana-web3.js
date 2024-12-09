@@ -24,13 +24,12 @@ For use in a Node.js or web application:
 npm install --save @solana/web3.js@next
 ```
 
-For use in a browser, without a build system:
+The **best practice** for importing javascript module is to load them through package management (such as [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)), and using locked version files. It is recommended to load through CDN only for local debugging.
 
-```html
-<!-- Development (debug mode, unminified) -->
-<script src="https://unpkg.com/@solana/web3.js@next/dist/index.development.js"></script>
+For **security reasons**, modules loaded through CDN always lock the version rather than using loose versions such as `@latest`, `@next` or `@1`.
 
-<!-- Production (minified) -->
+```
+<!-- Development Only, Never In Production!!! -->
 <script src="https://unpkg.com/@solana/web3.js@next/dist/index.production.min.js"></script>
 ```
 
