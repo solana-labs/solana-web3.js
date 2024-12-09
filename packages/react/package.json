@@ -86,10 +86,10 @@
     "devDependencies": {
         "@solana/codecs-core": "workspace:*",
         "@types/react": "^18",
-        "@types/react-test-renderer": "^18",
+        "@types/react-test-renderer": "^19",
         "react": "^18",
         "react-error-boundary": "^4.1.2",
-        "react-test-renderer": "^18"
+        "react-test-renderer": "^19"
     },
     "peerDependencies": {
         "react": ">=18"
