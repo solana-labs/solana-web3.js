@@ -2351,7 +2351,7 @@ describe('Connection', function () {
     await waitForSlot.call(this, connection, 1);
 
     await mockRpcResponse({
-      method: 'getConfirmedBlock',
+      method: 'getBlock',
       params: [1],
       value: {
         blockTime: 1614281964,
@@ -2433,7 +2433,7 @@ describe('Connection', function () {
     const mockSignature =
       '5SHZ9NwpnS9zYnauN7pnuborKf39zGMr11XpMC59VvRSeDJNcnYLecmdxXCVuBFPNQLdCBBjyZiNCL4KoHKr3tvz';
     await mockRpcResponse({
-      method: 'getConfirmedBlock',
+      method: 'getBlock',
       params: [slot, {transactionDetails: 'signatures', rewards: false}],
       value: {
         blockTime: 1614281964,
@@ -2449,7 +2449,7 @@ describe('Connection', function () {
       value: 123,
     });
     await mockRpcResponse({
-      method: 'getConfirmedBlock',
+      method: 'getBlock',
       params: [slot + 2, {transactionDetails: 'signatures', rewards: false}],
       value: {
         blockTime: 1614281964,
@@ -2482,7 +2482,7 @@ describe('Connection', function () {
 
     const badSlot = Number.MAX_SAFE_INTEGER - 1;
     await mockRpcResponse({
-      method: 'getConfirmedBlock',
+      method: 'getBlock',
       params: [badSlot - 1, {transactionDetails: 'signatures', rewards: false}],
       error: {message: 'Block not available for slot ' + badSlot},
     });
@@ -2531,7 +2531,7 @@ describe('Connection', function () {
     await waitForSlot.call(this, connection, 1);
 
     await mockRpcResponse({
-      method: 'getConfirmedBlock',
+      method: 'getBlock',
       params: [1],
       value: {
         blockTime: 1614281964,
@@ -2640,7 +2640,7 @@ describe('Connection', function () {
     await waitForSlot.call(this, connection, 1);
 
     await mockRpcResponse({
-      method: 'getConfirmedBlock',
+      method: 'getBlock',
       params: [1],
       value: {
         blockTime: 1614281964,
@@ -3294,7 +3294,7 @@ describe('Connection', function () {
     await waitForSlot.call(this, connection, 1);
 
     await mockRpcResponse({
-      method: 'getConfirmedBlock',
+      method: 'getBlock',
       params: [1],
       value: {
         blockTime: 1614281964,
@@ -4252,7 +4252,7 @@ describe('Connection', function () {
 
     it('gets the genesis block', async function () {
       await mockRpcResponse({
-        method: 'getConfirmedBlock',
+        method: 'getBlock',
         params: [0],
         value: {
           blockHeight: 0,
@@ -4290,7 +4290,7 @@ describe('Connection', function () {
     it('gets a block having a parent', async function () {
       // Mock parent of block with transaction.
       await mockRpcResponse({
-        method: 'getConfirmedBlock',
+        method: 'getBlock',
         params: [0],
         value: {
           blockHeight: 0,
@@ -4303,7 +4303,7 @@ describe('Connection', function () {
       });
       // Mock block with transaction.
       await mockRpcResponse({
-        method: 'getConfirmedBlock',
+        method: 'getBlock',
         params: [1],
         value: {
           blockTime: 1614281964,
@@ -4390,7 +4390,7 @@ describe('Connection', function () {
         .null;
 
       await mockRpcResponse({
-        method: 'getConfirmedBlock',
+        method: 'getBlock',
         params: [Number.MAX_SAFE_INTEGER],
         error: {
           message: `Block not available for slot ${Number.MAX_SAFE_INTEGER}`,
