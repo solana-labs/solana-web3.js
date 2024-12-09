@@ -4,7 +4,7 @@
     "private": true,
     "type": "module",
     "dependencies": {
-        "@inquirer/core": "^10.1.0",
+        "@inquirer/core": "^10.1.1",
         "pino": "^9.5.0",
         "pino-pretty": "^13.0.0"
     },
