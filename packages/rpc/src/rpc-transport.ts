@@ -33,7 +33,7 @@ export function createDefaultRpcTransport<TClusterUrl extends ClusterUrl>(
             headers: {
                 ...(__NODEJS__ &&
                     ({
-                        // Keep these headers lowercase so they will be overriden by any user-supplied headers below.
+                        // Keep these headers lowercase so they will be overridden by any user-supplied headers below.
                         'accept-encoding':
                             // Natively supported by Node LTS v20.18.0 and above.
                             'br,gzip,deflate', // Brotli, gzip, and Deflate, in that order.
