@@ -44,7 +44,7 @@ Creates a `RpcApi` implementation of the Solana JSON RPC API with some default b
 
 The default behaviours include:
 
--   A transform that converts `bigint` inputs to `number` for compatiblity with version 1.0 of the Solana JSON RPC.
+-   A transform that converts `bigint` inputs to `number` for compatibility with version 1.0 of the Solana JSON RPC.
 -   A transform that calls the config's `onIntegerOverflow` handler whenever a `bigint` input would overflow a JavaScript IEEE 754 number. See [this](https://github.com/solana-labs/solana-web3.js/issues/1116) GitHub issue for more information.
 -   A transform that applies a default commitment wherever not specified
 

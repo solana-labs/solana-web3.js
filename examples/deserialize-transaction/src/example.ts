@@ -236,7 +236,7 @@ log.info(
 const compiledTransactionMessageDecoder = getCompiledTransactionMessageDecoder();
 const compiledTransactionMessage = compiledTransactionMessageDecoder.decode(decodedTransaction.messageBytes);
 
-// This gives us the data stucture `CompiledTransactionMessage`. This is the format that transactions are
+// This gives us the data structure `CompiledTransactionMessage`. This is the format that transactions are
 // compiled before the entire transaction is encoded to base64 to be sent to the Solana network.
 
 // Let's inspect some fields of `compiledTransactionMessage`
