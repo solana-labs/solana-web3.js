@@ -29,7 +29,7 @@
         "@types/jest": "^29.5.14",
         "@types/node": "^22",
         "@typescript-eslint/eslint-plugin": "^8.17.0",
-        "@typescript-eslint/parser": "^8.17.0",
+        "@typescript-eslint/parser": "^8.18.0",
         "agadoo": "^3.0.0",
         "bundlemon": "^3.1.0",
         "eslint": "^9.16.0",
