@@ -179,3 +179,21 @@ if (!(await verifySignature(publicKey, signature, data))) {
     throw new Error('The data were *not* signed by the private key associated with `publicKey`');
 }
 ```
+
+### `verifySignatureForAddress()`
+
+This helper function verifies if a digital signature was produced by signing specific data with the private key associated with a given address. It simplifies the process of verifying signatures by internally handling the conversion of the address to a public Ed25519 key.
+
+```ts
+import { verifySignatureForAddress } from '@solana/keys';
+
+const signedByAddress = 'ED1WqT2hWJLSZtj4TtTdoovmpMrr7zpkUdbfxmcJR1Fq';
+const signature = new Uint8Array([/* ...signature bytes... */]);
+const data = new Uint8Array([/* ...data bytes... */]);
+
+const isVerified = await verifySignatureForAddress(signedByAddress, signature, data);
+
+if (!isVerified) {
+    throw new Error(`The signature is not valid for the provided address: ${signedByAddress}`);
+}
+```
