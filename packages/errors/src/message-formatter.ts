@@ -28,7 +28,10 @@ export function getHumanReadableErrorMessage<TErrorCode extends SolanaErrorCode>
             const variableName = messageFormatString.slice(state[START_INDEX] + 1, endIndex);
 
             fragments.push(
-                variableName in context ? `${context[variableName as keyof typeof context]}` : `$${variableName}`,
+                variableName in context
+                    ? // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+                      `${context[variableName as keyof typeof context]}`
+                    : `$${variableName}`,
             );
         } else if (state[TYPE] === StateType.Text) {
             fragments.push(messageFormatString.slice(state[START_INDEX], endIndex));
