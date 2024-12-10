@@ -75,3 +75,37 @@ export async function verifySignature(
     assertVerificationCapabilityIsAvailable();
     return await crypto.subtle.verify('Ed25519', key, signature, data);
 }
+
+
+export async function verifySignatureForAddress(
+    address: string,
+    signature: Uint8Array,
+    messageBytes: Uint8Array
+): Promise<boolean> {
+    try {
+        // Encode the address to bytes
+        const addressBytes: ReadonlyUint8Array = new Uint8Array(getBase58Encoder().encode(address));
+
+        // Create a public Ed25519 key from the address bytes
+        const publicKey = await crypto.subtle.importKey(
+            'raw',
+            addressBytes,
+            'Ed25519',
+            true,
+            ['verify']
+        );
+
+        // Verify the signature using the public key
+        const isValid = await crypto.subtle.verify(
+            'Ed25519',
+            publicKey,
+            signature,
+            messageBytes
+        );
+
+        return isValid;
+    } catch (error) {
+        console.error('Error verifying signature:', error);
+        return false;
+    }
+}
