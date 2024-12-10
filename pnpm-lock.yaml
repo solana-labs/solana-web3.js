@@ -38,7 +38,7 @@ importers:
         version: link:packages/build-scripts
       '@solana/eslint-config-solana':
         specifier: ^4.0.0
-        version: 4.0.0(@eslint/js@9.16.0)(@types/eslint__js@8.42.3)(eslint-plugin-jest@28.9.0(@typescript-eslint/eslint-plugin@8.17.0(@typescript-eslint/parser@8.17.0(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.0))(jest@30.0.0-alpha.6(@types/node@22.10.1)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.10.1)(typescript@5.7.2)))(typescript@5.7.2))(eslint-plugin-react-hooks@5.0.0(eslint@9.16.0(jiti@1.21.0)))(eslint-plugin-simple-import-sort@12.1.1(eslint@9.16.0(jiti@1.21.0)))(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@3.3.0(@typescript-eslint/parser@8.17.0(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.0))(globals@15.13.0)(jest@30.0.0-alpha.6(@types/node@22.10.1)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.10.1)(typescript@5.7.2)))(typescript-eslint@8.17.0(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(typescript@5.7.2)
+        version: 4.0.0(@eslint/js@9.16.0)(@types/eslint__js@8.42.3)(eslint-plugin-jest@28.9.0(@typescript-eslint/eslint-plugin@8.17.0(@typescript-eslint/parser@8.17.0(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.0))(jest@30.0.0-alpha.6(@types/node@22.10.1)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.10.1)(typescript@5.7.2)))(typescript@5.7.2))(eslint-plugin-react-hooks@5.1.0(eslint@9.16.0(jiti@1.21.0)))(eslint-plugin-simple-import-sort@12.1.1(eslint@9.16.0(jiti@1.21.0)))(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@3.3.0(@typescript-eslint/parser@8.17.0(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.0))(globals@15.13.0)(jest@30.0.0-alpha.6(@types/node@22.10.1)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.10.1)(typescript@5.7.2)))(typescript-eslint@8.17.0(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(typescript@5.7.2)
       '@solana/prettier-config-solana':
         specifier: 0.0.5
         version: 0.0.5(prettier@3.4.2)
@@ -79,8 +79,8 @@ importers:
         specifier: ^28.9.0
         version: 28.9.0(@typescript-eslint/eslint-plugin@8.17.0(@typescript-eslint/parser@8.17.0(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.0))(jest@30.0.0-alpha.6(@types/node@22.10.1)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.10.1)(typescript@5.7.2)))(typescript@5.7.2)
       eslint-plugin-react-hooks:
-        specifier: ^5.0.0
-        version: 5.0.0(eslint@9.16.0(jiti@1.21.0))
+        specifier: ^5.1.0
+        version: 5.1.0(eslint@9.16.0(jiti@1.21.0))
       eslint-plugin-simple-import-sort:
         specifier: ^12.1.1
         version: 12.1.1(eslint@9.16.0(jiti@1.21.0))
@@ -806,8 +806,8 @@ importers:
   packages/rpc-graphql:
     dependencies:
       '@graphql-tools/schema':
-        specifier: ^10.0.10
-        version: 10.0.10(graphql@16.9.0)
+        specifier: ^10.0.11
+        version: 10.0.11(graphql@16.9.0)
       '@solana/codecs-strings':
         specifier: workspace:*
         version: link:../codecs-strings
@@ -2490,20 +2490,20 @@ packages:
   '@gerrit0/mini-shiki@1.24.1':
     resolution: {integrity: sha512-PNP/Gjv3VqU7z7DjRgO3F9Ok5frTKqtpV+LJW1RzMcr2zpRk0ulhEWnbcNGXzPC7BZyWMIHrkfQX2GZRfxrn6Q==}
 
-  '@graphql-tools/merge@9.0.11':
-    resolution: {integrity: sha512-AJL0XTozn31HoZN8tULzEkbDXyETA5vAFu4Q65kxJDu027p+auaNFYj/y51HP4BhMR4wykoteWyO7/VxKfdpiw==}
+  '@graphql-tools/merge@9.0.12':
+    resolution: {integrity: sha512-ECkUdgWkizhzQ6JJg16MCYnIN2r2+q/vP5smzi3YeeJkZ/3f9ynFDkaqoMg0Ddg9MugR03hMiQQrssk5f0389Q==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
 
-  '@graphql-tools/schema@10.0.10':
-    resolution: {integrity: sha512-TSdDvwgk1Fq3URDuZBMCPXlWLpRpxwaQ+0KqvycVwoHozYnBRZ2Ql9HVgDKnebkGQKmIk2enSeku+ERKxxSG0g==}
+  '@graphql-tools/schema@10.0.11':
+    resolution: {integrity: sha512-cYr/7SJSKtdwPByTKHlBr0tYGf7/sYNyzKlPhPMHWoYyGxtn8ytbfF6wEUcxuaOoqksIFxOGr+WOJh1WvShb6A==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
 
-  '@graphql-tools/utils@10.6.1':
-    resolution: {integrity: sha512-XHl0/DWkMf/8Dmw1F3RRoMPt6ZwU4J707YWcbPjS+49WZNoTVz6f+prQ4GuwZT8RqTPtrRawnGU93AV73ZLTfQ==}
+  '@graphql-tools/utils@10.6.2':
+    resolution: {integrity: sha512-ABZHTpwiVR8oE2//NI/nnU3nNhbBpqMlMYyCF5cnqjLfhlyOdFfoRuhYEATEsmMfDg0ijGreULywK/SmepVGfw==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
@@ -4583,8 +4583,8 @@ packages:
       jest:
         optional: true
 
-  eslint-plugin-react-hooks@5.0.0:
-    resolution: {integrity: sha512-hIOwI+5hYGpJEc4uPRmz2ulCjAGD/N13Lukkh8cLV0i2IRk/bdZDYjgLVHj+U9Z704kLIdIO6iueGvxNur0sgw==}
+  eslint-plugin-react-hooks@5.1.0:
+    resolution: {integrity: sha512-mpJRtPgHN2tNAvZ35AMfqeB3Xqeo273QxrHJsbBEPWODRM4r0yB6jfoROqKEYrOn27UtRPpcpHc2UqyBSuUNTw==}
     engines: {node: '>=10'}
     peerDependencies:
       eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0 || ^9.0.0
@@ -8365,21 +8365,21 @@ snapshots:
       '@shikijs/types': 1.24.0
       '@shikijs/vscode-textmate': 9.3.0
 
-  '@graphql-tools/merge@9.0.11(graphql@16.9.0)':
+  '@graphql-tools/merge@9.0.12(graphql@16.9.0)':
     dependencies:
-      '@graphql-tools/utils': 10.6.1(graphql@16.9.0)
+      '@graphql-tools/utils': 10.6.2(graphql@16.9.0)
       graphql: 16.9.0
       tslib: 2.6.3
 
-  '@graphql-tools/schema@10.0.10(graphql@16.9.0)':
+  '@graphql-tools/schema@10.0.11(graphql@16.9.0)':
     dependencies:
-      '@graphql-tools/merge': 9.0.11(graphql@16.9.0)
-      '@graphql-tools/utils': 10.6.1(graphql@16.9.0)
+      '@graphql-tools/merge': 9.0.12(graphql@16.9.0)
+      '@graphql-tools/utils': 10.6.2(graphql@16.9.0)
       graphql: 16.9.0
       tslib: 2.6.3
       value-or-promise: 1.0.12
 
-  '@graphql-tools/utils@10.6.1(graphql@16.9.0)':
+  '@graphql-tools/utils@10.6.2(graphql@16.9.0)':
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.9.0)
       cross-inspect: 1.0.1
@@ -9570,13 +9570,13 @@ snapshots:
     dependencies:
       buffer: 6.0.3
 
-  ? '@solana/eslint-config-solana@4.0.0(@eslint/js@9.16.0)(@types/eslint__js@8.42.3)(eslint-plugin-jest@28.9.0(@typescript-eslint/eslint-plugin@8.17.0(@typescript-eslint/parser@8.17.0(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.0))(jest@30.0.0-alpha.6(@types/node@22.10.1)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.10.1)(typescript@5.7.2)))(typescript@5.7.2))(eslint-plugin-react-hooks@5.0.0(eslint@9.16.0(jiti@1.21.0)))(eslint-plugin-simple-import-sort@12.1.1(eslint@9.16.0(jiti@1.21.0)))(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@3.3.0(@typescript-eslint/parser@8.17.0(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.0))(globals@15.13.0)(jest@30.0.0-alpha.6(@types/node@22.10.1)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.10.1)(typescript@5.7.2)))(typescript-eslint@8.17.0(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(typescript@5.7.2)'
+  ? '@solana/eslint-config-solana@4.0.0(@eslint/js@9.16.0)(@types/eslint__js@8.42.3)(eslint-plugin-jest@28.9.0(@typescript-eslint/eslint-plugin@8.17.0(@typescript-eslint/parser@8.17.0(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.0))(jest@30.0.0-alpha.6(@types/node@22.10.1)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.10.1)(typescript@5.7.2)))(typescript@5.7.2))(eslint-plugin-react-hooks@5.1.0(eslint@9.16.0(jiti@1.21.0)))(eslint-plugin-simple-import-sort@12.1.1(eslint@9.16.0(jiti@1.21.0)))(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@3.3.0(@typescript-eslint/parser@8.17.0(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.0))(globals@15.13.0)(jest@30.0.0-alpha.6(@types/node@22.10.1)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.10.1)(typescript@5.7.2)))(typescript-eslint@8.17.0(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(typescript@5.7.2)'
   : dependencies:
       '@eslint/js': 9.16.0
       '@types/eslint__js': 8.42.3
       eslint: 9.16.0(jiti@1.21.0)
       eslint-plugin-jest: 28.9.0(@typescript-eslint/eslint-plugin@8.17.0(@typescript-eslint/parser@8.17.0(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.0))(jest@30.0.0-alpha.6(@types/node@22.10.1)(ts-node@10.9.2(@swc/core@1.7.26(@swc/helpers@0.5.11))(@types/node@22.10.1)(typescript@5.7.2)))(typescript@5.7.2)
-      eslint-plugin-react-hooks: 5.0.0(eslint@9.16.0(jiti@1.21.0))
+      eslint-plugin-react-hooks: 5.1.0(eslint@9.16.0(jiti@1.21.0))
       eslint-plugin-simple-import-sort: 12.1.1(eslint@9.16.0(jiti@1.21.0))
       eslint-plugin-sort-keys-fix: 1.1.2
       eslint-plugin-typescript-sort-keys: 3.3.0(@typescript-eslint/parser@8.17.0(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.0))(typescript@5.7.2)
@@ -10736,7 +10736,7 @@ snapshots:
       - supports-color
       - typescript
 
-  eslint-plugin-react-hooks@5.0.0(eslint@9.16.0(jiti@1.21.0)):
+  eslint-plugin-react-hooks@5.1.0(eslint@9.16.0(jiti@1.21.0)):
     dependencies:
       eslint: 9.16.0(jiti@1.21.0)
 
