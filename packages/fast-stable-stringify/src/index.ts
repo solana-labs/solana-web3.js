@@ -29,9 +29,11 @@ function stringify(val: unknown, isArrayProp: boolean) {
                     str = '[';
                     max = (val as unknown[]).length - 1;
                     for (i = 0; i < max; i++) {
+                        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
                         str += stringify((val as unknown[])[i], true) + ',';
                     }
                     if (max > -1) {
+                        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
                         str += stringify((val as unknown[])[i], true);
                     }
                     return str + ']';
@@ -48,6 +50,7 @@ function stringify(val: unknown, isArrayProp: boolean) {
                             if (str) {
                                 str += ',';
                             }
+                            // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
                             str += JSON.stringify(key) + ':' + propVal;
                         }
                         i++;
@@ -78,6 +81,7 @@ export default function (val: unknown): string;
 export default function (val: unknown): string | undefined {
     const returnVal = stringify(val, false);
     if (returnVal !== undefined) {
+        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
         return '' + returnVal;
     }
 }
