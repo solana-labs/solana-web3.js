@@ -18,7 +18,7 @@
         "@solana/web3.js": "workspace:*"
     },
     "devDependencies": {
-        "start-server-and-test": "^2.0.8",
+        "start-server-and-test": "^2.0.9",
         "tsx": "^4.19.2"
     }
 }
