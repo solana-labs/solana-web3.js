@@ -12,7 +12,8 @@
 [semantic-release-image]: https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg
 [semantic-release-url]: https://github.com/semantic-release/semantic-release
 
-> [!NOTE] This is the maintenance branch for the 1.x line of `@solana/web3.js`. The current development branch can be found [here](https://github.com/solana-labs/solana-web3.js).
+> [!NOTE]
+> This is the maintenance branch for the 1.x line of `@solana/web3.js`. You can find the successor to this library [here](https://l.anza.xyz/s/js-sdk-repo).
 
 # Solana JavaScript SDK (v1.x)
 
