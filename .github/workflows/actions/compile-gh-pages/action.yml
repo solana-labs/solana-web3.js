@@ -11,6 +11,12 @@ runs:
     - name: Assemble Deploy Directory
       shell: bash
       run: |
+        mkdir -p .ghpages-deploy
+        mv ./doc/* .ghpages-deploy
+
+    - name: Assemble Deploy Versioned Subdirectory
+      shell: bash
+      run: |
         mkdir -p .ghpages-deploy/v1.x
         mv ./doc/* .ghpages-deploy/v1.x
 
