@@ -12,13 +12,13 @@ runs:
       shell: bash
       run: |
         mkdir -p .ghpages-deploy
-        mv ./doc/* .ghpages-deploy
+        cp -r ./doc/* .ghpages-deploy
 
     - name: Assemble Deploy Versioned Subdirectory
       shell: bash
       run: |
         mkdir -p .ghpages-deploy/v1.x
-        mv ./doc/* .ghpages-deploy/v1.x
+        cp -r ./doc/* .ghpages-deploy/v1.x
 
     - uses: actions/upload-artifact@v4
       with:
