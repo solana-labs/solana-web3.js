@@ -8,6 +8,12 @@ assignees: ''
 
 <!-- Please fill in each section completely. Thank you! -->
 
+<!--
+  NOTE: This feature tracker is for the v1.x line of @solana/web3.js.
+  If you are here to suggest a feature for the successor of this
+  library, visit https://l.anza.xyz/s/js-sdk-repo
+-->
+
 ## Motivation
 
 <!--

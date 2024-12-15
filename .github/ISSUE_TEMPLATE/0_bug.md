@@ -8,6 +8,12 @@ assignees: ''
 
 <!-- Please fill in each section completely. Thank you! -->
 
+<!--
+  NOTE: This bug tracker is for the v1.x line of @solana/web3.js.
+  If you are here to file a bug for the successor of this library,
+  visit https://l.anza.xyz/s/js-sdk-repo
+-->
+
 ## Overview
 
 <!-- Say a few words about how you came to discover this bug -->
