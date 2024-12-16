@@ -2712,7 +2712,7 @@ describe('Connection', function () {
     await mockRpcBatchResponse({
       batch: [
         {
-          methodName: 'getConfirmedTransaction',
+          methodName: 'getTransaction',
           args: [],
         },
       ],
@@ -3364,7 +3364,7 @@ describe('Connection', function () {
     }
 
     await mockRpcResponse({
-      method: 'getConfirmedTransaction',
+      method: 'getTransaction',
       params: [confirmedTransaction],
       value: {
         slot,
@@ -3430,7 +3430,7 @@ describe('Connection', function () {
     });
 
     await mockRpcResponse({
-      method: 'getConfirmedTransaction',
+      method: 'getTransaction',
       params: [recentSignature],
       value: null,
     });
@@ -3622,7 +3622,7 @@ describe('Connection', function () {
       }
 
       await mockRpcResponse({
-        method: 'getConfirmedTransaction',
+        method: 'getTransaction',
         params: [confirmedTransaction, {encoding: 'jsonParsed'}],
         value: getMockData({
           parsed: {},
@@ -3641,7 +3641,7 @@ describe('Connection', function () {
       }
 
       await mockRpcResponse({
-        method: 'getConfirmedTransaction',
+        method: 'getTransaction',
         params: [confirmedTransaction, {encoding: 'jsonParsed'}],
         value: getMockData({
           accounts: [
