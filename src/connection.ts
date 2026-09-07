@@ -1867,7 +1867,7 @@ function createKitRpcClient(url: string, config: RpcTransportConfig) {
       api: createSolanaRpcApi({
         ...DEFAULT_RPC_CONFIG,
         // Match Kit's client-side default commitment when unspecified.
-        defaultCommitment: 'confirmed',
+        defaultCommitment: config.commitment ?? 'confirmed',
       }),
       transport: typedTransport,
     }),
@@ -2656,7 +2656,11 @@ export type ConnectionConfig = {
 type RpcTransportConfig = Readonly<
   Pick<
     ConnectionConfig,
-    'disableRetryOnRateLimit' | 'fetch' | 'fetchMiddleware' | 'httpHeaders'
+    | 'commitment'
+    | 'disableRetryOnRateLimit'
+    | 'fetch'
+    | 'fetchMiddleware'
+    | 'httpHeaders'
   >
 >;
 
@@ -2736,6 +2740,7 @@ export class Connection {
     this._rpcWsEndpoint = wsEndpoint || makeWebsocketUrl(endpoint);
 
     const rpcTransportConfig: RpcTransportConfig = Object.freeze({
+      commitment: this._commitment,
       disableRetryOnRateLimit,
       fetch: customFetch,
       fetchMiddleware,
@@ -2767,6 +2772,7 @@ export class Connection {
       },
       dispatchSubscriptionNotification,
       subscriptionChannelConfig,
+      this._commitment,
     );
   }
 

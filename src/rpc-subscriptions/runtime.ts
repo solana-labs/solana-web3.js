@@ -9,9 +9,11 @@
 import {
   assertIsAddress,
   assertIsSignature,
+  createDefaultRpcSubscriptionsTransport,
   createDefaultSolanaRpcSubscriptionsChannelCreator,
-  createSolanaRpcSubscriptions,
-  createSolanaRpcSubscriptions_UNSTABLE,
+  createSolanaRpcSubscriptionsApi,
+  createSubscriptionRpc,
+  DEFAULT_RPC_SUBSCRIPTIONS_CONFIG,
   type Address,
   type RpcSubscriptions as SubscriptionClient,
   type RpcSubscriptionsChannel as SubscriptionTransportChannel,
@@ -374,6 +376,7 @@ export class KitSubscriptionRuntime<TBlockDispatchConfig>
     private readonly _callbacks: ConnectionSubscriptionsRuntimeCallbacks,
     private readonly _dispatchNotification: ConnectionSubscriptionsNotificationDispatcher,
     subscriptionChannelConfig?: SubscriptionChannelConfig,
+    defaultCommitment?: Commitment,
   ) {
     const resolvedSubscriptionChannelConfig = resolveSubscriptionChannelConfig(
       subscriptionChannelConfig,
@@ -382,14 +385,30 @@ export class KitSubscriptionRuntime<TBlockDispatchConfig>
       endpoint,
       resolvedSubscriptionChannelConfig,
     );
-    this._stableSubscriptions = createSolanaRpcSubscriptions(
-      endpoint,
-      resolvedSubscriptionChannelConfig,
-    );
-    this._unstableSubscriptions = createSolanaRpcSubscriptions_UNSTABLE(
-      endpoint,
-      resolvedSubscriptionChannelConfig,
-    );
+    const requestTransformerConfig = {
+      ...DEFAULT_RPC_SUBSCRIPTIONS_CONFIG,
+      defaultCommitment:
+        defaultCommitment ?? DEFAULT_RPC_SUBSCRIPTIONS_CONFIG.defaultCommitment,
+    };
+    const createTransport = () =>
+      createDefaultRpcSubscriptionsTransport({
+        createChannel: createSubscriptionChannel(
+          endpoint,
+          resolvedSubscriptionChannelConfig,
+        ),
+      });
+    this._stableSubscriptions = createSubscriptionRpc({
+      api: createSolanaRpcSubscriptionsApi<SolanaRpcSubscriptionsApi>(
+        requestTransformerConfig,
+      ),
+      transport: createTransport(),
+    });
+    this._unstableSubscriptions = createSubscriptionRpc({
+      api: createSolanaRpcSubscriptionsApi<
+        SolanaRpcSubscriptionsApi & SolanaRpcSubscriptionsApiUnstable
+      >(requestTransformerConfig),
+      transport: createTransport(),
+    });
   }
 
   get channel(): SubscriptionChannel | null {
