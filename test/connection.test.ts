@@ -202,6 +202,34 @@ describe('Connection', function () {
   }
 
   if (mockServer) {
+    it('uses the commitment the Connection was constructed with as the default commitment for RPC requests', async () => {
+      const connection = new Connection(url, 'processed');
+      const account = await Keypair.generate();
+
+      await mockRpcResponse({
+        method: 'getBalance',
+        params: [account.publicKey.toBase58(), {commitment: 'processed'}],
+        value: 0,
+        withContext: true,
+      });
+
+      expect(await connection.getBalance(account.publicKey)).to.eq(0n);
+    });
+
+    it('falls back to `confirmed` as the default commitment for RPC requests when the Connection has no commitment', async () => {
+      const connection = new Connection(url);
+      const account = await Keypair.generate();
+
+      await mockRpcResponse({
+        method: 'getBalance',
+        params: [account.publicKey.toBase58(), {commitment: 'confirmed'}],
+        value: 0,
+        withContext: true,
+      });
+
+      expect(await connection.getBalance(account.publicKey)).to.eq(0n);
+    });
+
     it('should pass HTTP headers to RPC', async () => {
       const headers = {
         Authorization: 'Bearer 123',
