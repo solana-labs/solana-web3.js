@@ -7,6 +7,7 @@ import {
   getTransactionDecoder,
   isSolanaError,
   lamports,
+  SOLANA_ERROR__SIGNER__ADDRESS_CANNOT_HAVE_MULTIPLE_SIGNERS,
   SOLANA_ERROR__SIGNER__EXPECTED_TRANSACTION_SIGNER,
   sequentialInstructionPlan,
   singleInstructionPlan,
@@ -646,11 +647,12 @@ describe('Transaction', () => {
     expect(await transaction.verifySignatures()).to.be.true;
   });
 
-  it('rejects a Kit transaction modifying signer that modifies the message', async function () {
+  it('adopts the message returned by a Kit transaction modifying signer', async function () {
     const keyPairSigner = await generateKeyPairSigner();
     const signerPublicKey = new PublicKey(keyPairSigner.address);
     const recipient = await generateKeypair();
     const recentBlockhash = blockhash(keyPairSigner.address);
+    const modifiedRecentBlockhash = blockhash(recipient.address);
     const modifyingSigner = {
       address: keyPairSigner.address,
       modifyAndSignTransactions: async transactions =>
@@ -659,12 +661,18 @@ describe('Transaction', () => {
             const signable = transaction as Parameters<
               TransactionPartialSigner['signTransactions']
             >[0][number];
+            const modifiedMessage = Message.from(
+              Uint8Array.from(signable.messageBytes),
+            );
+            modifiedMessage.recentBlockhash = modifiedRecentBlockhash;
             const modified = {
               ...signable,
-              messageBytes: Uint8Array.from([
-                ...signable.messageBytes,
-                0,
-              ]) as unknown as typeof signable.messageBytes,
+              lifetimeConstraint: {
+                blockhash: modifiedRecentBlockhash,
+                lastValidBlockHeight: 9999n,
+              },
+              messageBytes:
+                modifiedMessage.serialize() as unknown as typeof signable.messageBytes,
             };
             const [signatures] = await keyPairSigner.signTransactions([
               modified,
@@ -690,13 +698,10 @@ describe('Transaction', () => {
       lastValidBlockHeight: 9999,
     }).add(transfer);
 
-    await expectPromiseToReject(
-      transaction.sign(modifyingSigner),
-      'Transaction message was modified during signing. ' +
-        'TransactionModifyingSigners that modify the message are not ' +
-        'supported by the legacy Transaction class; use ' +
-        'VersionedTransaction instead.',
-    );
+    await transaction.sign(modifyingSigner);
+    expect(transaction.recentBlockhash).to.equal(modifiedRecentBlockhash);
+    expect(transaction.signatures[0].signature).not.to.be.null;
+    expect(await transaction.verifySignatures()).to.be.true;
   });
 
   it('allows noop Kit partial signers to leave signatures empty', async function () {
@@ -2041,7 +2046,27 @@ describe('VersionedTransaction', () => {
       );
     });
 
-    it('signs once when the same address appears multiple times in the signers array', async () => {
+    it('signs once when the same signer appears multiple times in the signers array', async () => {
+      const keyPairSigner = await generateKeyPairSigner();
+      const recentBlockhash = await generateBlockhash();
+      const message = new TransactionMessage({
+        payerKey: new PublicKey(keyPairSigner.address),
+        recentBlockhash,
+        instructions: [],
+      }).compileToV1Message();
+
+      const transaction = new VersionedTransaction(message);
+      await transaction.sign([keyPairSigner, keyPairSigner], {
+        lastValidBlockHeight: 9999n,
+      });
+
+      expect(transaction.signatures).to.have.length(1);
+      expect(Buffer.from(transaction.signatures[0])).to.not.eql(
+        Buffer.alloc(64),
+      );
+    });
+
+    it('throws when two different signers share the same address', async () => {
       const keyPairSigner = await generateKeyPairSigner();
       const recentBlockhash = await generateBlockhash();
       const duplicateSigner = {
@@ -2055,14 +2080,20 @@ describe('VersionedTransaction', () => {
       }).compileToV1Message();
 
       const transaction = new VersionedTransaction(message);
-      await transaction.sign([keyPairSigner, duplicateSigner], {
-        lastValidBlockHeight: 9999n,
-      });
 
-      expect(transaction.signatures).to.have.length(1);
-      expect(Buffer.from(transaction.signatures[0])).to.not.eql(
-        Buffer.alloc(64),
-      );
+      try {
+        await transaction.sign([keyPairSigner, duplicateSigner], {
+          lastValidBlockHeight: 9999n,
+        });
+        expect.fail('Expected promise to reject');
+      } catch (error) {
+        expect(
+          isSolanaError(
+            error,
+            SOLANA_ERROR__SIGNER__ADDRESS_CANNOT_HAVE_MULTIPLE_SIGNERS,
+          ),
+        ).to.be.true;
+      }
     });
 
     it('signs with a modifying signer that leaves the message unmodified', async () => {
@@ -2122,7 +2153,7 @@ describe('VersionedTransaction', () => {
       );
     });
 
-    it('clears signatures created over the original message when a modifying signer changes it', async () => {
+    it('preserves previously added signatures when a modifying signer changes the message', async () => {
       const payer = await generateKeyPairSigner();
       const coSigner = await generateKeypair();
       const programId = (await generateKeypair()).publicKey;
@@ -2166,7 +2197,9 @@ describe('VersionedTransaction', () => {
       expect(Buffer.from(transaction.signatures[0])).to.not.eql(
         Buffer.alloc(64),
       );
-      expect(Buffer.from(transaction.signatures[1])).to.eql(Buffer.alloc(64));
+      expect(Buffer.from(transaction.signatures[1])).to.eql(
+        Buffer.from(coSignerSignature),
+      );
     });
 
     it('signs with a mix of modifying and partial signers', async () => {

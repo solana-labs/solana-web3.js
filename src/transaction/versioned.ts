@@ -187,10 +187,8 @@ export class VersionedTransaction {
    *
    * Modifying signers run first, sequentially, and may return a modified
    * message; when that happens, `this.message` is replaced with the modified
-   * message and signatures produced over the original message are cleared,
-   * since they no longer cover the bytes being signed. Partial signers then
-   * sign in parallel. Signers appearing more than once for the same address
-   * are used once, keeping the first occurrence.
+   * message. Partial signers then sign in parallel. Providing two different
+   * signers for the same address throws an error.
    *
    * Signers require transaction lifetime information. A message whose first
    * instruction is the System program's `AdvanceNonceAccount` instruction is
@@ -204,22 +202,16 @@ export class VersionedTransaction {
       0,
       this.message.header.numRequiredSignatures,
     );
-    const seenAddresses = new Set<string>();
-    const uniqueSigners: Array<Signer> = [];
     for (const signer of signers) {
       const signerPublicKey = getSignerPublicKey(signer);
       assert(
         signerPubkeys.some(pubkey => pubkey.equals(signerPublicKey)),
         `Cannot sign with non signer key ${signerPublicKey.toBase58()}`,
       );
-      if (!seenAddresses.has(signer.address)) {
-        seenAddresses.add(signer.address);
-        uniqueSigners.push(signer);
-      }
     }
 
     const signedTransaction = await signTransactionMessageBytes(
-      uniqueSigners,
+      signers,
       messageData,
       signerPubkeys,
       signerPubkeys.map((publicKey, index) => ({
@@ -232,17 +224,7 @@ export class VersionedTransaction {
       ),
     );
 
-    const messageModified = !bytesEqual(
-      signedTransaction.messageBytes,
-      messageData,
-    );
-    const previousSignatures = new Map(
-      signerPubkeys.map((publicKey, index) => [
-        publicKey.toBase58() as string,
-        this.signatures[index],
-      ]),
-    );
-    if (messageModified) {
+    if (!bytesEqual(signedTransaction.messageBytes, messageData)) {
       this.message = VersionedMessage.deserialize(
         Uint8Array.from(signedTransaction.messageBytes),
       );
@@ -260,18 +242,6 @@ export class VersionedTransaction {
         signature.byteLength === SIGNATURE_LENGTH_IN_BYTES,
         'Signature must be 64 bytes long',
       );
-      if (messageModified) {
-        // A signature identical to one that existed before signing was
-        // created over the original message; it does not cover the modified
-        // message bytes and must not be presented as valid.
-        const previousSignature = previousSignatures.get(publicKey.toBase58());
-        if (
-          previousSignature != null &&
-          bytesEqual(signature, previousSignature)
-        ) {
-          return new Uint8Array(SIGNATURE_LENGTH_IN_BYTES);
-        }
-      }
       return Uint8Array.from(signature);
     });
   }
