@@ -1,5 +1,6 @@
 import {
   assertIsTransactionPartialSigner,
+  assertIsTransactionWithinSizeLimit,
   getCompiledTransactionMessageDecoder,
   getTransactionLifetimeConstraintFromCompiledTransactionMessage,
   isSolanaError,
@@ -94,6 +95,7 @@ export async function signTransactionMessageBytes(
     messageBytes: asTransactionMessageBytes(toPackedUint8Array(messageBytes)),
     signatures: buildSignatureMap(requiredSignerPublicKeys, signatures),
   } satisfies KitTransaction;
+  assertIsTransactionWithinSizeLimit(transaction);
   return await partiallySignTransactionWithSigners(signers, transaction);
 }
 

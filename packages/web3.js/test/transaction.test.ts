@@ -10,6 +10,7 @@ import {
   SOLANA_ERROR__SIGNER__ADDRESS_CANNOT_HAVE_MULTIPLE_SIGNERS,
   SOLANA_ERROR__SIGNER__EXPECTED_TRANSACTION_PARTIAL_SIGNER,
   SOLANA_ERROR__TRANSACTION__ADDRESSES_CANNOT_SIGN_TRANSACTION,
+  SOLANA_ERROR__TRANSACTION__EXCEEDS_SIZE_LIMIT,
   sequentialInstructionPlan,
   singleInstructionPlan,
   type Blockhash,
@@ -765,6 +766,32 @@ describe('Transaction', () => {
           error,
           SOLANA_ERROR__TRANSACTION__ADDRESSES_CANNOT_SIGN_TRANSACTION,
         ),
+      ).to.be.true;
+    }
+  });
+
+  it('throws when signing a transaction that exceeds the size limit', async function () {
+    const payer = await generateKeypair();
+    const programId = (await generateKeypair()).publicKey;
+
+    const transaction = new Transaction({
+      blockhash: blockhash(payer.address),
+      feePayer: payer.publicKey,
+      lastValidBlockHeight: 9999,
+    }).add(
+      new TransactionInstruction({
+        keys: [],
+        programId,
+        data: Buffer.alloc(1500),
+      }),
+    );
+
+    try {
+      await transaction.sign(payer);
+      expect.fail('Expected promise to reject');
+    } catch (error) {
+      expect(
+        isSolanaError(error, SOLANA_ERROR__TRANSACTION__EXCEEDS_SIZE_LIMIT),
       ).to.be.true;
     }
   });
