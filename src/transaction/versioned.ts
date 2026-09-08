@@ -14,7 +14,7 @@ import {
 } from '@solana/kit';
 
 import {
-  getLifetimeConstraintForCompiledMessage,
+  getLifetimeConstraintForCompiledMessageBytes,
   getSignerPublicKey,
   signTransactionMessageBytes,
 } from '../kit-adapters/signing';
@@ -218,8 +218,8 @@ export class VersionedTransaction {
         publicKey,
         signature: this.signatures[index],
       })),
-      getLifetimeConstraintForCompiledMessage(
-        this.message,
+      await getLifetimeConstraintForCompiledMessageBytes(
+        messageData,
         config?.lastValidBlockHeight,
       ),
     );

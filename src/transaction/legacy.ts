@@ -23,7 +23,7 @@ import {
 } from '../kit-adapters/instruction-plan';
 import {blockhashAsNonce} from '../kit-adapters/brand';
 import {
-  getLifetimeConstraintForCompiledMessage,
+  getLifetimeConstraintForCompiledMessageBytes,
   getSignerPublicKey,
   signTransactionMessageBytes,
 } from '../kit-adapters/signing';
@@ -773,7 +773,7 @@ export class Transaction {
       signData,
       signerPubkeys,
       this.signatures,
-      this._getLifetimeConstraint(message),
+      await this._getLifetimeConstraint(signData),
     );
 
     let signedMessage = message;
@@ -819,9 +819,9 @@ export class Transaction {
    * compiled message is only used in its absence, e.g. when the nonce advance
    * instruction was added directly to `instructions`.
    */
-  private _getLifetimeConstraint(
-    message: Message,
-  ): TransactionWithLifetime['lifetimeConstraint'] {
+  private async _getLifetimeConstraint(
+    messageBytes: Uint8Array,
+  ): Promise<TransactionWithLifetime['lifetimeConstraint']> {
     if (this.nonceInfo != null) {
       const nonceAccountAddress =
         this.nonceInfo.nonceInstruction.keys[0]?.pubkey;
@@ -835,8 +835,8 @@ export class Transaction {
         nonceAccountAddress: nonceAccountAddress.toBase58(),
       };
     }
-    return getLifetimeConstraintForCompiledMessage(
-      message,
+    return await getLifetimeConstraintForCompiledMessageBytes(
+      messageBytes,
       this.lastValidBlockHeight != null
         ? BigInt(this.lastValidBlockHeight)
         : undefined,
