@@ -9,15 +9,16 @@ import {
   getShortU16Encoder,
   getStructDecoder,
   getStructEncoder,
-  type MessagePartialSigner,
   type TransactionVersion,
 } from '@solana/kit';
 
 import {
+  getLifetimeConstraintForCompiledMessageBytes,
   getSignerPublicKey,
   signTransactionMessageBytes,
 } from '../kit-adapters/signing';
 import assert from '../utils/assert';
+import type {Signer} from '../keypair';
 import type {PublicKey} from '../publickey';
 import {VersionedMessage} from '../message/versioned';
 import {
@@ -50,6 +51,13 @@ const VERSIONED_TRANSACTION_DECODER = getStructDecoder([
 ]);
 
 export type {TransactionVersion};
+
+/**
+ * Transaction lifetime information for {@link VersionedTransaction.sign}:
+ * the `lastValidBlockHeight` of the message's blockhash. Durable nonce
+ * lifetimes are detected from the message itself and need no configuration.
+ */
+export type VersionedTransactionSignConfig = {lastValidBlockHeight: bigint};
 
 /**
  * Versioned transaction class
@@ -172,13 +180,13 @@ export class VersionedTransaction {
     );
   }
 
-  async sign(signers: Array<MessagePartialSigner>) {
+  async sign(signers: Array<Signer>, config?: VersionedTransactionSignConfig) {
     const messageData = this.message.serialize();
     const signerPubkeys = this.message.staticAccountKeys.slice(
       0,
       this.message.header.numRequiredSignatures,
     );
-    for (const signer of signers) {
+    const signerIndexes = signers.map(signer => {
       const signerPublicKey = getSignerPublicKey(signer);
       const signerIndex = signerPubkeys.findIndex(pubkey =>
         pubkey.equals(signerPublicKey),
@@ -187,24 +195,34 @@ export class VersionedTransaction {
         signerIndex >= 0,
         `Cannot sign with non signer key ${signerPublicKey.toBase58()}`,
       );
+      return {signerIndex, signerPublicKey};
+    });
 
-      // `MessagePartialSigner` cannot supply transaction lifetime info,
-      // so the optional `signatures` and `lifetimeConstraint` parameters of
-      // `signTransactionMessageBytes` are unused on this path.
-      const signature = await signTransactionMessageBytes(
-        signer,
+    const signedTransaction = await signTransactionMessageBytes(
+      signers,
+      messageData,
+      signerPubkeys,
+      signerPubkeys.map((publicKey, index) => ({
+        publicKey,
+        signature: this.signatures[index],
+      })),
+      await getLifetimeConstraintForCompiledMessageBytes(
         messageData,
-        signerPubkeys,
-      );
+        config?.lastValidBlockHeight,
+      ),
+    );
 
-      if (signature === undefined) {
+    for (const {signerIndex, signerPublicKey} of signerIndexes) {
+      const signature =
+        signedTransaction.signatures[signerPublicKey.toBase58()];
+      if (signature == null) {
         continue;
       }
       assert(
         signature.byteLength === SIGNATURE_LENGTH_IN_BYTES,
         'Signature must be 64 bytes long',
       );
-      this.signatures[signerIndex] = signature;
+      this.signatures[signerIndex] = Uint8Array.from(signature);
     }
   }
 

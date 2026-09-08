@@ -22,6 +22,7 @@ import {
 } from '../kit-adapters/instruction-plan';
 import {blockhashAsNonce} from '../kit-adapters/brand';
 import {
+  getLifetimeConstraintForCompiledMessageBytes,
   getSignerPublicKey,
   signTransactionMessageBytes,
 } from '../kit-adapters/signing';
@@ -760,24 +761,25 @@ export class Transaction {
       0,
       message.header.numRequiredSignatures,
     );
-    const lifetimeConstraint = this._getLifetimeConstraint();
-    for (const {signer, publicKey} of signers) {
-      const signature = await signTransactionMessageBytes(
-        signer,
-        signData,
-        signerPubkeys,
-        this.signatures,
-        lifetimeConstraint,
-      );
-      if (signature !== undefined) {
-        this._addSignature(publicKey, signature);
+    const signedTransaction = await signTransactionMessageBytes(
+      signers.map(({signer}) => signer),
+      signData,
+      signerPubkeys,
+      this.signatures,
+      await this._getLifetimeConstraint(signData),
+    );
+
+    for (const {publicKey} of signers) {
+      const signature = signedTransaction.signatures[publicKey.toBase58()];
+      if (signature != null) {
+        this._addSignature(publicKey, Uint8Array.from(signature));
       }
     }
   }
 
-  private _getLifetimeConstraint():
-    | TransactionWithLifetime['lifetimeConstraint']
-    | undefined {
+  private async _getLifetimeConstraint(
+    messageBytes: Uint8Array,
+  ): Promise<TransactionWithLifetime['lifetimeConstraint'] | undefined> {
     if (this.nonceInfo != null) {
       const nonceAccountAddress =
         this.nonceInfo.nonceInstruction.keys[0]?.pubkey;
@@ -791,18 +793,12 @@ export class Transaction {
         nonceAccountAddress: nonceAccountAddress.toBase58(),
       };
     }
-
-    if (
-      this.recentBlockhash != null &&
-      this.lastValidBlockHeight !== undefined
-    ) {
-      return {
-        blockhash: this.recentBlockhash,
-        lastValidBlockHeight: BigInt(this.lastValidBlockHeight),
-      };
-    }
-
-    return undefined;
+    return await getLifetimeConstraintForCompiledMessageBytes(
+      messageBytes,
+      this.lastValidBlockHeight != null
+        ? BigInt(this.lastValidBlockHeight)
+        : undefined,
+    );
   }
 
   private _resolveSigners(

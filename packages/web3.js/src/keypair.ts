@@ -14,11 +14,11 @@ import {PublicKey} from './publickey';
 import {toPackedUint8Array} from './utils/typed-array';
 
 /**
- * Union of signer shapes accepted by web3.js transaction signing APIs.
- * Dispatch is documented on `signTransactionMessageBytes` in
+ * Kit transaction signer shape accepted by web3.js transaction signing APIs.
+ * Signing semantics are documented on `signTransactionMessageBytes` in
  * `src/kit-adapters/signing.ts`.
  */
-export type Signer = MessagePartialSigner | TransactionPartialSigner;
+export type Signer = TransactionPartialSigner;
 
 /**
  * An account keypair backed by WebCrypto.

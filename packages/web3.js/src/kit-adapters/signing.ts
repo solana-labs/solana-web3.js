@@ -1,12 +1,15 @@
 import {
-  assertIsTransactionWithinSizeLimit,
-  createSignableMessage,
-  isMessagePartialSigner,
-  isTransactionPartialSigner,
-  type MessagePartialSigner,
+  assertIsTransactionPartialSigner,
+  getCompiledTransactionMessageDecoder,
+  getTransactionLifetimeConstraintFromCompiledTransactionMessage,
+  isSolanaError,
+  partiallySignTransactionWithSigners,
   signatureBytes,
+  SignaturesMap,
+  SOLANA_ERROR__TRANSACTION__NONCE_ACCOUNT_CANNOT_BE_IN_LOOKUP_TABLE,
+  TransactionBlockhashLifetime,
+  TransactionDurableNonceLifetime,
   type Transaction as KitTransaction,
-  type TransactionPartialSigner,
   type TransactionWithLifetime,
 } from '@solana/kit';
 
@@ -16,25 +19,13 @@ import {SIGNATURE_LENGTH_IN_BYTES} from '../transaction/constants';
 import {toPackedUint8Array} from '../utils/typed-array';
 import {asTransactionMessageBytes} from './brand';
 
-type SignableTransaction = Parameters<
-  TransactionPartialSigner['signTransactions']
->[0][number];
+const COMPILED_TRANSACTION_MESSAGE_DECODER =
+  getCompiledTransactionMessageDecoder();
 
 type SignaturePair = Readonly<{
   publicKey: PublicKey;
   signature?: Uint8Array | null;
 }>;
-
-type SigningStrategy =
-  | {
-      kind: 'kit-tx';
-      signer: TransactionPartialSigner;
-      lifetime: TransactionWithLifetime['lifetimeConstraint'];
-    }
-  | {
-      kind: 'kit-msg';
-      signer: MessagePartialSigner;
-    };
 
 /** @internal */
 export function getSignerPublicKey(signer: Signer): PublicKey {
@@ -42,92 +33,75 @@ export function getSignerPublicKey(signer: Signer): PublicKey {
 }
 
 /**
- * Sign the serialized bytes of a legacy or versioned transaction message,
- * dispatching to whichever signing mechanism the input signer provides.
+ * Derive the Kit lifetime constraint of a serialized transaction message.
+ * Returns `undefined` for a durable nonce message whose nonce account is
+ * loaded from an address lookup table, since that address cannot be resolved
+ * without fetching the table.
  *
- * Strategy precedence (see {@link pickSigningStrategy}):
- *   1. Kit `TransactionPartialSigner` + lifetime → `signTransactions`
- *   2. Kit `MessagePartialSigner`                → `signMessages`
- * A Kit signer with only `signTransactions` and no lifetime is rejected.
+ * @internal
+ */
+export async function getLifetimeConstraintForCompiledMessageBytes(
+  messageBytes: Uint8Array,
+  lastValidBlockHeight?: bigint,
+): Promise<TransactionWithLifetime['lifetimeConstraint'] | undefined> {
+  const compiledMessage = COMPILED_TRANSACTION_MESSAGE_DECODER.decode(
+    toPackedUint8Array(messageBytes),
+  );
+  let lifetimeConstraint;
+  try {
+    lifetimeConstraint =
+      await getTransactionLifetimeConstraintFromCompiledTransactionMessage(
+        compiledMessage,
+      );
+  } catch (e) {
+    if (
+      isSolanaError(
+        e,
+        SOLANA_ERROR__TRANSACTION__NONCE_ACCOUNT_CANNOT_BE_IN_LOOKUP_TABLE,
+      )
+    ) {
+      return undefined;
+    }
+    throw e;
+  }
+  if ('blockhash' in lifetimeConstraint && lastValidBlockHeight != null) {
+    return {...lifetimeConstraint, lastValidBlockHeight};
+  }
+  return lifetimeConstraint;
+}
+
+/**
+ * Sign the serialized transaction bytes,
+ * delegating to Kit's `partiallySignTransactionWithSigners`
  *
  * @internal
  */
 export async function signTransactionMessageBytes(
-  signer: Signer,
-  messageBytes: Uint8Array,
-  requiredSignerPublicKeys: readonly PublicKey[],
-  signatures: readonly SignaturePair[] = [],
-  lifetimeConstraint?: TransactionWithLifetime['lifetimeConstraint'],
-): Promise<Uint8Array | undefined> {
-  const strategy = pickSigningStrategy(signer, lifetimeConstraint);
-  if (!strategy) {
-    throw new Error(
-      'TransactionPartialSigner support requires transaction lifetime information. Use a MessagePartialSigner-compatible signer or provide a transaction with a blockhash lifetime or nonce lifetime.',
-    );
-  }
-  switch (strategy.kind) {
-    case 'kit-tx': {
-      const [dict] = await strategy.signer.signTransactions([
-        buildSignableTransaction(
-          messageBytes,
-          requiredSignerPublicKeys,
-          signatures,
-          strategy.lifetime,
-        ),
-      ]);
-      return dict[strategy.signer.address];
-    }
-    case 'kit-msg': {
-      const [dict] = await strategy.signer.signMessages([
-        createSignableMessage(toPackedUint8Array(messageBytes)),
-      ]);
-      return dict[strategy.signer.address];
-    }
-  }
-}
-
-function pickSigningStrategy(
-  signer: Signer,
-  lifetime: TransactionWithLifetime['lifetimeConstraint'] | undefined,
-): SigningStrategy | null {
-  const hasTransactionPartial = isTransactionPartialSigner(signer);
-  const hasMessagePartial = isMessagePartialSigner(signer);
-  if (hasTransactionPartial && lifetime != null) {
-    return {
-      kind: 'kit-tx',
-      signer: signer,
-      lifetime,
-    };
-  }
-  if (hasMessagePartial) {
-    return {
-      kind: 'kit-msg',
-      signer: signer,
-    };
-  }
-  return null;
-}
-
-function buildSignableTransaction(
+  signers: readonly Signer[],
   messageBytes: Uint8Array,
   requiredSignerPublicKeys: readonly PublicKey[],
   signatures: readonly SignaturePair[],
-  lifetimeConstraint: TransactionWithLifetime['lifetimeConstraint'],
-): SignableTransaction {
+  lifetimeConstraint:
+    | TransactionBlockhashLifetime
+    | TransactionDurableNonceLifetime
+    | undefined,
+): Promise<KitTransaction> {
+  for (const signer of signers) {
+    assertIsTransactionPartialSigner(signer);
+  }
   const transaction = {
-    lifetimeConstraint,
+    ...(lifetimeConstraint != null ? {lifetimeConstraint} : null),
     messageBytes: asTransactionMessageBytes(toPackedUint8Array(messageBytes)),
     signatures: buildSignatureMap(requiredSignerPublicKeys, signatures),
-  } satisfies KitTransaction & TransactionWithLifetime;
-  assertIsTransactionWithinSizeLimit(transaction);
-  return transaction;
+  } satisfies KitTransaction;
+  return await partiallySignTransactionWithSigners(signers, transaction);
 }
 
 function buildSignatureMap(
   requiredSignerPublicKeys: readonly PublicKey[],
   signatures: readonly SignaturePair[],
-): KitTransaction['signatures'] {
-  const signatureMap: KitTransaction['signatures'] = {};
+): SignaturesMap {
+  const signatureMap: SignaturesMap = {};
   for (const publicKey of requiredSignerPublicKeys) {
     signatureMap[publicKey.toBase58()] = null;
   }
