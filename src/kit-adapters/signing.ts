@@ -3,7 +3,6 @@ import {
   assertIsTransactionWithinSizeLimit,
   getCompiledTransactionMessageDecoder,
   getTransactionLifetimeConstraintFromCompiledTransactionMessage,
-  isTransactionModifyingSigner,
   isTransactionPartialSigner,
   partiallySignTransactionWithSigners,
   signatureBytes,
@@ -56,14 +55,9 @@ export async function getLifetimeConstraintForCompiledMessageBytes(
 
 /**
  * Sign the serialized bytes of a legacy or versioned transaction message with
- * Kit transaction signers by delegating to Kit's
- * `partiallySignTransactionWithSigners`: `TransactionModifyingSigner`s run
- * first sequentially (each may return a modified transaction), then
- * `TransactionPartialSigner`s sign in parallel.
- *
- * Returns the signed Kit transaction. Its `messageBytes` may differ from the
- * input when a modifying signer altered the message; callers must reconcile
- * their own state with the returned bytes and signature dictionary.
+ * Kit `TransactionPartialSigner`s by delegating to Kit's
+ * `partiallySignTransactionWithSigners`, which runs them in parallel and
+ * merges their signature dictionaries.
  *
  * @internal
  */
@@ -77,15 +71,10 @@ export async function signTransactionMessageBytes(
   for (const signer of signers) {
     assertIsTransactionSigner(signer);
     const {address} = signer;
-    if (
-      !isTransactionPartialSigner(signer) &&
-      !isTransactionModifyingSigner(signer)
-    ) {
+    if (!isTransactionPartialSigner(signer)) {
       throw new Error(
-        `Signer for address ${address} can only sign and send a ` +
-          'transaction in a single step (Kit TransactionSendingSigner). ' +
-          'Signing without sending requires the TransactionPartialSigner ' +
-          'or TransactionModifyingSigner interface',
+        `Signer for address ${address} does not implement the Kit ` +
+          'TransactionPartialSigner interface',
       );
     }
   }

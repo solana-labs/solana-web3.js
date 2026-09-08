@@ -1,6 +1,5 @@
 import {
   type Blockhash,
-  bytesEqual,
   fixDecoderSize,
   getArrayDecoder,
   getBase58Codec,
@@ -776,41 +775,12 @@ export class Transaction {
       await this._getLifetimeConstraint(signData),
     );
 
-    let signedMessage = message;
-    if (!bytesEqual(signedTransaction.messageBytes, signData)) {
-      signedMessage = Message.from(
-        Uint8Array.from(signedTransaction.messageBytes),
-      );
-      this._populateFromMessage(signedMessage);
-    }
-
-    const signedSignerPubkeys = signedMessage.accountKeys.slice(
-      0,
-      signedMessage.header.numRequiredSignatures,
-    );
-    for (const publicKey of signedSignerPubkeys) {
+    for (const publicKey of signerPubkeys) {
       const signature = signedTransaction.signatures[publicKey.toBase58()];
       if (signature != null) {
         this._addSignature(publicKey, Uint8Array.from(signature));
       }
     }
-  }
-
-  /**
-   * Replace this transaction's contents with those of the given compiled
-   * message, e.g. after a `TransactionModifyingSigner` returned a modified
-   * message during signing.
-   */
-  private _populateFromMessage(message: Message) {
-    const populated = Transaction.populate(message);
-    this.recentBlockhash = populated.recentBlockhash;
-    this.feePayer = populated.feePayer;
-    this.instructions = populated.instructions;
-    this.signatures = message.accountKeys
-      .slice(0, message.header.numRequiredSignatures)
-      .map(publicKey => ({publicKey, signature: null}));
-    this._message = message;
-    this._json = this.toJSON();
   }
 
   /**

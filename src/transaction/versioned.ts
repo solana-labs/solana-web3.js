@@ -1,5 +1,4 @@
 import {
-  bytesEqual,
   fixDecoderSize,
   fixEncoderSize,
   getArrayDecoder,
@@ -182,13 +181,10 @@ export class VersionedTransaction {
   }
 
   /**
-   * Sign the transaction with the given Kit transaction signers
-   * (`TransactionPartialSigner` or `TransactionModifyingSigner`).
+   * Sign the transaction with the given Kit `TransactionPartialSigner`s.
    *
-   * Modifying signers run first, sequentially, and may return a modified
-   * message; when that happens, `this.message` is replaced with the modified
-   * message. Partial signers then sign in parallel. Providing two different
-   * signers for the same address throws an error.
+   * Signers sign in parallel. Providing two different signers for the same
+   * address throws an error.
    *
    * Signers require transaction lifetime information. A message whose first
    * instruction is the System program's `AdvanceNonceAccount` instruction is
@@ -224,16 +220,7 @@ export class VersionedTransaction {
       ),
     );
 
-    if (!bytesEqual(signedTransaction.messageBytes, messageData)) {
-      this.message = VersionedMessage.deserialize(
-        Uint8Array.from(signedTransaction.messageBytes),
-      );
-    }
-    const signedSignerPubkeys = this.message.staticAccountKeys.slice(
-      0,
-      this.message.header.numRequiredSignatures,
-    );
-    this.signatures = signedSignerPubkeys.map(publicKey => {
+    this.signatures = signerPubkeys.map(publicKey => {
       const signature = signedTransaction.signatures[publicKey.toBase58()];
       if (signature == null) {
         return new Uint8Array(SIGNATURE_LENGTH_IN_BYTES);

@@ -6,7 +6,6 @@ import {
   type MessagePartialSigner,
   signBytes,
   signatureBytes,
-  type TransactionModifyingSigner,
   type TransactionPartialSigner,
   verifySignature,
 } from '@solana/kit';
@@ -15,11 +14,11 @@ import {PublicKey} from './publickey';
 import {toPackedUint8Array} from './utils/typed-array';
 
 /**
- * Union of Kit transaction signer shapes accepted by web3.js transaction
- * signing APIs. Signing semantics are documented on
- * `signTransactionMessageBytes` in `src/kit-adapters/signing.ts`.
+ * Kit transaction signer shape accepted by web3.js transaction signing APIs.
+ * Signing semantics are documented on `signTransactionMessageBytes` in
+ * `src/kit-adapters/signing.ts`.
  */
-export type Signer = TransactionPartialSigner | TransactionModifyingSigner;
+export type Signer = TransactionPartialSigner;
 
 /**
  * An account keypair backed by WebCrypto.
