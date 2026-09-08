@@ -1,4 +1,5 @@
 import {
+  bytesEqual,
   fixDecoderSize,
   fixEncoderSize,
   getArrayDecoder,
@@ -9,15 +10,16 @@ import {
   getShortU16Encoder,
   getStructDecoder,
   getStructEncoder,
-  type MessagePartialSigner,
   type TransactionVersion,
 } from '@solana/kit';
 
 import {
+  getLifetimeConstraintForCompiledMessage,
   getSignerPublicKey,
   signTransactionMessageBytes,
 } from '../kit-adapters/signing';
 import assert from '../utils/assert';
+import type {Signer} from '../keypair';
 import type {PublicKey} from '../publickey';
 import {VersionedMessage} from '../message/versioned';
 import {
@@ -50,6 +52,13 @@ const VERSIONED_TRANSACTION_DECODER = getStructDecoder([
 ]);
 
 export type {TransactionVersion};
+
+/**
+ * Transaction lifetime information for {@link VersionedTransaction.sign}:
+ * the `lastValidBlockHeight` of the message's blockhash. Durable nonce
+ * lifetimes are detected from the message itself and need no configuration.
+ */
+export type VersionedTransactionSignConfig = {lastValidBlockHeight: bigint};
 
 /**
  * Versioned transaction class
@@ -172,40 +181,99 @@ export class VersionedTransaction {
     );
   }
 
-  async sign(signers: Array<MessagePartialSigner>) {
+  /**
+   * Sign the transaction with the given Kit transaction signers
+   * (`TransactionPartialSigner` or `TransactionModifyingSigner`).
+   *
+   * Modifying signers run first, sequentially, and may return a modified
+   * message; when that happens, `this.message` is replaced with the modified
+   * message and signatures produced over the original message are cleared,
+   * since they no longer cover the bytes being signed. Partial signers then
+   * sign in parallel. Signers appearing more than once for the same address
+   * are used once, keeping the first occurrence.
+   *
+   * Signers require transaction lifetime information. A message whose first
+   * instruction is the System program's `AdvanceNonceAccount` instruction is
+   * given a durable nonce lifetime. Any other message is given a blockhash
+   * lifetime from its `recentBlockhash`, with the `lastValidBlockHeight`
+   * provided via `config`, or the maximum possible value when omitted.
+   */
+  async sign(signers: Array<Signer>, config?: VersionedTransactionSignConfig) {
     const messageData = this.message.serialize();
     const signerPubkeys = this.message.staticAccountKeys.slice(
       0,
       this.message.header.numRequiredSignatures,
     );
+    const seenAddresses = new Set<string>();
+    const uniqueSigners: Array<Signer> = [];
     for (const signer of signers) {
       const signerPublicKey = getSignerPublicKey(signer);
-      const signerIndex = signerPubkeys.findIndex(pubkey =>
-        pubkey.equals(signerPublicKey),
-      );
       assert(
-        signerIndex >= 0,
+        signerPubkeys.some(pubkey => pubkey.equals(signerPublicKey)),
         `Cannot sign with non signer key ${signerPublicKey.toBase58()}`,
       );
+      if (!seenAddresses.has(signer.address)) {
+        seenAddresses.add(signer.address);
+        uniqueSigners.push(signer);
+      }
+    }
 
-      // `MessagePartialSigner` cannot supply transaction lifetime info,
-      // so the optional `signatures` and `lifetimeConstraint` parameters of
-      // `signTransactionMessageBytes` are unused on this path.
-      const signature = await signTransactionMessageBytes(
-        signer,
-        messageData,
-        signerPubkeys,
+    const signedTransaction = await signTransactionMessageBytes(
+      uniqueSigners,
+      messageData,
+      signerPubkeys,
+      signerPubkeys.map((publicKey, index) => ({
+        publicKey,
+        signature: this.signatures[index],
+      })),
+      getLifetimeConstraintForCompiledMessage(
+        this.message,
+        config?.lastValidBlockHeight,
+      ),
+    );
+
+    const messageModified = !bytesEqual(
+      signedTransaction.messageBytes,
+      messageData,
+    );
+    const previousSignatures = new Map(
+      signerPubkeys.map((publicKey, index) => [
+        publicKey.toBase58() as string,
+        this.signatures[index],
+      ]),
+    );
+    if (messageModified) {
+      this.message = VersionedMessage.deserialize(
+        Uint8Array.from(signedTransaction.messageBytes),
       );
-
-      if (signature === undefined) {
-        continue;
+    }
+    const signedSignerPubkeys = this.message.staticAccountKeys.slice(
+      0,
+      this.message.header.numRequiredSignatures,
+    );
+    this.signatures = signedSignerPubkeys.map(publicKey => {
+      const signature = signedTransaction.signatures[publicKey.toBase58()];
+      if (signature == null) {
+        return new Uint8Array(SIGNATURE_LENGTH_IN_BYTES);
       }
       assert(
         signature.byteLength === SIGNATURE_LENGTH_IN_BYTES,
         'Signature must be 64 bytes long',
       );
-      this.signatures[signerIndex] = signature;
-    }
+      if (messageModified) {
+        // A signature identical to one that existed before signing was
+        // created over the original message; it does not cover the modified
+        // message bytes and must not be presented as valid.
+        const previousSignature = previousSignatures.get(publicKey.toBase58());
+        if (
+          previousSignature != null &&
+          bytesEqual(signature, previousSignature)
+        ) {
+          return new Uint8Array(SIGNATURE_LENGTH_IN_BYTES);
+        }
+      }
+      return Uint8Array.from(signature);
+    });
   }
 
   addSignature(publicKey: PublicKey, signature: Uint8Array) {

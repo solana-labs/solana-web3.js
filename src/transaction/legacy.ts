@@ -1,5 +1,6 @@
 import {
   type Blockhash,
+  bytesEqual,
   fixDecoderSize,
   getArrayDecoder,
   getBase58Codec,
@@ -22,6 +23,7 @@ import {
 } from '../kit-adapters/instruction-plan';
 import {blockhashAsNonce} from '../kit-adapters/brand';
 import {
+  getLifetimeConstraintForCompiledMessage,
   getSignerPublicKey,
   signTransactionMessageBytes,
 } from '../kit-adapters/signing';
@@ -760,24 +762,49 @@ export class Transaction {
       0,
       message.header.numRequiredSignatures,
     );
-    const lifetimeConstraint = this._getLifetimeConstraint();
-    for (const {signer, publicKey} of signers) {
-      const signature = await signTransactionMessageBytes(
-        signer,
-        signData,
-        signerPubkeys,
-        this.signatures,
-        lifetimeConstraint,
+    for (const {publicKey} of signers) {
+      if (!this.signatures.some(pair => pair.publicKey.equals(publicKey))) {
+        throw new Error(`unknown signer: ${publicKey.toString()}`);
+      }
+    }
+
+    const signedTransaction = await signTransactionMessageBytes(
+      signers.map(({signer}) => signer),
+      signData,
+      signerPubkeys,
+      this.signatures,
+      this._getLifetimeConstraint(message),
+    );
+
+    // The legacy Transaction keeps its instructions as the source of truth,
+    // so a message modified during signing cannot be reconciled back into
+    // this class's state.
+    if (!bytesEqual(signedTransaction.messageBytes, signData)) {
+      throw new Error(
+        'Transaction message was modified during signing. ' +
+          'TransactionModifyingSigners that modify the message are not ' +
+          'supported by the legacy Transaction class; use ' +
+          'VersionedTransaction instead.',
       );
-      if (signature !== undefined) {
-        this._addSignature(publicKey, signature);
+    }
+
+    for (const publicKey of signerPubkeys) {
+      const signature = signedTransaction.signatures[publicKey.toBase58()];
+      if (signature != null) {
+        this._addSignature(publicKey, Uint8Array.from(signature));
       }
     }
   }
 
-  private _getLifetimeConstraint():
-    | TransactionWithLifetime['lifetimeConstraint']
-    | undefined {
+  /**
+   * An explicitly provided `nonceInfo` is the source of truth for the
+   * transaction's durable nonce lifetime; structural inference from the
+   * compiled message is only used in its absence, e.g. when the nonce advance
+   * instruction was added directly to `instructions`.
+   */
+  private _getLifetimeConstraint(
+    message: Message,
+  ): TransactionWithLifetime['lifetimeConstraint'] {
     if (this.nonceInfo != null) {
       const nonceAccountAddress =
         this.nonceInfo.nonceInstruction.keys[0]?.pubkey;
@@ -791,18 +818,12 @@ export class Transaction {
         nonceAccountAddress: nonceAccountAddress.toBase58(),
       };
     }
-
-    if (
-      this.recentBlockhash != null &&
-      this.lastValidBlockHeight !== undefined
-    ) {
-      return {
-        blockhash: this.recentBlockhash,
-        lastValidBlockHeight: BigInt(this.lastValidBlockHeight),
-      };
-    }
-
-    return undefined;
+    return getLifetimeConstraintForCompiledMessage(
+      message,
+      this.lastValidBlockHeight != null
+        ? BigInt(this.lastValidBlockHeight)
+        : undefined,
+    );
   }
 
   private _resolveSigners(
