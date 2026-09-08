@@ -52,14 +52,14 @@ The `@rc` tag always resolves to the latest release candidate. For production, p
 
 - [The Solana Cookbook](https://solanacookbook.com/) has extensive task-based documentation using this library.
 - For more detail on individual functions, see the [latest API Documentation](https://solana-foundation.github.io/solana-web3.js)
-- For applications upgrading to v3, see the [web3.js v1 → v3 migration guide](docs/web3js-v1-to-v3-migration.md).
+- For applications upgrading to v3, see the [web3.js v1 → v3 migration guide](../../docs/web3js-v1-to-v3-migration.md).
 
 ## v3 Migration Assistance
 This repository includes a reusable agent skill for upgrading applications from
 `@solana/web3.js` v1 to v3:
 
-- Human-facing guide: [`docs/web3js-v1-to-v3-migration.md`](docs/web3js-v1-to-v3-migration.md)
-- [`skills/web3js-v1-to-v3-migration/SKILL.md`](skills/web3js-v1-to-v3-migration/SKILL.md)
+- Human-facing guide: [`docs/web3js-v1-to-v3-migration.md`](../../docs/web3js-v1-to-v3-migration.md)
+- [`skills/web3js-v1-to-v3-migration/SKILL.md`](../../skills/web3js-v1-to-v3-migration/SKILL.md)
 
 You can install it locally from a checkout:
 
@@ -121,13 +121,13 @@ Integration tests require a validator client running on your machine.
 To install a test validator:
 
 ```shell
-$ pnpm test:live-with-test-validator:setup
+$ pnpm --filter @solana/web3.js run test:live-with-test-validator:setup
 ```
 
 To start the test validator and run all of the integration tests in live mode:
 
 ```shell
-$ pnpm test:live-with-test-validator
+$ pnpm --filter @solana/web3.js run test:live-with-test-validator
 ```
 
 Other useful development commands:

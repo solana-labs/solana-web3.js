@@ -11,6 +11,7 @@
         "compile:docs": "pnpm -r compile:docs",
         "test:unit": "pnpm -r test:unit",
         "test:lint": "pnpm -r test:lint",
+        "test:live": "pnpm -r --if-present run test:live",
         "test:prettier": "pnpm -r test:prettier",
         "test:typecheck": "pnpm -r test:typecheck",
         "test:smoke": "pnpm -r test:smoke"
