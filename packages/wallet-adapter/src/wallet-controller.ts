@@ -1,4 +1,10 @@
-import {createClient, getBase58Decoder, signatureBytes} from '@solana/kit';
+import {
+  createClient,
+  getBase58Decoder,
+  isSolanaError,
+  signatureBytes,
+  SOLANA_ERROR__WALLET__NOT_CONNECTED,
+} from '@solana/kit';
 import {walletSigner, type WalletPluginConfig} from '@solana/kit-plugin-wallet';
 import type {
   SolanaSignAndSendTransactionFeature,
@@ -65,7 +71,11 @@ function wrap<T extends WalletError>(
   message: string,
 ): WalletError {
   if (error instanceof WalletError) return error;
-  return new Wrapper(
+  // Kit reports a wallet that vanished or came back without accounts as not connected; v1 apps test that class.
+  const Wallet = isSolanaError(error, SOLANA_ERROR__WALLET__NOT_CONNECTED)
+    ? WalletNotConnectedError
+    : Wrapper;
+  return new Wallet(
     error instanceof Error && error.message ? error.message : message,
     error,
   );

@@ -4,11 +4,12 @@ import {
   createWalletController,
   WalletConnectionError,
   WalletDisconnectionError,
+  WalletNotConnectedError,
   WalletNotReadyError,
   WalletNotSelectedError,
   WalletReadyState,
 } from '../core.js';
-import {standardWallet, registerWallets} from './helpers.js';
+import {standardWallet, registerWallets, testController} from './helpers.js';
 
 async function setup() {
   const a = standardWallet('A');
@@ -100,6 +101,17 @@ it('preserves the active account through a rejected switch and reports each fail
   unregister();
   expect(owner.getSnapshot().wallets).toEqual([]);
   expect(owner.getSnapshot().selectedWallet).toBeNull();
+});
+
+it('reports a wallet that connects without accounts as not connected, as v1 apps expect', async () => {
+  const {wallet} = standardWallet('Empty');
+  wallet.accounts = [];
+  wallet.features['standard:connect'].connect.mockResolvedValueOnce({
+    accounts: [],
+  });
+  const owner = testController(wallet);
+  owner.select(wallet.name);
+  await expect(owner.connect()).rejects.toBeInstanceOf(WalletNotConnectedError);
 });
 
 it('accepts any selection, as in v1, and rejects connecting to one that does not resolve', async () => {

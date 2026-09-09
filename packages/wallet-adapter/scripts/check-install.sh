@@ -12,10 +12,11 @@ web3js=$(cd ../web3.js && pnpm pack --pack-destination "$app" | tail -1)
 cd "$app"
 npm init -y >/dev/null
 peer() { node -p "require('$OLDPWD/package.json').peerDependencies['$1']"; }
-npm install --no-audit --no-fund "$tarball" "$web3js" "@solana/kit@$(peer @solana/kit)" "@solana/kit-plugin-wallet@$(peer @solana/kit-plugin-wallet)" react@19.2.8 react-dom@19.2.8 >/dev/null
+npm install --no-audit --no-fund "$tarball" "$web3js" "@solana/kit@$(peer @solana/kit)" react@19.2.8 react-dom@19.2.8 >/dev/null
 node --input-type=module -e "
 import { WalletProvider, useWallet, WalletMultiButton } from '@solana/wallet-adapter';
 import { createWalletController } from '@solana/wallet-adapter/core';
+await import('@solana/kit-plugin-wallet');
 if (![WalletProvider, useWallet, WalletMultiButton, createWalletController].every(v => typeof v === 'function')) process.exit(1);
 console.log('installed and importable');
 "

@@ -55,6 +55,9 @@ importers:
 
   packages/wallet-adapter:
     dependencies:
+      '@solana/kit-plugin-wallet':
+        specifier: ^0.19.0
+        version: 0.19.0(@solana/kit@8.2.0(bufferutil@4.0.8)(typescript@5.9.3)(utf-8-validate@5.0.10))(react@19.2.8)(typescript@5.9.3)
       '@wallet-standard/ui-features':
         specifier: ^1.0.3
         version: 1.0.3
@@ -65,9 +68,6 @@ importers:
       '@solana/kit':
         specifier: 'catalog:'
         version: 8.2.0(bufferutil@4.0.8)(typescript@5.9.3)(utf-8-validate@5.0.10)
-      '@solana/kit-plugin-wallet':
-        specifier: ^0.19.0
-        version: 0.19.0(@solana/kit@8.2.0(bufferutil@4.0.8)(typescript@5.9.3)(utf-8-validate@5.0.10))(react@19.2.8)(typescript@5.9.3)
       '@solana/wallet-standard-features':
         specifier: ^1.4.0
         version: 1.4.0

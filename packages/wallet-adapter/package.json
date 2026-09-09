@@ -1,6 +1,6 @@
 {
   "name": "@solana/wallet-adapter",
-  "version": "0.1.0",
+  "version": "3.0.0-rc.3",
   "description": "Wallet-adapter providers, hooks and UI for @solana/web3.js v3",
   "author": "Solana Foundation",
   "license": "MIT",
@@ -57,14 +57,12 @@
   },
   "peerDependencies": {
     "@solana/kit": "^8.2.0",
-    "@solana/kit-plugin-wallet": "^0.19.0",
     "@solana/web3.js": "^3.0.0-rc.3",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },
   "devDependencies": {
     "@solana/kit": "catalog:",
-    "@solana/kit-plugin-wallet": "^0.19.0",
     "@solana/wallet-standard-features": "^1.4.0",
     "@solana/web3.js": "workspace:*",
     "@testing-library/react": "^16.3.2",
@@ -90,6 +88,7 @@
     }
   },
   "dependencies": {
+    "@solana/kit-plugin-wallet": "^0.19.0",
     "@wallet-standard/ui-features": "^1.0.3",
     "@wallet-standard/ui-registry": "^1.1.1"
   }
