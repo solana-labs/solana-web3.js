@@ -5,12 +5,16 @@ import {
   getArrayEncoder,
   getBytesDecoder,
   getBytesEncoder,
+  getCompiledTransactionMessageDecoder,
   getShortU16Decoder,
   getShortU16Encoder,
   getStructDecoder,
   getStructEncoder,
-  type MessagePartialSigner,
+  getTransactionLifetimeConstraintFromCompiledTransactionMessage,
+  isSolanaError,
+  SOLANA_ERROR__TRANSACTION__NONCE_ACCOUNT_CANNOT_BE_IN_LOOKUP_TABLE,
   type TransactionVersion,
+  type TransactionWithLifetime,
 } from '@solana/kit';
 
 import {
@@ -18,7 +22,9 @@ import {
   signTransactionMessageBytes,
 } from '../kit-adapters/signing';
 import assert from '../utils/assert';
+import type {Signer} from '../keypair';
 import type {PublicKey} from '../publickey';
+import {toPackedUint8Array} from '../utils/typed-array';
 import {VersionedMessage} from '../message/versioned';
 import {
   SIGNATURE_LENGTH_IN_BYTES,
@@ -49,7 +55,17 @@ const VERSIONED_TRANSACTION_DECODER = getStructDecoder([
   ['serializedMessage', getBytesDecoder()],
 ]);
 
+const COMPILED_TRANSACTION_MESSAGE_DECODER =
+  getCompiledTransactionMessageDecoder();
+
 export type {TransactionVersion};
+
+/**
+ * Transaction lifetime information for {@link VersionedTransaction.sign}:
+ * the `lastValidBlockHeight` of the message's blockhash. Durable nonce
+ * lifetimes are detected from the message itself and need no configuration.
+ */
+export type VersionedTransactionSignConfig = {lastValidBlockHeight: bigint};
 
 /**
  * Versioned transaction class
@@ -172,11 +188,15 @@ export class VersionedTransaction {
     );
   }
 
-  async sign(signers: Array<MessagePartialSigner>) {
+  async sign(signers: Array<Signer>, config?: VersionedTransactionSignConfig) {
     const messageData = this.message.serialize();
     const signerPubkeys = this.message.staticAccountKeys.slice(
       0,
       this.message.header.numRequiredSignatures,
+    );
+    const lifetimeConstraint = await getLifetimeConstraint(
+      messageData,
+      config?.lastValidBlockHeight,
     );
     for (const signer of signers) {
       const signerPublicKey = getSignerPublicKey(signer);
@@ -188,13 +208,15 @@ export class VersionedTransaction {
         `Cannot sign with non signer key ${signerPublicKey.toBase58()}`,
       );
 
-      // `MessagePartialSigner` cannot supply transaction lifetime info,
-      // so the optional `signatures` and `lifetimeConstraint` parameters of
-      // `signTransactionMessageBytes` are unused on this path.
       const signature = await signTransactionMessageBytes(
         signer,
         messageData,
         signerPubkeys,
+        signerPubkeys.map((publicKey, index) => ({
+          publicKey,
+          signature: this.signatures[index],
+        })),
+        lifetimeConstraint,
       );
 
       if (signature === undefined) {
@@ -223,4 +245,39 @@ export class VersionedTransaction {
     );
     this.signatures[signerIndex] = signature;
   }
+}
+
+/**
+ * Derive the lifetime constraint of a serialized message. Returns
+ * `undefined` for a durable nonce message whose nonce account is loaded from
+ * an address lookup table, since that address cannot be resolved without
+ * fetching the table; such messages can only be signed by message signers.
+ */
+async function getLifetimeConstraint(
+  messageBytes: Uint8Array,
+  lastValidBlockHeight?: bigint,
+): Promise<TransactionWithLifetime['lifetimeConstraint'] | undefined> {
+  let lifetimeConstraint;
+  try {
+    lifetimeConstraint =
+      await getTransactionLifetimeConstraintFromCompiledTransactionMessage(
+        COMPILED_TRANSACTION_MESSAGE_DECODER.decode(
+          toPackedUint8Array(messageBytes),
+        ),
+      );
+  } catch (e) {
+    if (
+      isSolanaError(
+        e,
+        SOLANA_ERROR__TRANSACTION__NONCE_ACCOUNT_CANNOT_BE_IN_LOOKUP_TABLE,
+      )
+    ) {
+      return undefined;
+    }
+    throw e;
+  }
+  if ('blockhash' in lifetimeConstraint && lastValidBlockHeight != null) {
+    return {...lifetimeConstraint, lastValidBlockHeight};
+  }
+  return lifetimeConstraint;
 }

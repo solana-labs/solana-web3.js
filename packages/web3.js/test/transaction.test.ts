@@ -1597,6 +1597,175 @@ describe('VersionedTransaction', () => {
     expect(Buffer.from(versionedTx.signatures[0])).to.not.eql(Buffer.alloc(64));
   });
 
+  describe('sign with kit transaction partial signers', () => {
+    const makeTransactionOnlySigner = (
+      keyPairSigner: TransactionPartialSigner,
+    ) => {
+      let signedTransaction: {
+        lifetimeConstraint?: unknown;
+        signatures?: unknown;
+      } = {};
+      const signer = {
+        address: keyPairSigner.address,
+        signTransactions: async (
+          transactions: Parameters<
+            TransactionPartialSigner['signTransactions']
+          >[0],
+        ) => {
+          signedTransaction = transactions[0];
+          return await keyPairSigner.signTransactions(transactions);
+        },
+      } satisfies TransactionPartialSigner;
+      return {
+        getLifetimeConstraint: () => signedTransaction.lifetimeConstraint,
+        getSignatures: () => signedTransaction.signatures,
+        signer,
+      };
+    };
+
+    it('forwards lastValidBlockHeight in the blockhash lifetime', async () => {
+      const keyPairSigner = await generateKeyPairSigner();
+      const recentBlockhash = await generateBlockhash();
+      const {signer, getLifetimeConstraint} =
+        makeTransactionOnlySigner(keyPairSigner);
+      const message = new TransactionMessage({
+        payerKey: new PublicKey(keyPairSigner.address),
+        recentBlockhash,
+        instructions: [],
+      }).compileToV1Message();
+
+      const transaction = new VersionedTransaction(message);
+      await transaction.sign([signer], {lastValidBlockHeight: 9999n});
+
+      expect(getLifetimeConstraint()).to.deep.equal({
+        blockhash: recentBlockhash,
+        lastValidBlockHeight: 9999n,
+      });
+      expect(Buffer.from(transaction.signatures[0])).to.not.eql(
+        Buffer.alloc(64),
+      );
+    });
+
+    it('defaults to the maximum lastValidBlockHeight when none is provided', async () => {
+      const keyPairSigner = await generateKeyPairSigner();
+      const recentBlockhash = await generateBlockhash();
+      const {signer, getLifetimeConstraint} =
+        makeTransactionOnlySigner(keyPairSigner);
+      const message = new TransactionMessage({
+        payerKey: new PublicKey(keyPairSigner.address),
+        recentBlockhash,
+        instructions: [],
+      }).compileToV0Message();
+
+      const transaction = new VersionedTransaction(message);
+      await transaction.sign([signer]);
+
+      expect(getLifetimeConstraint()).to.deep.equal({
+        blockhash: recentBlockhash,
+        lastValidBlockHeight: 0xffffffffffffffffn,
+      });
+    });
+
+    it('passes a nonce lifetime when the first instruction advances a durable nonce', async () => {
+      const keyPairSigner = await generateKeyPairSigner();
+      const nonceAccount = await generateKeypair();
+      const nonce = await generateBlockhash();
+      const {signer, getLifetimeConstraint} =
+        makeTransactionOnlySigner(keyPairSigner);
+      const message = new TransactionMessage({
+        payerKey: new PublicKey(keyPairSigner.address),
+        recentBlockhash: nonce,
+        instructions: [
+          SystemProgram.nonceAdvance({
+            noncePubkey: nonceAccount.publicKey,
+            authorizedPubkey: new PublicKey(keyPairSigner.address),
+          }),
+        ],
+      }).compileToV1Message();
+
+      const transaction = new VersionedTransaction(message);
+      await transaction.sign([signer], {lastValidBlockHeight: 9999n});
+
+      expect(getLifetimeConstraint()).to.deep.equal({
+        nonce,
+        nonceAccountAddress: nonceAccount.address,
+      });
+    });
+
+    it('passes previously added signatures through to the signer', async () => {
+      const payer = await generateKeyPairSigner();
+      const coSigner = await generateKeypair();
+      const programId = (await generateKeypair()).publicKey;
+      const recentBlockhash = await generateBlockhash();
+      const coSignerSignature = new Uint8Array(64).fill(1);
+      const {signer, getSignatures} = makeTransactionOnlySigner(payer);
+      const message = new TransactionMessage({
+        payerKey: new PublicKey(payer.address),
+        recentBlockhash,
+        instructions: [
+          new TransactionInstruction({
+            keys: [
+              {pubkey: coSigner.publicKey, isSigner: true, isWritable: false},
+            ],
+            programId,
+          }),
+        ],
+      }).compileToV0Message();
+
+      const transaction = new VersionedTransaction(message);
+      transaction.addSignature(coSigner.publicKey, coSignerSignature);
+      await transaction.sign([signer]);
+
+      expect(getSignatures()).to.deep.equal({
+        [payer.address]: null,
+        [coSigner.address]: coSignerSignature,
+      });
+      expect(Buffer.from(transaction.signatures[0])).to.not.eql(
+        Buffer.alloc(64),
+      );
+      expect(transaction.signatures[1]).to.eql(coSignerSignature);
+    });
+
+    it('signs with a mix of transaction-only and message signers', async () => {
+      const payer = await generateKeyPairSigner();
+      const coSigner = await generateKeyPairSigner();
+      const programId = (await generateKeypair()).publicKey;
+      const recentBlockhash = await generateBlockhash();
+      const transactionOnlySigner = {
+        address: coSigner.address,
+        signTransactions: coSigner.signTransactions,
+      } satisfies TransactionPartialSigner;
+      const messageOnlySigner = {
+        address: payer.address,
+        signMessages: payer.signMessages,
+      } satisfies MessagePartialSigner;
+      const message = new TransactionMessage({
+        payerKey: new PublicKey(payer.address),
+        recentBlockhash,
+        instructions: [
+          new TransactionInstruction({
+            keys: [
+              {
+                pubkey: new PublicKey(coSigner.address),
+                isSigner: true,
+                isWritable: false,
+              },
+            ],
+            programId,
+          }),
+        ],
+      }).compileToV0Message();
+
+      const transaction = new VersionedTransaction(message);
+      await transaction.sign([messageOnlySigner, transactionOnlySigner]);
+
+      expect(transaction.signatures).to.have.length(2);
+      for (const signature of transaction.signatures) {
+        expect(Buffer.from(signature)).to.not.eql(Buffer.alloc(64));
+      }
+    });
+  });
+
   describe('addSignature', () => {
     let signer1: Keypair;
     let signer2: Keypair;
