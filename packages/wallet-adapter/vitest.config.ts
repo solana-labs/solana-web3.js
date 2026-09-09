@@ -1,6 +1,6 @@
 import {fileURLToPath} from 'node:url';
 import react from '@vitejs/plugin-react';
-import {defineConfig} from 'vitest/config';
+import {configDefaults, defineConfig} from 'vitest/config';
 
 // @testing-library/react unmounts between tests only with a global `afterEach`, hence `globals`.
 export default defineConfig({
@@ -22,5 +22,8 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     include: ['src/**/__tests__/**/*-test.ts?(x)'],
+    exclude: process.env.TEST_LIVE
+      ? configDefaults.exclude
+      : [...configDefaults.exclude, '**/__tests__/e2e/**'],
   },
 });

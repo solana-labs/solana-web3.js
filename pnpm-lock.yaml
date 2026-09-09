@@ -55,9 +55,6 @@ importers:
 
   packages/wallet-adapter:
     dependencies:
-      '@solana/kit-plugin-wallet':
-        specifier: ^0.19.0
-        version: 0.19.0(@solana/kit@8.2.0(bufferutil@4.0.8)(typescript@5.9.3)(utf-8-validate@5.0.10))(react@19.2.8)(typescript@5.9.3)
       '@wallet-standard/ui-features':
         specifier: ^1.0.3
         version: 1.0.3
@@ -68,6 +65,12 @@ importers:
       '@solana/kit':
         specifier: 'catalog:'
         version: 8.2.0(bufferutil@4.0.8)(typescript@5.9.3)(utf-8-validate@5.0.10)
+      '@solana/kit-plugin-wallet':
+        specifier: ^0.19.0
+        version: 0.19.0(@solana/kit@8.2.0(bufferutil@4.0.8)(typescript@5.9.3)(utf-8-validate@5.0.10))(react@19.2.8)(typescript@5.9.3)
+      '@solana/surfpool':
+        specifier: ^1.5.0
+        version: 1.5.0(@solana/kit@8.2.0(bufferutil@4.0.8)(typescript@5.9.3)(utf-8-validate@5.0.10))
       '@solana/wallet-standard-features':
         specifier: ^1.4.0
         version: 1.4.0
@@ -1573,6 +1576,40 @@ packages:
       typescript: '>=5.4.0'
     peerDependenciesMeta:
       typescript:
+        optional: true
+
+  '@solana/surfpool-darwin-arm64@1.5.0':
+    resolution: {integrity: sha512-RdjEN7WDAr1Vrp1CD+NAS3pwT//TJclX9zyxjhAMpmBofwDzlCO8/yqv2CbD77UOuB/y3UWz3MvEEHxZfetKsw==}
+    engines: {node: '>=18'}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@solana/surfpool-darwin-x64@1.5.0':
+    resolution: {integrity: sha512-8ScgLVX32JX7HH0XkijZxlpsNAALuzaJQDUTjJ1aPazKzunliek27TP9ZkVzzBHypyiY59wpwNue9PUGnGKdIw==}
+    engines: {node: '>=18'}
+    cpu: [x64]
+    os: [darwin]
+
+  '@solana/surfpool-linux-x64-gnu@1.5.0':
+    resolution: {integrity: sha512-d+wUCBdzw7U4inKoe+Lj7XlH8Nmd6A00IZOsG3R61NQbqhRVp7zFpVCCzV00RvgAOsSedkI87I6B4ehAuyGPAg==}
+    engines: {node: '>=18'}
+    cpu: [x64]
+    os: [linux]
+    libc: [glibc]
+
+  '@solana/surfpool@1.5.0':
+    resolution: {integrity: sha512-smTwmZpron2Zf/EcxwcjlJ5cva+nnf4GWpHf7RJj8nEzA4XcHlCDFkO+Dwoe5mapHKelePqFeWpId7Q/7zxEOg==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@solana/kit': ^7.0.0
+      '@solana/kit-plugin-rpc': ^0.15.0
+      '@solana/kit-plugin-signer': ^0.13.0
+    peerDependenciesMeta:
+      '@solana/kit':
+        optional: true
+      '@solana/kit-plugin-rpc':
+        optional: true
+      '@solana/kit-plugin-signer':
         optional: true
 
   '@solana/sysvars@8.2.0':
@@ -5446,6 +5483,22 @@ snapshots:
       '@solana/promises': 8.2.0(typescript@5.9.3)
     optionalDependencies:
       typescript: 5.9.3
+
+  '@solana/surfpool-darwin-arm64@1.5.0':
+    optional: true
+
+  '@solana/surfpool-darwin-x64@1.5.0':
+    optional: true
+
+  '@solana/surfpool-linux-x64-gnu@1.5.0':
+    optional: true
+
+  '@solana/surfpool@1.5.0(@solana/kit@8.2.0(bufferutil@4.0.8)(typescript@5.9.3)(utf-8-validate@5.0.10))':
+    optionalDependencies:
+      '@solana/kit': 8.2.0(bufferutil@4.0.8)(typescript@5.9.3)(utf-8-validate@5.0.10)
+      '@solana/surfpool-darwin-arm64': 1.5.0
+      '@solana/surfpool-darwin-x64': 1.5.0
+      '@solana/surfpool-linux-x64-gnu': 1.5.0
 
   '@solana/sysvars@8.2.0(typescript@5.9.3)':
     dependencies:
