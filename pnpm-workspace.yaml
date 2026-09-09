@@ -9,11 +9,11 @@ catalog:
   '@solana-program/stake': ^0.9.0
   '@solana-program/system': ^0.14.0
   '@solana-program/token': ^0.16.0
-  '@solana/addresses': ^8.2.0
-  '@solana/assertions': ^8.2.0
-  '@solana/fast-stable-stringify': ^8.2.0
-  '@solana/kit': ^8.2.0
-  '@solana/rpc-spec-types': ^8.2.0
-  '@solana/rpc-subscriptions-api': ^8.2.0
-  '@solana/rpc-types': ^8.2.0
-  '@solana/signers': ^8.2.0
+  '@solana/addresses': ^8.3.0
+  '@solana/assertions': ^8.3.0
+  '@solana/fast-stable-stringify': ^8.3.0
+  '@solana/kit': ^8.3.0
+  '@solana/rpc-spec-types': ^8.3.0
+  '@solana/rpc-subscriptions-api': ^8.3.0
+  '@solana/rpc-types': ^8.3.0
+  '@solana/signers': ^8.3.0

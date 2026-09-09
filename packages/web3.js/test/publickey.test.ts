@@ -1,6 +1,12 @@
 import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import type {Address} from '@solana/kit';
+import {
+  compileTransactionMessage,
+  createTransactionMessage,
+  setTransactionMessageLifetimeUsingBlockhash,
+  type Address,
+  type Blockhash,
+} from '@solana/kit';
 
 import {Keypair} from '../src/keypair';
 import {PublicKey, MAX_SEED_LENGTH} from '../src/publickey';
@@ -132,6 +138,26 @@ describe('PublicKey', function () {
     const key = new PublicKey('CiDwVBFgWV9E5MvXWoLgnEgn2hK7rJikbvfWavzAQz3');
     const address: Address = key.toBase58();
     expect(address).to.eq('CiDwVBFgWV9E5MvXWoLgnEgn2hK7rJikbvfWavzAQz3');
+  });
+
+  it('address', () => {
+    const key = new PublicKey('CiDwVBFgWV9E5MvXWoLgnEgn2hK7rJikbvfWavzAQz3');
+    expect(key.address).to.eq('CiDwVBFgWV9E5MvXWoLgnEgn2hK7rJikbvfWavzAQz3');
+    expect(key.address).to.eq(key.toBase58());
+  });
+
+  it('is usable as a Kit HasAddress', () => {
+    const key = new PublicKey('CiDwVBFgWV9E5MvXWoLgnEgn2hK7rJikbvfWavzAQz3');
+    const message = setTransactionMessageLifetimeUsingBlockhash(
+      {
+        blockhash: '11111111111111111111111111111111' as Blockhash,
+        lastValidBlockHeight: 0n,
+      },
+      {...createTransactionMessage({version: 0}), feePayer: key},
+    );
+    // Consumes HasAddress via the TransactionMessageWithFeePayer interface
+    const compiled = compileTransactionMessage(message);
+    expect(compiled.staticAccounts[0]).to.eq(key.toBase58());
   });
 
   it('toBase58', () => {
