@@ -10,6 +10,7 @@ import {
   signatureBytes,
   SolanaError,
   type Address,
+  type HasAddress,
   verifySignature as verifySignatureAsync,
 } from '@solana/kit';
 import {assertVerificationCapabilityIsAvailable} from '@solana/assertions';
@@ -54,7 +55,7 @@ const PDA_MARKER_BYTES = new TextEncoder().encode('ProgramDerivedAddress');
 /**
  * A Solana address
  */
-export class PublicKey {
+export class PublicKey implements HasAddress {
   private readonly _publicKeyBytes: Uint8Array;
 
   /**
@@ -101,6 +102,15 @@ export class PublicKey {
       }
     }
     return true;
+  }
+
+  /**
+   * The base-58 representation of the public key as a Kit `Address` branded
+   * string. Satisfies Kit's {@link HasAddress} interface so a `PublicKey` can be
+   * passed anywhere Kit accepts an address-bearing object.
+   */
+  get address(): Address {
+    return this.toBase58();
   }
 
   /**
