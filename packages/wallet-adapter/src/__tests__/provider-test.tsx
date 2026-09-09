@@ -282,3 +282,53 @@ it('publishes the same authorized capabilities through WalletContext and the Rea
   );
   expect(result.current.publicKey?.toBase58()).toBe(output.account.address);
 });
+
+it('signs offchain messages through the solana:signOffchainMessage feature', async () => {
+  const {wallet} = standardWallet();
+  wallet.accounts[0]!.features = ['solana:signOffchainMessage'];
+  const output = {
+    signedOffchainMessage: new Uint8Array([1, 2, 3]),
+    signature: new Uint8Array(64),
+  };
+  const signOffchainMessage = vi.fn(async () => [output]);
+  const signing = {
+    ...wallet,
+    features: {
+      ...wallet.features,
+      'solana:signOffchainMessage': {
+        version: '1.0.0',
+        supportedMessageVersions: [1],
+        signOffchainMessage,
+      },
+    },
+  };
+  registerWallets(signing);
+  const {result} = renderHook(useWallet, {
+    wrapper: ({children}: {children: ReactNode}) => (
+      <WalletProvider chain="solana:devnet" storage={null}>
+        {children}
+      </WalletProvider>
+    ),
+  });
+  expect(result.current.signOffchainMessage).toBeUndefined();
+  act(() => result.current.select(wallet.name));
+  await act(async () => result.current.connect());
+  expect(result.current.signOffchainMessage).toBeTypeOf('function');
+  expect(await result.current.signOffchainMessage!('hello')).toBe(output);
+  expect(signOffchainMessage).toHaveBeenCalledExactlyOnceWith({
+    account: wallet.accounts[0],
+    message: 'hello',
+    messageVersion: 1,
+    requiredSigners: [wallet.accounts[0]!.publicKey],
+  });
+  const extraSigner = new Uint8Array(32).fill(9);
+  await result.current.signOffchainMessage!('hello', {
+    requiredSigners: [wallet.accounts[0]!.publicKey, extraSigner],
+  });
+  expect(signOffchainMessage).toHaveBeenLastCalledWith({
+    account: wallet.accounts[0],
+    message: 'hello',
+    messageVersion: 1,
+    requiredSigners: [wallet.accounts[0]!.publicKey, extraSigner],
+  });
+});

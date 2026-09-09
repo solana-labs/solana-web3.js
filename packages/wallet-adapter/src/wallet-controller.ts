@@ -9,6 +9,7 @@ import {walletSigner, type WalletPluginConfig} from '@solana/kit-plugin-wallet';
 import type {
   SolanaSignAndSendTransactionFeature,
   SolanaSignMessageFeature,
+  SolanaSignOffchainMessageFeature,
   SolanaSignTransactionFeature,
 } from '@solana/wallet-standard-features';
 import {getWalletAccountFeature} from '@wallet-standard/ui-features';
@@ -35,12 +36,15 @@ import {
   WalletSendTransactionError,
   WalletSignInError,
   WalletSignMessageError,
+  WalletSignOffchainMessageError,
   WalletSignTransactionError,
 } from './errors.js';
 import {
   WalletReadyState,
   type SendTransactionOptions,
   type SignInInput,
+  type SignOffchainMessageOptions,
+  type SignOffchainMessageOutput,
   type UiWallet,
   type UiWalletAccount,
   type Wallet,
@@ -257,6 +261,50 @@ export function createWalletController({
       );
     }
   }
+  const canSignOffchainMessages = () =>
+    active()?.account.features.includes('solana:signOffchainMessage') ?? false;
+  async function signOffchainMessage(
+    message: string,
+    options: SignOffchainMessageOptions = {},
+  ): Promise<SignOffchainMessageOutput> {
+    const connected = active();
+    try {
+      if (!connected || !canSignOffchainMessages()) {
+        throw new WalletNotReadyError(
+          'The connected wallet cannot sign offchain messages.',
+        );
+      }
+      // Wallets compare the account by identity, so pass their own account object, not Kit's UI handle.
+      const feature = getWalletAccountFeature(
+        connected.account,
+        'solana:signOffchainMessage',
+      ) as SolanaSignOffchainMessageFeature['solana:signOffchainMessage'];
+      if (!feature.supportedMessageVersions.includes(1)) {
+        throw new Error(
+          'The wallet does not support version 1 offchain messages.',
+        );
+      }
+      const account = getWalletAccountForUiWalletAccount(connected.account);
+      const [output] = await feature.signOffchainMessage({
+        account,
+        message,
+        messageVersion: 1,
+        requiredSigners: options.requiredSigners ?? [account.publicKey],
+      });
+      if (!output)
+        throw new Error('The wallet returned no offchain message signature.');
+      return output;
+    } catch (error) {
+      throw report(
+        wrap(
+          error,
+          WalletSignOffchainMessageError,
+          'Wallet offchain message signing failed.',
+        ),
+        connected?.wallet,
+      );
+    }
+  }
   async function signAllTransactions<
     T extends Transaction | VersionedTransaction,
   >(transactions: T[]): Promise<T[]> {
@@ -422,6 +470,9 @@ export function createWalletController({
         signTransaction: modifyingSigner() && signTransaction,
         signAllTransactions: modifyingSigner() && signAllTransactions,
         signMessage: canSignMessages() ? signMessage : undefined,
+        signOffchainMessage: canSignOffchainMessages()
+          ? signOffchainMessage
+          : undefined,
         signIn: selected?.features.includes('solana:signIn')
           ? signIn
           : undefined,

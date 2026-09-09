@@ -13,6 +13,10 @@ import type {
   WalletState,
   WalletStatus,
 } from '@solana/kit-plugin-wallet';
+import type {
+  SolanaSignOffchainMessageInput,
+  SolanaSignOffchainMessageOutput,
+} from '@solana/wallet-standard-features';
 
 /** A wallet discovered through Wallet Standard. */
 export type UiWallet = WalletState['wallets'][number];
@@ -25,6 +29,14 @@ export type SignInInput = Parameters<WalletNamespace['signIn']>[1];
 
 /** Output returned by Sign In With Solana. */
 export type SignInOutput = Awaited<ReturnType<WalletNamespace['signIn']>>;
+
+export interface SignOffchainMessageOptions {
+  /** Required signer public keys, 32 bytes each; defaults to the connected account's public key. */
+  requiredSigners?: SolanaSignOffchainMessageInput['requiredSigners'];
+}
+
+/** Output of signing an offchain message: the full signed bytes and the signature over them. */
+export type SignOffchainMessageOutput = SolanaSignOffchainMessageOutput;
 
 export interface SendTransactionOptions extends SendOptions {
   /** Additional local signers applied before the wallet signs. */
@@ -74,6 +86,10 @@ export interface WalletOperations {
     transactions: T[],
   ) => Promise<T[]>;
   signMessage?: (message: Uint8Array) => Promise<Uint8Array>;
+  signOffchainMessage?: (
+    message: string,
+    options?: SignOffchainMessageOptions,
+  ) => Promise<SignOffchainMessageOutput>;
   signIn?: (input?: SignInInput) => Promise<SignInOutput>;
 }
 

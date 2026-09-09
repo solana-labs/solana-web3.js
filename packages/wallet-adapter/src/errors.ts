@@ -46,6 +46,10 @@ export class WalletSignMessageError extends WalletError {
   name = 'WalletSignMessageError';
 }
 
+export class WalletSignOffchainMessageError extends WalletError {
+  name = 'WalletSignOffchainMessageError';
+}
+
 export class WalletSignInError extends WalletError {
   name = 'WalletSignInError';
 }
