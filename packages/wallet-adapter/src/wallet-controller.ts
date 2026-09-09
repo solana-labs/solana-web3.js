@@ -280,7 +280,7 @@ export function createWalletController({
         'solana:signOffchainMessage',
       ) as SolanaSignOffchainMessageFeature['solana:signOffchainMessage'];
       if (!feature.supportedMessageVersions.includes(1)) {
-        throw new Error(
+        throw new WalletNotReadyError(
           'The wallet does not support version 1 offchain messages.',
         );
       }
