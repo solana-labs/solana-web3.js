@@ -10,23 +10,30 @@ This repository is a pnpm workspace containing `@solana/web3.js` and the tooling
 
 ## Development
 
-Install all workspace dependencies from the repository root:
+### Prerequisites
+
+- [Just](https://github.com/casey/just) (command runner) — `brew install just`
+- Node.js 20.18+ and pnpm 10
+
+### Setup
 
 ```shell
-pnpm install
+just setup
 ```
 
-Run a script across every package:
+### Common commands
 
 ```shell
-pnpm test:unit
+just build      # bundle JavaScript and generate type definitions
+just test       # unit tests across every package
+just fmt        # check formatting
+just lint       # check lint rules
+just ci         # everything CI runs on a pull request
 ```
 
-Run a script in a single package:
-
-```shell
-pnpm --filter @solana/web3.js run test:unit
-```
+Run `just -l` to list every recipe, including the validator and release ones.
+Running `just` with no arguments runs the default recipe: format, lint,
+typecheck, build, and unit tests.
 
 ## Security
 
