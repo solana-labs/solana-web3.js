@@ -8,27 +8,27 @@ import type {
   VersionedTransaction,
 } from '@solana/web3.js';
 import type {
-  WalletNamespace,
   WalletSigner,
   WalletState,
   WalletStatus,
 } from '@solana/kit-plugin-wallet';
 import type {
+  SolanaSignInInput,
+  SolanaSignInOutput,
   SolanaSignOffchainMessageInput,
   SolanaSignOffchainMessageOutput,
 } from '@solana/wallet-standard-features';
+import type {UiWallet, UiWalletAccount} from '@wallet-standard/ui';
 
-/** A wallet discovered through Wallet Standard. */
-export type UiWallet = WalletState['wallets'][number];
+export type {SolanaSignInInput, SolanaSignInOutput, UiWallet, UiWalletAccount};
 
-/** An account belonging to a {@link UiWallet}. */
-export type UiWalletAccount = NonNullable<WalletState['connected']>['account'];
-
-/** Input accepted by Sign In With Solana. */
-export type SignInInput = Parameters<WalletNamespace['signIn']>[1];
-
-/** Output returned by Sign In With Solana. */
-export type SignInOutput = Awaited<ReturnType<WalletNamespace['signIn']>>;
+/**
+ * Transaction versions the connected account accepts on every signing path it exposes.
+ * transactions. Check for the version you intend to send rather than assuming a ceiling.
+ */
+export type SupportedTransactionVersions = NonNullable<
+  WalletState['connected']
+>['supportedTransactionVersions'];
 
 export interface SignOffchainMessageOptions {
   /** Required signer public keys, 32 bytes each; defaults to the connected account's public key. */
@@ -90,7 +90,7 @@ export interface WalletOperations {
     message: string,
     options?: SignOffchainMessageOptions,
   ) => Promise<SignOffchainMessageOutput>;
-  signIn?: (input?: SignInInput) => Promise<SignInOutput>;
+  signIn?: (input?: SolanaSignInInput) => Promise<SolanaSignInOutput>;
 }
 
 /** Immutable view of the wallet client, as returned by `useWallet()` and `controller.getSnapshot()`. */
@@ -102,6 +102,7 @@ export interface WalletContextState extends WalletOperations {
   readonly account: UiWalletAccount | null;
   readonly address: UiWalletAccount['address'] | null;
   readonly signer: WalletSigner | null;
+  readonly supportedTransactionVersions: SupportedTransactionVersions | null;
   readonly connected: boolean;
   readonly connecting: boolean;
   readonly disconnecting: boolean;

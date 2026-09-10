@@ -66,7 +66,6 @@
     "@solana/kit": "catalog:",
     "@solana/kit-plugin-wallet": "^0.20.0",
     "@solana/surfpool": "^1.5.0",
-    "@solana/wallet-standard-features": "^1.4.0",
     "@solana/web3.js": "workspace:*",
     "@testing-library/react": "^16.3.2",
     "@types/react": "^19.1.6",
@@ -92,7 +91,8 @@
   },
   "dependencies": {
     "@solana/kit-plugin-wallet": "^0.20.0",
-    "@wallet-standard/ui-features": "^1.0.3",
+    "@solana/wallet-standard-features": "^1.4.0",
+    "@wallet-standard/ui": "^1.0.3",
     "@wallet-standard/ui-registry": "^1.1.1"
   }
 }

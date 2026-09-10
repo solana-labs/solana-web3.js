@@ -66,6 +66,7 @@ function pendingSnapshot(
     address: null,
     publicKey: null,
     signer: null,
+    supportedTransactionVersions: null,
     connected: false,
     connecting: false,
     disconnecting: false,

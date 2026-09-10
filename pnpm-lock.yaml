@@ -58,7 +58,10 @@ importers:
       '@solana/kit-plugin-wallet':
         specifier: ^0.20.0
         version: 0.20.0(@solana/kit@8.3.0(bufferutil@4.0.8)(typescript@5.9.3)(utf-8-validate@5.0.10))(react@19.2.8)(typescript@5.9.3)
-      '@wallet-standard/ui-features':
+      '@solana/wallet-standard-features':
+        specifier: ^1.4.0
+        version: 1.4.0
+      '@wallet-standard/ui':
         specifier: ^1.0.3
         version: 1.0.3
       '@wallet-standard/ui-registry':
@@ -71,9 +74,6 @@ importers:
       '@solana/surfpool':
         specifier: ^1.5.0
         version: 1.5.0(@solana/kit@8.3.0(bufferutil@4.0.8)(typescript@5.9.3)(utf-8-validate@5.0.10))
-      '@solana/wallet-standard-features':
-        specifier: ^1.4.0
-        version: 1.4.0
       '@solana/web3.js':
         specifier: workspace:*
         version: link:../web3.js

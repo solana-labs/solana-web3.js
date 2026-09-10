@@ -8,11 +8,11 @@ import {
 import {walletSigner, type WalletPluginConfig} from '@solana/kit-plugin-wallet';
 import type {
   SolanaSignAndSendTransactionFeature,
-  SolanaSignMessageFeature,
+  SolanaSignInInput,
   SolanaSignOffchainMessageFeature,
   SolanaSignTransactionFeature,
 } from '@solana/wallet-standard-features';
-import {getWalletAccountFeature} from '@wallet-standard/ui-features';
+import {getWalletAccountFeature} from '@wallet-standard/ui';
 import {getWalletAccountForUiWalletAccount} from '@wallet-standard/ui-registry';
 import {
   PublicKey,
@@ -42,7 +42,6 @@ import {
 import {
   WalletReadyState,
   type SendTransactionOptions,
-  type SignInInput,
   type SignOffchainMessageOptions,
   type SignOffchainMessageOutput,
   type UiWallet,
@@ -216,7 +215,7 @@ export function createWalletController({
       );
     }
   }
-  async function signIn(input?: SignInInput) {
+  async function signIn(input?: SolanaSignInInput) {
     let target: UiWallet | undefined;
     try {
       target = selectedWallet();
@@ -243,17 +242,7 @@ export function createWalletController({
           'The connected wallet cannot sign messages.',
         );
       }
-      // Wallets compare the account by identity, so pass their own account object, not Kit's UI handle.
-      const feature = getWalletAccountFeature(
-        connected.account,
-        'solana:signMessage',
-      ) as SolanaSignMessageFeature['solana:signMessage'];
-      const [output] = await feature.signMessage({
-        account: getWalletAccountForUiWalletAccount(connected.account),
-        message,
-      });
-      if (!output) throw new Error('The wallet returned no message signature.');
-      return output.signature;
+      return await namespace.signMessage(message);
     } catch (error) {
       throw report(
         wrap(error, WalletSignMessageError, 'Wallet message signing failed.'),
@@ -481,6 +470,8 @@ export function createWalletController({
         address: connected?.account.address ?? null,
         publicKey,
         signer: connected?.signer ?? null,
+        supportedTransactionVersions:
+          connected?.supportedTransactionVersions ?? null,
         connected: connected !== null,
         connecting:
           next.status === 'connecting' || next.status === 'reconnecting',

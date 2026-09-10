@@ -113,7 +113,11 @@ export async function signingWallet() {
   const onError = vi.fn();
   const owner = testController(wallet, {onError});
   owner.select(wallet.name);
+  expect(owner.getSnapshot().supportedTransactionVersions).toBeNull();
   await owner.connect();
+  expect(owner.getSnapshot().supportedTransactionVersions).toEqual(
+    new Set(['legacy', 0]),
+  );
   const payer = owner.getSnapshot().publicKey!;
   const transaction = new Transaction();
   transaction.feePayer = payer;
