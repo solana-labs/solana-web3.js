@@ -25,11 +25,6 @@ export type RequiredSignature = Readonly<{
   signature: Uint8Array | null;
 }>;
 
-/** @internal */
-export function getSignerPublicKey(signer: {address: string}): PublicKey {
-  return new PublicKey(signer.address);
-}
-
 /**
  * Sign the serialized bytes of a legacy or versioned transaction message with
  * Kit transaction signers, delegating dedupe and signature merging to Kit's

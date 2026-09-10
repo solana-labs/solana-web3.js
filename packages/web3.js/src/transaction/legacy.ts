@@ -20,10 +20,7 @@ import {
   expandInstructionPlans,
   type InstructionInput,
 } from '../kit-adapters/instruction-plan';
-import {
-  getSignerPublicKey,
-  signTransactionBytesWithSigners,
-} from '../kit-adapters/signing';
+import {signTransactionBytesWithSigners} from '../kit-adapters/signing';
 import invariant from '../utils/assert';
 import type {CompiledInstruction} from '../message';
 import {toUint8ArrayView} from '../utils/typed-array';
@@ -786,7 +783,7 @@ export class Transaction {
       publicKey: PublicKey;
     }> = [];
     for (const signer of signers) {
-      const publicKey = getSignerPublicKey(signer);
+      const publicKey = new PublicKey(signer.address);
       const key = publicKey.toString();
       if (seen.has(key)) {
         continue;
