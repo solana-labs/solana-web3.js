@@ -603,6 +603,58 @@ describe('Transaction', () => {
     expect(await transaction.verifySignatures()).to.be.true;
   });
 
+  it('applies co-signer signatures returned by a Kit transaction partial signer', async function () {
+    const payerSigner = await generateKeyPairSigner();
+    const coSigner = await generateKeyPairSigner();
+    const payerPublicKey = new PublicKey(payerSigner.address);
+    const coSignerPublicKey = new PublicKey(coSigner.address);
+    const recipient = await generateKeypair();
+    const recentBlockhash = blockhash(payerSigner.address);
+    const transactionOnlySigner = {
+      address: payerSigner.address,
+      signTransactions: async transactions => {
+        const [payerSignatures] =
+          await payerSigner.signTransactions(transactions);
+        const [coSignerSignatures] =
+          await coSigner.signTransactions(transactions);
+        return [{...payerSignatures, ...coSignerSignatures}];
+      },
+    } satisfies TransactionPartialSigner;
+
+    const transaction = new Transaction({
+      blockhash: recentBlockhash,
+      feePayer: payerPublicKey,
+      lastValidBlockHeight: 9999,
+    })
+      .add(
+        SystemProgram.transfer({
+          fromPubkey: payerPublicKey,
+          toPubkey: recipient.publicKey,
+          lamports: 123,
+        }),
+      )
+      .add(
+        SystemProgram.transfer({
+          fromPubkey: coSignerPublicKey,
+          toPubkey: recipient.publicKey,
+          lamports: 456,
+        }),
+      );
+
+    await transaction.partialSign(transactionOnlySigner);
+
+    expect(
+      transaction.signatures.find(pair => pair.publicKey.equals(payerPublicKey))
+        ?.signature,
+    ).not.to.be.null;
+    expect(
+      transaction.signatures.find(pair =>
+        pair.publicKey.equals(coSignerPublicKey),
+      )?.signature,
+    ).not.to.be.null;
+    expect(await transaction.verifySignatures()).to.be.true;
+  });
+
   it('rejects message-only Kit signers', async function () {
     const keyPairSigner = await generateKeyPairSigner();
     const signerPublicKey = new PublicKey(keyPairSigner.address);
@@ -1816,6 +1868,26 @@ describe('VersionedTransaction', () => {
         Buffer.alloc(64),
       );
       expect(transaction.signatures[1]).to.eql(coSignerSignature);
+    });
+
+    it('dedupes distinct signer objects that share an address', async function () {
+      const payer = await generateKeypair();
+      const recentBlockhash = await generateBlockhash();
+      const message = new TransactionMessage({
+        payerKey: payer.publicKey,
+        recentBlockhash,
+        instructions: [],
+      }).compileToV0Message();
+
+      const transaction = new VersionedTransaction(message);
+      await transaction.sign([payer, createNoopSigner(payer.address)]);
+
+      expect(
+        await payer.publicKey.verifySignature(
+          transaction.signatures[0],
+          message.serialize(),
+        ),
+      ).to.be.true;
     });
 
     it('rejects message-only Kit signers', async function () {

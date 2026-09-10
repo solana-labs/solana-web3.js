@@ -27,14 +27,13 @@ export type RequiredSignature = Readonly<{
 
 /**
  * Sign the serialized bytes of a legacy or versioned transaction message with
- * Kit transaction signers, delegating dedupe and signature merging to Kit's
  * `partiallySignTransactionWithSigners`.
  *
  * The lifetime is derived from the compiled message itself (durable nonce or
  * blockhash). A blockhash lifetime's `lastValidBlockHeight` can be supplied by
  * the caller; otherwise Kit's maximum-height default applies.
  *
- * `requiredSignatures` seeds the signature dictionary handed to Kit with the
+ * `requiredSignatures` seeds the signature dictionary with the
  * signatures the caller already holds, so signers can observe them.
  *
  * Returns the signatures present after signing, keyed by base58 signer
@@ -49,6 +48,7 @@ export async function signTransactionBytesWithSigners(
   lastValidBlockHeight?: bigint,
 ): Promise<Readonly<Record<string, Uint8Array>>> {
   signers.forEach(signer => assertIsTransactionPartialSigner(signer));
+  const dedupedSigners = dedupeSignersByAddress(signers);
 
   const packedMessageBytes = toPackedUint8Array(messageBytes);
   const signatures: KitTransaction['signatures'] = {};
@@ -70,7 +70,7 @@ export async function signTransactionBytesWithSigners(
   assertIsTransactionWithinSizeLimit(transaction);
 
   const signed = await partiallySignTransactionWithSigners(
-    signers,
+    dedupedSigners,
     transaction,
   );
 
@@ -86,6 +86,22 @@ export async function signTransactionBytesWithSigners(
     result[address] = Uint8Array.from(signature);
   }
   return result;
+}
+
+/**
+ * Keep the first signer supplied for each address so that callers may pass
+ */
+function dedupeSignersByAddress(
+  signers: ReadonlyArray<TransactionPartialSigner>,
+): ReadonlyArray<TransactionPartialSigner> {
+  const seen = new Set<string>();
+  return signers.filter(signer => {
+    if (seen.has(signer.address)) {
+      return false;
+    }
+    seen.add(signer.address);
+    return true;
+  });
 }
 
 async function getLifetimeConstraint(
