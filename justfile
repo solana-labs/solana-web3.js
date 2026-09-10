@@ -24,7 +24,7 @@ setup:
 [group('setup')]
 [confirm('Delete lib/, docs/ and all node_modules?')]
 clean:
-    rm -rf packages/*/lib packages/*/docs
+    rm -rf packages/*/lib packages/*/doc
     find . -name node_modules -type d -prune -exec rm -rf {} +
 
 # ******************************************************************************
