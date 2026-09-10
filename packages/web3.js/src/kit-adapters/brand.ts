@@ -1,19 +1,4 @@
-import type {
-  Blockhash,
-  Nonce,
-  ReadonlyUint8Array,
-  TransactionMessageBytes,
-} from '@solana/kit';
-
-/**
- * `Blockhash` and `Nonce` are distinct base58-string brands in Kit, but a
- * durable nonce IS a blockhash-shaped value. TypeScript rejects the direct
- * cross-brand cast, so the bypass is centralized here.
- * @internal
- */
-export function blockhashAsNonce(blockhash: Blockhash): Nonce {
-  return blockhash as unknown as Nonce;
-}
+import type {ReadonlyUint8Array, TransactionMessageBytes} from '@solana/kit';
 
 /**
  * `TransactionMessageBytes` is a branded `ReadonlyUint8Array<ArrayBuffer>`.

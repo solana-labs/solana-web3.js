@@ -7,7 +7,7 @@ import {
   getShortU16Decoder,
   getShortU16Encoder,
   getStructDecoder,
-  type TransactionWithLifetime,
+  type TransactionPartialSigner,
 } from '@solana/kit';
 
 import {PACKET_DATA_SIZE, SIGNATURE_LENGTH_IN_BYTES} from './constants';
@@ -20,13 +20,11 @@ import {
   expandInstructionPlans,
   type InstructionInput,
 } from '../kit-adapters/instruction-plan';
-import {blockhashAsNonce} from '../kit-adapters/brand';
 import {
   getSignerPublicKey,
-  signTransactionMessageBytes,
+  signTransactionBytesWithSigners,
 } from '../kit-adapters/signing';
 import invariant from '../utils/assert';
-import type {Signer} from '../keypair';
 import type {CompiledInstruction} from '../message';
 import {toUint8ArrayView} from '../utils/typed-array';
 import {verify} from '../utils/ed25519';
@@ -715,7 +713,7 @@ export class Transaction {
    *
    * The Transaction must be assigned a valid `recentBlockhash` before invoking this method
    */
-  async sign(...signers: Array<Signer>) {
+  async sign(...signers: Array<TransactionPartialSigner>) {
     if (signers.length === 0) {
       throw new Error('No signers');
     }
@@ -738,7 +736,7 @@ export class Transaction {
    *
    * All the caveats from the `sign` method apply to `partialSign`
    */
-  async partialSign(...signers: Array<Signer>) {
+  async partialSign(...signers: Array<TransactionPartialSigner>) {
     if (signers.length === 0) {
       throw new Error('No signers');
     }
@@ -753,63 +751,40 @@ export class Transaction {
    */
   async _partialSign(
     message: Message,
-    signers: ReadonlyArray<{signer: Signer; publicKey: PublicKey}>,
+    signers: ReadonlyArray<{
+      signer: TransactionPartialSigner;
+      publicKey: PublicKey;
+    }>,
   ) {
-    const signData = message.serialize();
-    const signerPubkeys = message.accountKeys.slice(
-      0,
-      message.header.numRequiredSignatures,
+    for (const {publicKey} of signers) {
+      if (!this.signatures.some(pair => publicKey.equals(pair.publicKey))) {
+        throw new Error(`unknown signer: ${publicKey.toString()}`);
+      }
+    }
+    const signatures = await signTransactionBytesWithSigners(
+      signers.map(({signer}) => signer),
+      message.serialize(),
+      this.signatures,
+      this.lastValidBlockHeight === undefined
+        ? undefined
+        : BigInt(this.lastValidBlockHeight),
     );
-    const lifetimeConstraint = this._getLifetimeConstraint();
-    for (const {signer, publicKey} of signers) {
-      const signature = await signTransactionMessageBytes(
-        signer,
-        signData,
-        signerPubkeys,
-        this.signatures,
-        lifetimeConstraint,
-      );
-      if (signature !== undefined) {
+    for (const {publicKey} of signers) {
+      const signature = signatures[publicKey.toBase58()];
+      if (signature != null) {
         this._addSignature(publicKey, signature);
       }
     }
   }
 
-  private _getLifetimeConstraint():
-    | TransactionWithLifetime['lifetimeConstraint']
-    | undefined {
-    if (this.nonceInfo != null) {
-      const nonceAccountAddress =
-        this.nonceInfo.nonceInstruction.keys[0]?.pubkey;
-      if (nonceAccountAddress == null) {
-        throw new Error(
-          'Transaction nonceInfo.nonceInstruction is missing a nonce account in keys[0]',
-        );
-      }
-      return {
-        nonce: blockhashAsNonce(this.nonceInfo.nonce),
-        nonceAccountAddress: nonceAccountAddress.toBase58(),
-      };
-    }
-
-    if (
-      this.recentBlockhash != null &&
-      this.lastValidBlockHeight !== undefined
-    ) {
-      return {
-        blockhash: this.recentBlockhash,
-        lastValidBlockHeight: BigInt(this.lastValidBlockHeight),
-      };
-    }
-
-    return undefined;
-  }
-
   private _resolveSigners(
-    signers: ReadonlyArray<Signer>,
-  ): Array<{signer: Signer; publicKey: PublicKey}> {
+    signers: ReadonlyArray<TransactionPartialSigner>,
+  ): Array<{signer: TransactionPartialSigner; publicKey: PublicKey}> {
     const seen = new Set<string>();
-    const resolved: Array<{signer: Signer; publicKey: PublicKey}> = [];
+    const resolved: Array<{
+      signer: TransactionPartialSigner;
+      publicKey: PublicKey;
+    }> = [];
     for (const signer of signers) {
       const publicKey = getSignerPublicKey(signer);
       const key = publicKey.toString();

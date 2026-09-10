@@ -9,14 +9,11 @@ import {
   getShortU16Encoder,
   getStructDecoder,
   getStructEncoder,
-  type MessagePartialSigner,
+  type TransactionPartialSigner,
   type TransactionVersion,
 } from '@solana/kit';
 
-import {
-  getSignerPublicKey,
-  signTransactionMessageBytes,
-} from '../kit-adapters/signing';
+import {signTransactionBytesWithSigners} from '../kit-adapters/signing';
 import assert from '../utils/assert';
 import type {PublicKey} from '../publickey';
 import {VersionedMessage} from '../message/versioned';
@@ -50,6 +47,13 @@ const VERSIONED_TRANSACTION_DECODER = getStructDecoder([
 ]);
 
 export type {TransactionVersion};
+
+/**
+ * Transaction lifetime information for {@link VersionedTransaction.sign}:
+ * the `lastValidBlockHeight` of the message's blockhash. Durable nonce
+ * lifetimes are detected from the message itself and need no configuration.
+ */
+export type VersionedTransactionSignConfig = {lastValidBlockHeight: bigint};
 
 /**
  * Versioned transaction class
@@ -172,40 +176,37 @@ export class VersionedTransaction {
     );
   }
 
-  async sign(signers: Array<MessagePartialSigner>) {
-    const messageData = this.message.serialize();
+  async sign(
+    signers: Array<TransactionPartialSigner>,
+    config?: VersionedTransactionSignConfig,
+  ) {
     const signerPubkeys = this.message.staticAccountKeys.slice(
       0,
       this.message.header.numRequiredSignatures,
     );
     for (const signer of signers) {
-      const signerPublicKey = getSignerPublicKey(signer);
-      const signerIndex = signerPubkeys.findIndex(pubkey =>
-        pubkey.equals(signerPublicKey),
-      );
       assert(
-        signerIndex >= 0,
-        `Cannot sign with non signer key ${signerPublicKey.toBase58()}`,
+        signerPubkeys.some(pubkey => pubkey.toBase58() === signer.address),
+        `Cannot sign with non signer key ${signer.address}`,
       );
-
-      // `MessagePartialSigner` cannot supply transaction lifetime info,
-      // so the optional `signatures` and `lifetimeConstraint` parameters of
-      // `signTransactionMessageBytes` are unused on this path.
-      const signature = await signTransactionMessageBytes(
-        signer,
-        messageData,
-        signerPubkeys,
-      );
-
-      if (signature === undefined) {
-        continue;
-      }
-      assert(
-        signature.byteLength === SIGNATURE_LENGTH_IN_BYTES,
-        'Signature must be 64 bytes long',
-      );
-      this.signatures[signerIndex] = signature;
     }
+
+    const signatures = await signTransactionBytesWithSigners(
+      signers,
+      this.message.serialize(),
+      signerPubkeys.map((publicKey, index) => ({
+        publicKey,
+        signature: this.signatures[index],
+      })),
+      config?.lastValidBlockHeight,
+    );
+
+    signerPubkeys.forEach((pubkey, index) => {
+      const signature = signatures[pubkey.toBase58()];
+      if (signature != null) {
+        this.signatures[index] = signature;
+      }
+    });
   }
 
   addSignature(publicKey: PublicKey, signature: Uint8Array) {

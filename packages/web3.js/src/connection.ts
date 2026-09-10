@@ -64,6 +64,7 @@ import {
   type TransactionForFullBase64,
   type TransactionForFullJson,
   type TransactionForFullJsonParsed,
+  type TransactionPartialSigner,
   type UnixTimestamp,
 } from '@solana/kit';
 import fastStableStringify from '@solana/fast-stable-stringify';
@@ -76,7 +77,6 @@ import {EpochSchedule} from './epoch-schedule';
 import {SendTransactionError, SolanaJSONRPCError} from './errors';
 import {DurableNonce, NonceAccount} from './nonce-account';
 import {PublicKey} from './publickey';
-import type {Signer} from './keypair';
 import {
   coerceNumericToBigInt,
   coerceOptionalNumericToBigInt,
@@ -5591,7 +5591,7 @@ export class Connection {
    */
   simulateTransaction(
     transactionOrMessage: Transaction | Message,
-    signers?: Array<Signer>,
+    signers?: Array<TransactionPartialSigner>,
     includeAccounts?: boolean | Array<PublicKey>,
   ): Promise<RpcResponseAndContext<SimulatedTransactionResponse>>;
 
@@ -5610,7 +5610,9 @@ export class Connection {
 
   async simulateTransaction(
     transactionOrMessage: VersionedTransaction | Transaction | Message,
-    configOrSigners?: SimulateTransactionConfig | Array<Signer>,
+    configOrSigners?:
+      | SimulateTransactionConfig
+      | Array<TransactionPartialSigner>,
     includeAccounts?: boolean | Array<PublicKey>,
   ): Promise<RpcResponseAndContext<SimulatedTransactionResponse>> {
     let encodedTransaction: string;
@@ -5818,7 +5820,7 @@ export class Connection {
    */
   sendTransaction(
     transaction: Transaction,
-    signers: Array<Signer>,
+    signers: Array<TransactionPartialSigner>,
     options?: SendOptions,
   ): Promise<TransactionSignature>;
 
@@ -5837,7 +5839,7 @@ export class Connection {
 
   async sendTransaction(
     transaction: VersionedTransaction | Transaction,
-    signersOrOptions?: Array<Signer> | SendOptions,
+    signersOrOptions?: Array<TransactionPartialSigner> | SendOptions,
     options?: SendOptions,
   ): Promise<TransactionSignature> {
     if ('version' in transaction) {
