@@ -3,7 +3,6 @@ import {
   assertIsTransactionWithinSizeLimit,
   getCompiledTransactionMessageDecoder,
   getTransactionLifetimeConstraintFromCompiledTransactionMessage,
-  partiallySignTransactionWithSigners,
   signatureBytes,
   type Transaction as KitTransaction,
   type TransactionPartialSigner,
@@ -26,8 +25,13 @@ export type RequiredSignature = Readonly<{
 }>;
 
 /**
- * Sign the serialized bytes of a legacy or versioned transaction message with
- * `partiallySignTransactionWithSigners`.
+ * Sign the serialized bytes of a legacy or versioned transaction message by
+ * calling `signTransactions` on each `TransactionPartialSigner` directly.
+ *
+ * Partial signers are used exclusively (rather than
+ * `partiallySignTransactionWithSigners`) so that a signer which also
+ * implements `TransactionModifyingSigner` can never alter the message and
+ * produce signatures over bytes other than the ones supplied.
  *
  * The lifetime is derived from the compiled message itself (durable nonce or
  * blockhash). A blockhash lifetime's `lastValidBlockHeight` can be supplied by
@@ -69,13 +73,18 @@ export async function signTransactionBytesWithSigners(
   } satisfies KitTransaction & TransactionWithLifetime;
   assertIsTransactionWithinSizeLimit(transaction);
 
-  const signed = await partiallySignTransactionWithSigners(
-    dedupedSigners,
-    transaction,
+  const signatureDictionaries = await Promise.all(
+    dedupedSigners.map(async signer => {
+      const [dictionary] = await signer.signTransactions([transaction]);
+      return dictionary;
+    }),
   );
+  const signedSignatures = signatureDictionaries.reduce<
+    KitTransaction['signatures']
+  >((merged, dictionary) => ({...merged, ...dictionary}), signatures);
 
   const result: Record<string, Uint8Array> = {};
-  for (const [address, signature] of Object.entries(signed.signatures)) {
+  for (const [address, signature] of Object.entries(signedSignatures)) {
     if (signature == null) {
       continue;
     }

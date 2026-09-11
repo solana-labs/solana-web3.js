@@ -18,6 +18,7 @@ import {
   createNoopSigner,
   generateKeyPairSigner,
   type MessagePartialSigner,
+  type TransactionModifyingSigner,
   type TransactionPartialSigner,
 } from '@solana/signers';
 import {expect} from 'chai';
@@ -532,6 +533,36 @@ describe('Transaction', () => {
       blockhash: recentBlockhash,
       lastValidBlockHeight: 9999n,
     });
+    expect(transaction.signatures[0].signature).not.to.be.null;
+    expect(await transaction.verifySignatures()).to.be.true;
+  });
+
+  it('uses the partial signing path for a signer that also implements modifyAndSignTransactions', async function () {
+    const keyPairSigner = await generateKeyPairSigner();
+    const signerPublicKey = new PublicKey(keyPairSigner.address);
+    const recipient = await generateKeypair();
+    let modifyCalled = false;
+    const dualSigner = {
+      address: keyPairSigner.address,
+      modifyAndSignTransactions: () => {
+        modifyCalled = true;
+        throw new Error('modifyAndSignTransactions must not be called');
+      },
+      signTransactions: keyPairSigner.signTransactions,
+    } satisfies TransactionModifyingSigner & TransactionPartialSigner;
+    const transfer = SystemProgram.transfer({
+      fromPubkey: signerPublicKey,
+      toPubkey: recipient.publicKey,
+      lamports: 123,
+    });
+
+    const transaction = new Transaction({
+      blockhash: blockhash(keyPairSigner.address),
+      lastValidBlockHeight: 9999,
+    }).add(transfer);
+
+    await transaction.sign(dualSigner);
+    expect(modifyCalled).to.be.false;
     expect(transaction.signatures[0].signature).not.to.be.null;
     expect(await transaction.verifySignatures()).to.be.true;
   });
