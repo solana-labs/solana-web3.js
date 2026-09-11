@@ -1,0 +1,117 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #303030;
+  color: #fff;
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+}
+
+a {
+  color: inherit;
+}
+
+main {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 64px;
+  padding: 48px 16px;
+}
+
+table {
+  border-collapse: collapse;
+  width: min(100%, 960px);
+}
+
+th,
+td {
+  padding: 16px;
+  border-bottom: 1px solid #515151;
+  text-align: left;
+  vertical-align: middle;
+}
+
+th {
+  font-weight: 500;
+}
+
+.action {
+  background-color: #c2185b;
+  white-space: nowrap;
+}
+
+.action:not([disabled]):hover {
+  background-color: #ad1457;
+}
+
+.setting {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.setting select {
+  font: inherit;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.notifications {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 600px;
+  z-index: 1050;
+}
+
+.notification {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  word-break: break-all;
+}
+
+.notification[data-variant='info'] {
+  background-color: #2196f3;
+}
+
+.notification[data-variant='success'] {
+  background-color: #43a047;
+}
+
+.notification[data-variant='error'] {
+  background-color: #d32f2f;
+}
+
+.notification a {
+  white-space: nowrap;
+}
+
+.notification button {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  margin-left: auto;
+}
