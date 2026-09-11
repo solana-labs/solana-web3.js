@@ -10,6 +10,7 @@ import {SendLegacyTransaction} from '../components/SendLegacyTransaction';
 import {SendTransaction} from '../components/SendTransaction';
 import {SendV0Transaction} from '../components/SendV0Transaction';
 import {SendV1Transaction} from '../components/SendV1Transaction';
+import {SelectWallet} from '../components/SelectWallet';
 import {Settings} from '../components/Settings';
 import {SignIn} from '../components/SignIn';
 import {SignMessage} from '../components/SignMessage';
@@ -19,83 +20,68 @@ import {SignTransaction} from '../components/SignTransaction';
 export default function Page() {
   return (
     <main>
-      <table>
-        <thead>
-          <tr>
-            <th>Component</th>
-            <th>React UI</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Connect Button</td>
-            <td>
-              <WalletConnectButton />
-            </td>
-          </tr>
-          <tr>
-            <td>Disconnect Button</td>
-            <td>
-              <WalletDisconnectButton />
-            </td>
-          </tr>
-          <tr>
-            <td>Dialog/Modal Button</td>
-            <td>
-              <WalletModalButton />
-            </td>
-          </tr>
-          <tr>
-            <td>Multi Button</td>
-            <td>
-              <WalletMultiButton />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <table>
-        <thead>
-          <tr>
-            <th>Example</th>
-            <th colSpan={2}>
-              <Settings />
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <SignMessage />
-            </td>
-            <td>
-              <SignOffchainMessage />
-            </td>
-            <td>
-              <SignIn />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <SignTransaction />
-            </td>
-            <td>
-              <SendTransaction />
-            </td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>
-              <SendLegacyTransaction />
-            </td>
-            <td>
-              <SendV0Transaction />
-            </td>
-            <td>
-              <SendV1Transaction />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <header>
+        <div>
+          <h1>Wallet Adapter</h1>
+          <p>Components and hooks from @solana/wallet-adapter.</p>
+        </div>
+        <Settings />
+      </header>
+      <section>
+        <h2>Components</h2>
+        <table>
+          <tbody>
+            <tr>
+              <th scope="row">Select Wallet</th>
+              <td>
+                <SelectWallet />
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Connect Button</th>
+              <td>
+                <WalletConnectButton />
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Disconnect Button</th>
+              <td>
+                <WalletDisconnectButton />
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Modal Button</th>
+              <td>
+                <WalletModalButton />
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Multi Button</th>
+              <td>
+                <WalletMultiButton />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      <section>
+        <h2>Signing</h2>
+        <div className="actions">
+          <SignMessage />
+          <SignOffchainMessage />
+          <SignIn />
+          <SignTransaction />
+        </div>
+      </section>
+      <section>
+        <h2>Transactions</h2>
+        <div className="actions">
+          <SendTransaction />
+          <SendLegacyTransaction />
+          <SendV0Transaction />
+          <SendV1Transaction />
+        </div>
+      </section>
     </main>
   );
 }

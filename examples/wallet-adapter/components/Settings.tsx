@@ -48,7 +48,7 @@ export function Settings() {
   if (!mounted) return null;
   return (
     <div className="setting">
-      <label className="setting">
+      <label>
         <input
           type="checkbox"
           name="autoConnect"

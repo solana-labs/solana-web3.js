@@ -85,7 +85,7 @@ export function SendV0Transaction() {
       disabled={!publicKey}
       unsupported={!!publicKey && !supported}
     >
-      Send V0 Transaction using Address Lookup Table (devnet)
+      Send V0 Transaction (devnet)
     </ActionButton>
   );
 }
