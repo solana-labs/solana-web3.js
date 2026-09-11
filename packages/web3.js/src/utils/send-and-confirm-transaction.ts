@@ -1,9 +1,9 @@
+import type {TransactionPartialSigner} from '@solana/kit';
 import {stringifyJsonWithBigInts} from '@solana/rpc-spec-types';
 
 import {Connection, SignatureResult} from '../connection';
 import {Transaction} from '../transaction';
 import type {ConfirmOptions} from '../connection';
-import type {Signer} from '../keypair';
 import type {TransactionSignature} from '../transaction';
 import {SendTransactionError} from '../errors';
 
@@ -14,14 +14,14 @@ import {SendTransactionError} from '../errors';
  *
  * @param {Connection} connection
  * @param {Transaction} transaction
- * @param {Array<Signer>} signers
+ * @param {Array<TransactionPartialSigner>} signers
  * @param {ConfirmOptions} [options]
  * @returns {Promise<TransactionSignature>}
  */
 export async function sendAndConfirmTransaction(
   connection: Connection,
   transaction: Transaction,
-  signers: Array<Signer>,
+  signers: Array<TransactionPartialSigner>,
   options?: ConfirmOptions &
     Readonly<{
       // A signal that, when aborted, cancels any outstanding transaction confirmation operations

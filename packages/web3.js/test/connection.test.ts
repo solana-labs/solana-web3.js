@@ -6,6 +6,10 @@ import {
   type Blockhash,
 } from '@solana/kit';
 import {getTransferSolInstructionDataEncoder} from '@solana-program/system';
+import {
+  generateKeyPairSigner,
+  type TransactionPartialSigner,
+} from '@solana/signers';
 import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import {mock, spy, stub, useFakeTimers, SinonFakeTimers} from 'sinon';
@@ -7703,6 +7707,55 @@ describe('Connection', function () {
 
       await versionedTx.sign([payer]);
       await connection.sendTransaction(versionedTx);
+    });
+
+    it('sendTransaction with a v1 transaction signed by a Kit transaction partial signer', async () => {
+      const connection = new Connection(url, 'confirmed');
+      const payer = await generateKeyPairSigner();
+      const payerPublicKey = new PublicKey(payer.address);
+      const transactionOnlySigner = {
+        address: payer.address,
+        signTransactions: payer.signTransactions,
+      } satisfies TransactionPartialSigner;
+
+      await helpers.airdrop({
+        connection,
+        address: payerPublicKey,
+        amount: LAMPORTS_PER_SOL,
+      });
+
+      const {blockhash, lastValidBlockHeight} = await helpers.latestBlockhash({
+        connection,
+      });
+
+      const recipient = await Keypair.generate();
+      const transferLamports = LAMPORTS_PER_SOL / 10;
+      const versionedTx = new VersionedTransaction(
+        new TransactionMessage({
+          payerKey: payerPublicKey,
+          recentBlockhash: blockhash,
+          instructions: [
+            SystemProgram.transfer({
+              fromPubkey: payerPublicKey,
+              toPubkey: recipient.publicKey,
+              lamports: transferLamports,
+            }),
+          ],
+        }).compileToV1Message({
+          computeUnitLimit: 200_000,
+          loadedAccountsDataSizeLimit: 1_000_000,
+        }),
+      );
+      await versionedTx.sign([transactionOnlySigner], {lastValidBlockHeight});
+
+      const signature = await connection.sendTransaction(versionedTx);
+      await connection.confirmTransaction(
+        {signature, blockhash, lastValidBlockHeight},
+        'confirmed',
+      );
+      expect(await connection.getBalance(recipient.publicKey)).to.eq(
+        BigInt(transferLamports),
+      );
     });
 
     it('simulateTransaction', async () => {

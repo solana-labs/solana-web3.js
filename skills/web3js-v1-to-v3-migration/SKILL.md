@@ -83,8 +83,8 @@ Find call sites that previously assumed sync behavior for signature verification
 - The `Keypair` constructor is no longer public — `new Keypair(...)` will fail to typecheck. Replace it with `await Keypair.generate()` (or `await Keypair.fromSecretKey(...)` / `await Keypair.fromSeed(...)` when reconstructing from existing bytes).
 - Add `await` to current async methods: `transaction.sign(...)`, `transaction.partialSign(...)`, and `versionedTransaction.sign(...)`.
 - Prefer Kit-compatible signer APIs when integrating with Kit, Kit Plugins, Codama-generated clients, browser wallets, ledgers, or custom signing systems. `Keypair` provides `signMessages(...)`, `signTransactions(...)`, and `keyPair`, and implements Kit's `KeyPairSigner` interface so it can be passed directly to Kit APIs that accept a `TransactionSigner` or `KeyPairSigner`.
-- Pass compatible Kit `MessagePartialSigner` or `TransactionPartialSigner` values directly to web3.js transaction signing APIs instead of adapting them through noop signers only to satisfy legacy types.
-- Do not assume every Kit `TransactionSigner` can sign a web3.js transaction. The exported `Signer` type is `MessagePartialSigner | TransactionPartialSigner`; sending-only or modifying-only signers need a boundary that understands those behaviors. Custom signers that only expose an ad-hoc `signBytes(...)` function should implement Kit's `MessagePartialSigner` shape rather than relying on a bespoke web3.js byte-signer interface.
+- Pass any Kit `TransactionPartialSigner` (including the web3.js `Signer` type, `MessagePartialSigner & TransactionPartialSigner`) directly to web3.js transaction signing APIs instead of adapting them through noop signers only to satisfy legacy types.
+- Do not assume every Kit `TransactionSigner` can sign a web3.js transaction. Transaction signing APIs accept any Kit `TransactionPartialSigner` and only ever call `signTransactions`; the exported `Signer` type, `MessagePartialSigner & TransactionPartialSigner` (what `Keypair` provides), satisfies it, while message-only signers are rejected. Sending-only, modifying-only, or message-only signers need a boundary that understands those behaviors. Custom signers that only expose an ad-hoc `signBytes(...)` function should implement Kit's `TransactionPartialSigner` shape rather than relying on a bespoke web3.js byte-signer interface.
 - The v1 `Signer` interface (`{publicKey, secretKey}`) is no longer accepted. Replace signer literals with a `Keypair` (`await Keypair.fromSecretKey(legacySigner.secretKey)`) or another Kit signer.
 - Replace sync PDA helpers with the current async surfaces:
   - `PublicKey.createProgramAddressSync(...)` -> `await PublicKey.createProgramAddress(...)`
@@ -152,7 +152,7 @@ After each migration slice, run the narrowest test or smoke check that exercises
 - Convert `Buffer`-typed account data or instruction data to `Uint8Array`, and only re-wrap at third-party boundaries that still require `Buffer`.
 - Clone readonly RPC arrays before calling mutating helpers like `.sort()` or `.push()`.
 - Blockhashes and nonces are kit-branded `Blockhash` string subtypes; lamports, slots, and timestamps are `bigint`. Expect `bigint` where older code used `number`.
-- Use `MessagePartialSigner` and `TransactionPartialSigner` from `@solana/kit` (the web3.js package itself exports only the `Signer` union) instead of app-local signer interfaces when crossing Kit-aware boundaries.
+- Use `MessagePartialSigner` and `TransactionPartialSigner` from `@solana/kit` (the web3.js package itself exports only the `Signer` intersection) instead of app-local signer interfaces when crossing Kit-aware boundaries.
 
 ## Decision Rules
 
@@ -165,7 +165,7 @@ After each migration slice, run the narrowest test or smoke check that exercises
 ### Signer interop
 
 - If the signer is a web3.js `Keypair`, pass it directly to Kit APIs that accept a `TransactionSigner` or to web3.js transaction signing APIs.
-- If the signer is a Kit `MessagePartialSigner` or `TransactionPartialSigner`, pass it directly to web3.js transaction signing APIs.
+- If the signer is a Kit `TransactionPartialSigner`, pass it directly to web3.js transaction signing APIs.
 - If the signer is a sending-only or modifying-only Kit signer, do not force it into web3.js `Transaction.sign(...)`; use a Kit-aware transaction flow or add an explicit boundary that handles modification/sending semantics.
 - If old code used `createNoopSigner(...)` only because web3.js could not accept Kit signers, remove the noop wrapper and pass the real signer where possible.
 

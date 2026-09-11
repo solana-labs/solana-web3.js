@@ -1,4 +1,5 @@
 import {getStructCodec, getU32Codec} from '@solana/kit';
+import type {TransactionPartialSigner} from '@solana/kit';
 
 import {PublicKey} from './publickey';
 import {Transaction, PACKET_DATA_SIZE} from './transaction';
@@ -7,8 +8,6 @@ import {SYSVAR_RENT_PUBKEY} from './sysvar';
 import {sendAndConfirmTransaction} from './utils/send-and-confirm-transaction';
 import {sleep} from './utils/sleep';
 import type {Connection} from './connection';
-import {getSignerPublicKey} from './kit-adapters/signing';
-import type {Signer} from './keypair';
 import {SystemProgram} from './programs/system';
 import {toUint8ArrayView} from './utils/typed-array';
 
@@ -99,13 +98,13 @@ export class Loader {
    */
   static async load(
     connection: Connection,
-    payer: Signer,
-    program: Signer,
+    payer: TransactionPartialSigner,
+    program: TransactionPartialSigner,
     programId: PublicKey,
     data: Uint8Array | Array<number>,
   ): Promise<boolean> {
-    const payerPubkey = getSignerPublicKey(payer);
-    const programPubkey = getSignerPublicKey(program);
+    const payerPubkey = new PublicKey(payer.address);
+    const programPubkey = new PublicKey(program.address);
     {
       const balanceNeeded = await connection.getMinimumBalanceForRentExemption(
         data.length,

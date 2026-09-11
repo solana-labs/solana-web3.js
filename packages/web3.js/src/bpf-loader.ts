@@ -1,7 +1,8 @@
+import type {TransactionPartialSigner} from '@solana/kit';
+
 import {PublicKey} from './publickey';
 import {Loader} from './loader';
 import type {Connection} from './connection';
-import type {Signer} from './keypair';
 
 /**
  * @deprecated Deprecated since Solana v1.17.20.
@@ -38,8 +39,8 @@ export class BpfLoader {
    */
   static load(
     connection: Connection,
-    payer: Signer,
-    program: Signer,
+    payer: TransactionPartialSigner,
+    program: TransactionPartialSigner,
     elf: Uint8Array | Array<number>,
     loaderProgramId: PublicKey,
   ): Promise<boolean> {
