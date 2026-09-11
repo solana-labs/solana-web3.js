@@ -1,0 +1,98 @@
+{
+  "name": "@solana/wallet-adapter",
+  "version": "3.0.0-rc.3",
+  "description": "Wallet-adapter providers, hooks and UI for @solana/web3.js v3",
+  "author": "Solana Foundation",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/solana-foundation/solana-web3.js.git",
+    "directory": "packages/wallet-adapter"
+  },
+  "keywords": [
+    "solana",
+    "web3.js",
+    "wallet",
+    "wallet-adapter",
+    "wallet-standard",
+    "react"
+  ],
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./styles.css": "./styles.css",
+    "./core": {
+      "types": "./dist/core.d.ts",
+      "import": "./dist/core.js"
+    },
+    "./ui": {
+      "types": "./dist/ui/index.d.ts",
+      "import": "./dist/ui/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "!src/__tests__",
+    "styles.css"
+  ],
+  "engines": {
+    "node": ">=20.18.0"
+  },
+  "scripts": {
+    "compile:js": "tsc --build",
+    "clean": "rm -rf dist *.tsbuildinfo",
+    "prepack": "pnpm run compile:js",
+    "test:unit": "vitest run",
+    "test:live": "TEST_LIVE=1 vitest run src/__tests__/e2e",
+    "test:typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
+    "test:install": "./scripts/check-install.sh"
+  },
+  "peerDependencies": {
+    "@solana/kit": "^8.3.0",
+    "@solana/web3.js": "^3.0.0-rc.3",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@solana/kit": "catalog:",
+    "@solana/kit-plugin-wallet": "^0.20.0",
+    "@solana/surfpool": "^1.5.0",
+    "@solana/web3.js": "workspace:*",
+    "@testing-library/react": "^16.3.2",
+    "@types/react": "^19.1.6",
+    "@types/react-dom": "^19.2.4",
+    "@vitejs/plugin-react": "^5.1.1",
+    "@wallet-standard/app": "^1.1.1",
+    "jsdom": "^28.0.1",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.9"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "@solana/kit-plugin-wallet": "^0.20.0",
+    "@solana/wallet-standard-features": "^1.4.0",
+    "@wallet-standard/ui": "^1.0.3",
+    "@wallet-standard/ui-registry": "^1.1.1"
+  }
+}
