@@ -24,7 +24,7 @@ setup:
 [group('setup')]
 [confirm('Delete lib/, docs/ and all node_modules?')]
 clean:
-    rm -rf packages/*/lib packages/*/doc
+    rm -rf packages/*/lib packages/*/dist packages/*/doc packages/*/*.tsbuildinfo
     find . -name node_modules -type d -prune -exec rm -rf {} +
 
 # ******************************************************************************
@@ -106,11 +106,39 @@ test-live:
 # Run integration tests, starting and stopping a local validator automatically
 [group('test')]
 test-live-local: validator-install
-    pnpm --filter {{pkg}} run test:live-with-test-validator
+    #!/usr/bin/env bash
+    set -euo pipefail
+    just _with-validator pnpm run test:live
 
-# Everything CI runs on a pull request
+# Pack the workspace packages and install them into a fresh npm app to prove peer ranges resolve
 [group('test')]
-ci: fmt build-typedefs lint build-js test-smoke test test-live-local
+test-install: build-js
+    pnpm --filter @solana/wallet-adapter run test:install
+
+# Everything CI runs on a pull request. Mirrors the GitHub workflow: the
+# validator boots in the background first so it is warmed up by the time the
+# integration tests run.
+[group('test')]
+ci: validator-install
+    #!/usr/bin/env bash
+    set -euo pipefail
+    just _with-validator just fmt build-typedefs lint build-js test-smoke test test-install test-live
+
+# Run a command with a fresh test validator on :8899, killing it afterwards
+_with-validator +cmd:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    cd packages/web3.js
+    pkill -f solana-test-validator || true
+    rm -rf test-ledger
+    ./scripts/start-shared-test-validator.sh &
+    validator_script_pid=$!
+    trap 'pkill -f solana-test-validator || true; kill $validator_script_pid 2>/dev/null || true' EXIT
+    cd ../..
+    until [ "$(curl -sf -m 2 http://127.0.0.1:8899/health || true)" = "ok" ]; do sleep 1; done
+    slot() { curl -sf -m 2 -X POST -H 'content-type: application/json' -d '{"jsonrpc":"2.0","id":1,"method":"getSlot"}' http://127.0.0.1:8899 | jq -r .result; }
+    until [ "$(slot || echo 0)" -ge 32 ]; do sleep 1; done
+    {{cmd}}
 
 # ******************************************************************************
 # Validator
