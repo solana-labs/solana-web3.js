@@ -114,8 +114,8 @@ it('reports a wallet that connects without accounts as not connected, as v1 apps
   await expect(owner.connect()).rejects.toBeInstanceOf(WalletNotConnectedError);
 });
 
-it('accepts any selection, as in v1, and rejects connecting to one that does not resolve', async () => {
-  const {b, owner} = await setup();
+it('accepts any selection, as in v1, rejects connecting to one that does not resolve, and lists a duplicated name once', async () => {
+  const {a, b, owner} = await setup();
   owner.select('Missing');
   expect(owner.getSnapshot().selectedWallet).toBeNull();
   expect(owner.getSnapshot().wallet?.adapter.name).toBe('A');
@@ -123,8 +123,13 @@ it('accepts any selection, as in v1, and rejects connecting to one that does not
   const remove = getWallets().register({...b.wallet, name: 'A'});
   try {
     owner.select('A');
-    expect(owner.getSnapshot().selectedWallet).toBeNull();
-    await expect(owner.connect()).rejects.toBeInstanceOf(WalletNotReadyError);
+    expect(
+      owner.getSnapshot().wallets.map(wallet => wallet.adapter.name),
+    ).toEqual(['A', 'B']);
+    await owner.connect();
+    expect(owner.getSnapshot().publicKey?.toBase58()).toBe(
+      a.wallet.accounts[0]!.address,
+    );
   } finally {
     remove();
   }

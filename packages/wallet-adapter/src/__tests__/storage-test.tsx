@@ -37,3 +37,22 @@ it('keeps useLocalStorage state usable when storage is unavailable', () => {
     unavailable.mockRestore();
   }
 });
+
+it('adopts the stored value of a new key instead of copying the previous key into it', () => {
+  localStorage.setItem('first', JSON.stringify('one'));
+  localStorage.setItem('second', JSON.stringify('two'));
+  const {result, rerender} = renderHook(
+    ({key}) => useLocalStorage<string | null>(key, 'fallback'),
+    {initialProps: {key: 'first'}, wrapper: StrictMode},
+  );
+  expect(result.current[0]).toBe('one');
+  rerender({key: 'second'});
+  expect(result.current[0]).toBe('two');
+  expect(localStorage.getItem('second')).toBe('"two"');
+  rerender({key: 'missing'});
+  expect(result.current[0]).toBe('fallback');
+  expect(localStorage.getItem('missing')).toBeNull();
+  act(() => result.current[1]('written'));
+  expect(localStorage.getItem('missing')).toBe('"written"');
+  expect(localStorage.getItem('first')).toBe('"one"');
+});

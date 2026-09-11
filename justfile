@@ -135,9 +135,13 @@ _with-validator +cmd:
     validator_script_pid=$!
     trap 'pkill -f solana-test-validator || true; kill $validator_script_pid 2>/dev/null || true' EXIT
     cd ../..
-    until [ "$(curl -sf -m 2 http://127.0.0.1:8899/health || true)" = "ok" ]; do sleep 1; done
+    deadline=$((SECONDS + 120))
+    wait_for() { until "$@"; do [ "$SECONDS" -lt "$deadline" ] || { echo "Timed out waiting for the test validator" >&2; exit 1; }; sleep 1; done; }
+    healthy() { [ "$(curl -sf -m 2 http://127.0.0.1:8899/health || true)" = "ok" ]; }
     slot() { curl -sf -m 2 -X POST -H 'content-type: application/json' -d '{"jsonrpc":"2.0","id":1,"method":"getSlot"}' http://127.0.0.1:8899 | jq -r .result; }
-    until [ "$(slot || echo 0)" -ge 32 ]; do sleep 1; done
+    warmed_up() { [ "$(slot || echo 0)" -ge 32 ]; }
+    wait_for healthy
+    wait_for warmed_up
     {{cmd}}
 
 # ******************************************************************************

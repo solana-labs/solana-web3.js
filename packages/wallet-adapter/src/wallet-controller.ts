@@ -159,7 +159,7 @@ export function createWalletController({
   }
   const unsubscribe = namespace.subscribe(notify);
   const active = () => namespace.getState().connected;
-  /** The wallet a selection currently resolves to; unknown and ambiguous names resolve to nothing. */
+  /** The wallet a selection currently resolves to; unknown names resolve to nothing. */
   function resolve(name = selectedName): UiWallet | undefined {
     const state = namespace.getState();
     if (name === undefined) {
@@ -168,8 +168,14 @@ export function createWalletController({
         ? state.wallets.find(wallet => wallet.accounts.includes(account))
         : undefined;
     }
-    const matches = state.wallets.filter(wallet => wallet.name === name);
-    return matches.length === 1 ? matches[0] : undefined;
+    return state.wallets.find(wallet => wallet.name === name);
+  }
+  /** Wallets are selected by name, so a name registered more than once is listed once: the first registration wins. */
+  function uniqueByName(wallets: readonly UiWallet[]): UiWallet[] {
+    const seen = new Set<string>();
+    return wallets.filter(
+      wallet => !seen.has(wallet.name) && Boolean(seen.add(wallet.name)),
+    );
   }
   function select(name: string | null): void {
     if (selectedName === name) return;
@@ -180,9 +186,7 @@ export function createWalletController({
     const wallet = resolve();
     if (wallet) return wallet;
     if (selectedName)
-      throw new WalletNotReadyError(
-        `Wallet '${selectedName}' is unavailable or ambiguous.`,
-      );
+      throw new WalletNotReadyError(`Wallet '${selectedName}' is unavailable.`);
     throw new WalletNotSelectedError('Select a wallet before connecting.');
   }
   async function connect(): Promise<void> {
@@ -486,7 +490,7 @@ export function createWalletController({
         wallets:
           snapshot && state.wallets === next.wallets
             ? snapshot.wallets
-            : Object.freeze(next.wallets.map(view)),
+            : Object.freeze(uniqueByName(next.wallets).map(view)),
       });
       state = next;
       snapshotSelection = selectedName;

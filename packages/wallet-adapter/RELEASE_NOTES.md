@@ -44,6 +44,7 @@ Behavior:
 - A `WalletError` thrown inside an operation comes out unchanged, so `instanceof` still works. A request that a newer one superseded rejects with Kit's `AbortError` and isn't reported to `onError`.
 - `sendTransaction` fills a legacy transaction's payer and blockhash, applies `options.signers`, checks the wallet's supported versions, and passes `skipPreflight`, `preflightCommitment`, `maxRetries` and `minContextSlot` to whichever side sends. Extra signers on a `VersionedTransaction` need Kit message signing; v3 `Keypair` has it.
 - The UI keeps its names and CSS classes. The modal is a native `<dialog>` with no overlay element, so `div.wallet-adapter-modal` and `.wallet-adapter-modal-overlay` selectors become `.wallet-adapter-modal`. Menu actions are buttons. The trigger does nothing while connecting or disconnecting. A consumer `onClick` runs first and `preventDefault` cancels the built-in action.
+- The stylesheet no longer sets a font. The button, dropdown and modal inherit the application's `font-family` instead of v1's `'DM Sans', 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif`; an application that sets no body font sees the browser default and can set one on `.wallet-adapter-button`, `.wallet-adapter-dropdown-list` and `.wallet-adapter-modal-wrapper`.
 - React 19 and Node >=20.18.0, because Kit's wallet plugin requires them.
 
 ## Removed
