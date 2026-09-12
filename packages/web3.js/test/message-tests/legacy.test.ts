@@ -253,6 +253,25 @@ describe('Message', () => {
     expect(Message.from(Array.from(serialized)).serialize()).to.eql(serialized);
   });
 
+  it('copies the header so later mutation of the argument does not change the message', () => {
+    const header = {
+      numRequiredSignatures: 1,
+      numReadonlySignedAccounts: 0,
+      numReadonlyUnsignedAccounts: 2,
+    };
+    const message = new Message({
+      header,
+      recentBlockhash: TEST_RECENT_BLOCKHASH,
+      accountKeys: createTestKeys(3),
+      instructions: [],
+    });
+    expect(message.isAccountWritable(1)).to.be.false;
+    header.numReadonlyUnsignedAccounts = 1;
+    expect(message.header.numReadonlyUnsignedAccounts).to.equal(2);
+    expect(message.isAccountWritable(1)).to.be.false;
+    expect(Object.isFrozen(message.header)).to.be.true;
+  });
+
   it('isAccountWritable', () => {
     const accountKeys = [
       getUniqueAddress(),

@@ -298,6 +298,25 @@ describe('MessageV1', () => {
     );
   });
 
+  it('copies the header so later mutation of the argument does not change the message', () => {
+    const header = {
+      numRequiredSignatures: 1,
+      numReadonlySignedAccounts: 0,
+      numReadonlyUnsignedAccounts: 2,
+    };
+    const message = new MessageV1({
+      header,
+      recentBlockhash: TEST_RECENT_BLOCKHASH,
+      staticAccountKeys: createTestKeys(3),
+      compiledInstructions: [],
+    });
+    expect(message.isAccountWritable(1)).to.be.false;
+    header.numReadonlyUnsignedAccounts = 1;
+    expect(message.header.numReadonlyUnsignedAccounts).to.equal(2);
+    expect(message.isAccountWritable(1)).to.be.false;
+    expect(Object.isFrozen(message.header)).to.be.true;
+  });
+
   it('isAccountWritable', () => {
     const staticAccountKeys = [
       getUniqueAddress(),
